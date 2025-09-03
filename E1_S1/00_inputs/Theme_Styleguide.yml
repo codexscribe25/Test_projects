@@ -1,0 +1,16 @@
+# Theme_Styleguide.yml
+meta:
+  version: 1
+  description: "Neutral style guide for narrative outputs; no world refs."
+schema:
+  style:
+    sentence_lengths: {type: string, enum: [short, varied, long], default: varied}
+    jargon_limit: {type: string, enum: [low, medium, high], default: low}
+    imagery_density: {type: string, enum: [sparse, moderate, lush], default: moderate}
+  banned_terms:
+    type: array
+    items: {type: string}
+    default: [recursion, resonance, loop, echo, choir, symbolic memory]
+rules:
+  - "Keep prose concrete; show costs on-page."
+  - "Prefer active voice; minimize filter verbs."

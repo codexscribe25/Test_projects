@@ -1,0 +1,33 @@
+job_ticket:
+  id: "E1_S1-run-<timestamp>"
+  mode: fidelity
+  intent: "Produce an episode with validated tone and provenance."
+  inputs:
+    workspace_root: "/projects/E1_S1"
+    theme_index: "/@workspace/Theme_LoreIndex.yml"
+    tone_bible: "/@workspace/Theme_Styleguide.yml"
+    premise_or_outline: "00_inputs/premise.md"
+  validators:
+    - tone_guard
+    - canon_gate
+    - contradiction_scan
+    - citation_map
+    - style_guard
+    - export_guard
+  deliverables:
+    - "10_drafts/*"
+    - "20_reviews/validators.json"
+    - "30_rewrites/*"
+    - "40_exports/*"
+    - "logs/ProcessLog.csv"
+  acceptance:
+    overall_score_min: 80
+    tone_accuracy_min: 85
+    validator_pass_rate_min: 90
+    hard_contradictions: 0
+  telemetry:
+    kpis: [cycle_time_draft_min, cycle_time_review_min, edit_density, rework_pct, human_touches]
+    log_to: "logs/ProcessLog.csv"
+  provenance:
+    require_sources: true
+    min_confidence: 0.85

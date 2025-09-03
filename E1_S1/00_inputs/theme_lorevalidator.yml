@@ -1,0 +1,18 @@
+# theme_lorevalidator.yml
+meta:
+  version: 1
+  description: "Validation rules applied to cited facts and provenance."
+rules:
+  - id: require_index_match
+    description: "Every citation must map to an entry in Theme_LoreIndex.yml"
+    severity: error
+  - id: confidence_floor
+    threshold: 0.85
+    description: "Reject sources below confidence floor"
+    severity: error
+  - id: line_range_required
+    description: "Citations must include line ranges when available"
+    severity: warn
+  - id: no_world_tokens_in_core
+    description: "Block world-specific tokens unless listed in LoreIndex entries"
+    severity: error

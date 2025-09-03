@@ -1,0 +1,10 @@
+# Theme_LoreIndex.yml
+meta:
+  version: 1
+  description: "Agnostic index of allowed canon sources for citation."
+index:
+  workspace_root: "/projects/E1_S1"
+  entries: []  # Fill with {path, canonical_id, confidence}
+policy:
+  min_confidence: 0.85
+  allow_new_unindexed_facts: false
