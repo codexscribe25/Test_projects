@@ -1,0 +1,3 @@
+# canon_packet.txt
+Provide extracts or notes here only if you have specific references.
+If you add any files, list them in Theme_LoreIndex.yml with {path, canonical_id, confidence}.

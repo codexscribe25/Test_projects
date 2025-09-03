@@ -1,0 +1,17 @@
+# scene_brief_template.yml
+scene_brief:
+  title: "<working title>"
+  setting: { place: "—", year: "GEN01", conditions: "—" }
+  beats:
+    - { id: b1, summary: "inciting jolt" }
+    - { id: b2, summary: "complication" }
+    - { id: b3, summary: "choice + immediate cost" }
+  must_include:
+    artifacts: ["—"]
+    customs: ["—"]
+  constraints:
+    pov: "protagonist"
+    tone: "direct, grounded"
+    banned_terms: ["recursion","resonance","loop","echo","choir","symbolic memory"]
+  canon_refs:
+    - { path: "Generic_Lore.md", canonical_id: "memorycore:canon:generic_commit-<timestamp>", lines: "L10-L60" }

@@ -1,0 +1,23 @@
+job_ticket:
+  id: "E1_S1-ideate-<ts>"
+  mode: performance
+  inputs:
+    premise_inline: |
+      Generate 8 distinct loglines for a story-first short episode.
+      Core vibe: grounded, concrete prose, immediate cost visible.
+      Pick the 2 strongest ideas and expand each with:
+      - a 3-beat skeleton (inciting jolt → complication → choice+cost)
+      - one opening paragraph (≤120 words).
+    theme_styleguide_inline: |
+      meta: { version: 1, description: "Neutral style; no world refs" }
+      schema: {}
+      rules:
+        - "Keep prose concrete; show costs on-page."
+        - "Prefer active voice; minimize filter verbs."
+  steps:
+    - generate_loglines: { count: 8, max_words: 40 }
+    - select_top: { count: 2, criteria: ["hook strength","clarity","tone fit"] }
+    - expand: { beats: 3, opening_para: true, opening_words_max: 120 }
+  validators: []           # keep off for speed
+  outputs:
+    export_path: "40_exports/ideation.md"

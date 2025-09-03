@@ -1,0 +1,17 @@
+job_ticket:
+  id: "E1_S1-scaffold-<ts>"
+  mode: performance
+  inputs:
+    selected_idea_inline: |
+      <Paste the chosen logline + the 3-beat skeleton you liked>
+    scaffold_request_inline: |
+      Build a final scene plan:
+      - beats: inciting jolt → complication → choice + immediate cost
+      - pov (one)
+      - concrete stakes (who loses what if they fail)
+      - 2 continuity hooks for Episode 2
+  steps:
+    - build_scaffold: { include: ["beats","pov","stakes","cost","hooks"], words_max: 250 }
+  validators: []
+  outputs:
+    export_path: "40_exports/scaffold.md"

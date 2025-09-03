@@ -1,0 +1,51 @@
+job_ticket:
+  id: "E1_S1-validate-export-<ts>"
+  mode: fidelity
+  inputs:
+    source_draft_path: "10_drafts/episode1_v1.md"
+    theme_styleguide_inline: |
+      meta: { version: 1 }
+      rules: ["Concrete prose","Immediate cost on-page","Low jargon"]
+    theme_loreindex_inline: |
+      meta: { version: 1 }
+      index: { entries: [] }
+      policy: { min_confidence: 0.85, allow_new_unindexed_facts: false }
+    theme_lorevalidator_inline: |
+      meta: { version: 1 }
+      rules:
+        - { id: require_index_match, severity: error }
+        - { id: confidence_floor, threshold: 0.85, severity: error }
+        - { id: line_range_required, severity: warn }
+        - { id: no_world_tokens_in_core, severity: error }
+    export_front_matter_inline: |
+      ---
+      title: "Episode 1 — <working title>"
+      project_id: "E1_S1"
+      type: "episode"
+      year: "GEN01"
+      location: "—"
+      wordcount: 0
+      canonical_status: "candidate"
+      provenance: { sources: [] }
+      validators:
+        tone_guard: pending
+        canon_gate: pending
+        contradiction_scan: pending
+        citation_map: pending
+        continuity_check: n/a
+      ---
+  steps:
+    - run_validators: {}
+    - rewrite_addressing_flags: { enforce_tone: true, enforce_cost: true }
+    - export_with_front_matter: {}
+  validators: [tone_guard, canon_gate, contradiction_scan, citation_map, style_guard, export_guard]
+  outputs:
+    validators_path: "20_reviews/validators.json"
+    rewrite_path: "30_rewrites/episode1_v2.md"
+    export_path: "40_exports/episode1_final.md"
+    process_log_path: "logs/ProcessLog.csv"
+  acceptance:
+    overall_score_min: 80
+    tone_accuracy_min: 85
+    validator_pass_rate_min: 90
+    hard_contradictions: 0

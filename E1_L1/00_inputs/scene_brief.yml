@@ -1,0 +1,16 @@
+# scene_brief.yml
+scene_brief:
+  title: "Closed for Inventory"
+  setting: { place: "Overnight retail floor", year: "GEN01", conditions: "Lights dimmed; doors locked" }
+  beats:
+    - { id: b1, summary: "Manager locks doors; first aisle count returns impossible totals" }
+    - { id: b2, summary: "Inventory zones shift when unobserved; exits mismatch floor plan" }
+    - { id: b3, summary: "Protagonist follows the only accurate count into a closed wing; pays immediate cost" }
+  must_include:
+    artifacts: ["misprinted floor map", "out-of-hours scanner"]
+    customs: ["safety check-in every 15 minutes"]
+  constraints:
+    pov: "protagonist"
+    tone: "direct, grounded"
+    banned_terms: ["recursion","resonance","loop","echo","choir","symbolic memory"]
+  canon_refs: []

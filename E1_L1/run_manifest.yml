@@ -1,0 +1,14 @@
+run_manifest:
+  project: "E1_L1"
+  timestamp: "20250903T171900Z"
+  inputs:
+    scene_brief: "00_inputs/scene_brief.yml"
+    tone_bible: "00_inputs/Theme_Styleguide.yml"
+    theme_index: "00_inputs/Theme_LoreIndex.yml"
+  outputs:
+    draft: "10_drafts/episode1_v1.md"
+    validators: "20_reviews/validators.json"
+    rewrite: "30_rewrites/episode1_v2.md"
+    export: "40_exports/episode1_final.md"
+  metrics_file: "logs/ProcessLog.csv"
+  kpis: [overall_score, tone_accuracy, contradiction_index, cycle_time_draft_min, validator_pass_rate]
