@@ -1,0 +1,13 @@
+# Theme_Purpose.yml
+meta:
+  version: 1
+purpose:
+  mission: "Deliver a story-first chapter with consistent tone and verifiable facts."
+  audience: "General readers; pilot publication tests"
+  constraints:
+    - "IP-agnostic pipeline; no specific world until indexed."
+    - "Story-first for C1_S1."
+success_criteria:
+  - "Overall score >= 80"
+  - "Tone accuracy >= 85"
+  - "Zero hard contradictions"

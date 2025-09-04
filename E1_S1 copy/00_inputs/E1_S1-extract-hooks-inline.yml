@@ -1,0 +1,14 @@
+job_ticket:
+  id: "E1_S1-extract-hooks-<ts>"
+  mode: performance
+  inputs:
+    source_final_path: "episode1_final.md"
+    extraction_rules_inline: |
+      - "Identify 3–5 explicit promises, open questions, or unresolved stakes."
+      - "Each hook must be one sentence, actionable, and testable in E2."
+      - "Prefer hooks that tie to character goals or costs."
+  steps:
+    - extract_continuity_hooks: { count_min: 3, count_max: 5 }
+  validators: []
+  outputs:
+    hooks_path: "continuity_hooks.md"

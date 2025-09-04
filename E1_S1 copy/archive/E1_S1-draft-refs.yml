@@ -1,0 +1,13 @@
+job_ticket:
+  id: "E1_S1-draft-refs-<ts>"
+  mode: fidelity
+  inputs:
+    scaffold_path: "scaffold.md"
+    theme_index: "Theme_LoreIndex.yml"
+    tone_bible: "Theme_Styleguide.yml"
+    lore_validator: "Theme_LoreValidator.yml"
+  steps:
+    - draft_episode: { target_words: [1800,2200] }
+  validators: [tone_guard, style_guard]
+  outputs:
+    draft_path: "10_drafts/episode1_v1.md"

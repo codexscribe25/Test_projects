@@ -1,0 +1,6 @@
+low_confidence_count: 3
+recommendations:
+- run /deepscan on flagged entries
+- curator review of low-confidence items
+scanned_files: 62
+session_id: callen5-1757016561-0316

@@ -1,0 +1,8 @@
+# arc_map_template.yml
+arc_map:
+  opening: "<scene that establishes status quo + tension>"
+  rising_action: "<complications escalating toward midpoint>"
+  midpoint: "<reversal or reveal>"
+  crisis: "<worst point; choice required>"
+  climax: "<action that resolves the chapter goal>"
+  resolution: "<immediate consequences and setup for next chapter>"

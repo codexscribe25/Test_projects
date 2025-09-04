@@ -1,0 +1,16 @@
+{
+  "generated_at": "20250904T180117Z",
+  "conflicts": [
+    {
+      "basename": "README.md",
+      "groups": {
+        "71ef8ac812ece57e762b400db80f741125685e36fe74c738d8f678f738593c8c": [
+          "README.md"
+        ],
+        "476c6c48652c56802791d9611087964eaa6e0c52912f120d42e74698bdd5e850": [
+          "PromptCORE/README.md"
+        ]
+      }
+    }
+  ]
+}

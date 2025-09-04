@@ -1,0 +1,154 @@
+{
+  "session_id": "callen5-1757016561-0316",
+  "timestamp": 1757016561,
+  "extract_path": "/mnt/data/project_extracted_callen5-1757016561-0316",
+  "tickets_requested": [
+    "00_E1_S1-BOOT.yml",
+    "00a_E1_S1-session-snapshot.yml",
+    "00b_E1_S1-sync-theme-from-memory-refs.yml",
+    "00c_E1_S1-theme-validate.yml",
+    "00d_E1_S1-lore-deepscan.yml"
+  ],
+  "tickets_found": [
+    "00_E1_S1-BOOT.yml",
+    "00a_E1_S1-session-snapshot.yml",
+    "00b_E1_S1-sync-theme-from-memory-refs.yml",
+    "00c_E1_S1-theme-validate.yml",
+    "00d_E1_S1-lore-deepscan.yml"
+  ],
+  "run_logs": [
+    {
+      "ticket": "00_E1_S1-BOOT.yml",
+      "found": true,
+      "path": "/mnt/data/project_extracted_callen5-1757016561-0316/tickets/00_E1_S1-BOOT.yml",
+      "preflight": {
+        "require_files": [
+          "run_manifest.yml"
+        ],
+        "missing": []
+      },
+      "simulated_steps": [
+        "Boot sequence: initialize session snapshot, validate manifest, mount workspace.",
+        "Check core files: run_manifest.yml"
+      ],
+      "status": "ok"
+    },
+    {
+      "ticket": "00a_E1_S1-session-snapshot.yml",
+      "found": true,
+      "path": "/mnt/data/project_extracted_callen5-1757016561-0316/tickets/00a_E1_S1-session-snapshot.yml",
+      "preflight": {
+        "require_files": [],
+        "missing": []
+      },
+      "simulated_steps": [
+        "Create session snapshot YAML (session_id, files, timestamp).",
+        "Snapshot written to /mnt/data/run_outputs_callen5-1757016561-0316/session_snapshot_callen5-1757016561-0316.yml"
+      ],
+      "status": "ok"
+    },
+    {
+      "ticket": "00b_E1_S1-sync-theme-from-memory-refs.yml",
+      "found": true,
+      "path": "/mnt/data/project_extracted_callen5-1757016561-0316/tickets/00b_E1_S1-sync-theme-from-memory-refs.yml",
+      "preflight": {
+        "require_files": [
+          "memory/MemoryLog_Lore.yml"
+        ],
+        "missing": []
+      },
+      "simulated_steps": [
+        "Sync theme: resolve Theme_LoreIndex references from MemoryCORE and copy theme seeds to workspace.",
+        "Found Theme_LoreIndex at /mnt/data/project_extracted_callen5-1757016561-0316/Theme/Theme_LoreIndex.yml"
+      ],
+      "status": "ok"
+    },
+    {
+      "ticket": "00c_E1_S1-theme-validate.yml",
+      "found": true,
+      "path": "/mnt/data/project_extracted_callen5-1757016561-0316/tickets/00c_E1_S1-theme-validate.yml",
+      "preflight": {
+        "require_files": [
+          "Theme/Theme_LoreValidator.yml",
+          "Theme/Theme_Main.yml",
+          "Theme/Theme_LoreIndex.yml"
+        ],
+        "missing": []
+      },
+      "simulated_steps": [
+        "Run theme validators: tone_guard, contradiction_scan, schema_check.",
+        "Found Theme_Styleguide.yml; running validators (simulated)."
+      ],
+      "status": "ok"
+    },
+    {
+      "ticket": "00d_E1_S1-lore-deepscan.yml",
+      "found": true,
+      "path": "/mnt/data/project_extracted_callen5-1757016561-0316/tickets/00d_E1_S1-lore-deepscan.yml",
+      "preflight": {
+        "require_files": [
+          "memory/MemoryLog_Lore.yml"
+        ],
+        "missing": []
+      },
+      "simulated_steps": [
+        "Perform lore deep-scan (entity extraction, contradiction mapping, low-confidence flags).",
+        "Deepscan report written to /mnt/data/run_outputs_callen5-1757016561-0316/lore_deepscan_report_callen5-1757016561-0316.yml"
+      ],
+      "status": "ok"
+    }
+  ],
+  "file_count": 62,
+  "files_sample": [
+    "core_map.yml",
+    "core_resolver.json",
+    "README.md",
+    "run_manifest.yml",
+    "00_inputs/Operator_Intent_Prime.yml",
+    "00_inputs/premise.md",
+    "00_inputs/README_MEMORY.md",
+    "00_inputs/scaffold.md",
+    "00_inputs/seeds.md",
+    "10_drafts/.keep",
+    "10_drafts/ep1_validator.md",
+    "10_drafts/episode1_final.md",
+    "10_drafts/episode1_v1.md",
+    "20_reviews/E1_S1-validation.md",
+    "20_reviews/human_notes.md",
+    "20_reviews/validators.json",
+    "30_rewrites/.keep",
+    "40_exports/.keep",
+    "40_exports/E1_S1-extract-hooks.md",
+    "40_exports/export_front_matter_template.md",
+    "artifacts/00boot_compare_20250904T175618Z.json",
+    "artifacts/00boot_manifest_20250904T175618Z.json",
+    "artifacts/00boot_scan_20250904T175618Z.json",
+    "artifacts/00b_sync_theme_report_20250904T180422Z.json",
+    "artifacts/00c_theme_validate_report_20250904T180638Z.json",
+    "artifacts/00_map_virtual_cores_20250904T175915Z.json",
+    "artifacts/01_ideation_feedback.md",
+    "artifacts/session_conflicts_20250904T180117Z.json",
+    "artifacts/session_duplicates_20250904T180117Z.json",
+    "artifacts/session_snapshot_20250904T180117Z.json",
+    "logs/logmarks.ndjson",
+    "logs/ProcessLog.csv",
+    "memory/MemoryLog_Lore.yml",
+    "PromptCORE/README.md",
+    "templates/05b_human_ack_template.md",
+    "templates/canon_packet_stub.md",
+    "Theme/Theme_Enforcement_State.yml",
+    "Theme/Theme_LoreIndex.yml",
+    "Theme/Theme_LoreValidator.yml",
+    "Theme/Theme_Main.yml",
+    "Theme/Theme_Purpose.yml",
+    "Theme/Theme_Styleguide.yml",
+    "Theme/Virtual_Cores.yml",
+    "tickets/00a_E1_S1-session-snapshot.yml",
+    "tickets/00b_E1_S1-sync-theme-from-memory-refs.yml",
+    "tickets/00c_E1_S1-theme-validate.yml",
+    "tickets/00d_E1_S1-lore-deepscan.yml",
+    "tickets/00e_E1_S1-set-enforcement-phase.yml",
+    "tickets/00f_E1_S1-auto-evaluate-phase.yml",
+    "tickets/00_E1_S1-BOOT.yml"
+  ]
+}

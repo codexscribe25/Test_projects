@@ -1,0 +1,66 @@
+# 04_E1_S1-draft-refs.yml instructions
+# ---
+# purpose: "Produce raw draft from scaffold (no heavy validators yet)."
+# run_command: "Run the ticket in 04_E1_S1-draft-refs.yml"
+# ai_create_ticket_prompt: |
+#   Create a REFS-style DRAFT ticket YAML that:
+#     - asserts scaffold_check.json has required fields
+#     - drafts 1800–2200 words into 10_drafts/episode1_v1.md
+#     - computes basic metrics into metrics_draft_v1.json and logs draft_complete
+# outputs_to_expect:
+#   - "10_drafts/episode1_v1.md"
+#   - "metrics_draft_v1.json"
+# guidance: "Keep Draft isolated: no rewriting or heavy validators here so we can trace issues to generation."
+# 04_E1_S1-draft-refs.yml — preflight
+# File: tickets/04_E1_S1-draft-refs.yml
+preflight:
+  description: "Produce first raw draft from scaffold and seeds."
+  require_files:
+    - "10_drafts/scaffold_<ts>.md"
+  outputs_expected:
+    - "10_drafts/episode1_v1_<ts>.md"
+    - "artifacts/10_drafts_episode1_v1_<ts>.md.sha256"
+  fail_on_missing: true
+
+job_ticket:
+  id: "04_E1_S1-draft.<ts>"
+  mode: fidelity
+  intent: "Produce the initial draft artifact from scaffold."
+
+inputs:
+  scaffold: "10_drafts/scaffold_<ts>.md"
+  styleguide: "Theme/Theme_Styleguide.yml"
+
+steps:
+  - load_scaffold:
+      file: "{{inputs.scaffold}}"
+      out: "artifacts/04_scaffold_<ts>.json"
+  - generate_draft:
+      scaffold: "artifacts/04_scaffold_<ts>.json"
+      styleguide: "{{inputs.styleguide}}"
+      out: "10_drafts/episode1_v1_<ts>.md"
+  - checksum:
+      file: "10_drafts/episode1_v1_<ts>.md"
+      out: "artifacts/10_drafts_episode1_v1_<ts>.md.sha256"
+  - append_logmark:
+      event: "draft_generated"
+      payload: "10_drafts/episode1_v1_<ts>.md"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "draft_v1"
+    path: "10_drafts/episode1_v1_<ts>.md"
+    suggested_folder: "10_drafts"
+    artifact_type: "draft"
+    retention: "workspace"
+    required: true
+    checksum: true
+    description: "First raw draft from scaffold."
+  - id: "draft_v1_checksum"
+    path: "artifacts/10_drafts_episode1_v1_<ts>.md.sha256"
+    suggested_folder: "artifacts"
+    artifact_type: "checksum"
+    retention: "artifacts"
+    required: true
+    checksum: false
+    description: "SHA256 checksum for draft v1."

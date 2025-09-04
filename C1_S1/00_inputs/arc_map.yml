@@ -1,0 +1,8 @@
+# arc_map.yml
+arc_map:
+  opening: "Archivist receives eviction notice during last shift; forced to finish shelving."
+  rising_action: "Strange shelf key; missing catalog entries; supervisor evasive."
+  midpoint: "Shelf opens to a thin corridor with older copies of current books."
+  crisis: "Alarm triggers; must choose between keeping the key or locking corridor."
+  climax: "Locks corridor, copies vanish, alarm stops; notices one title remains—about them."
+  resolution: "They keep the book’s call number; vow to return during renovation."

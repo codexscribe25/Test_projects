@@ -1,0 +1,18 @@
+# chapter_outline.yml
+chapter_outline:
+  title: "The Archivist’s Key"
+  sections:
+    - { id: o1, heading: "Opening", summary: "Archivist receives eviction notice during last shift; forced to finish shelving." }
+    - { id: o2, heading: "Rising Action", summary: "Finds a key; missing catalog entries; supervisor evasive." }
+    - { id: o3, heading: "Midpoint", summary: "Key opens a shelf into a thin corridor with older copies of current books." }
+    - { id: o4, heading: "Crisis", summary: "Alarm triggers; must choose between keeping the key or locking corridor." }
+    - { id: o5, heading: "Climax", summary: "Locks corridor; copies vanish; alarm stops; one title remains—about them." }
+    - { id: o6, heading: "Resolution", summary: "Keeps the call number; vows to return during renovation." }
+  must_include:
+    artifacts: ["brass shelf key", "deaccession ledger"]
+    customs: ["closing protocol: two-person signoff"]
+  constraints:
+    pov: "protagonist"
+    tone: "direct, grounded"
+    banned_terms: ["recursion","resonance","loop","echo","choir","symbolic memory"]
+  canon_refs: []

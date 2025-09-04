@@ -1,0 +1,297 @@
+meta:
+  source_export: /mnt/data/40_exports/episode1_final.md
+  ticket_source: /mnt/data/E1_S1-extract-hooks-inline.yml
+  extraction_timestamp: '2025-09-03T20:50:44.606930Z'
+  method: heuristic-capitalized-names + keyword search; no external NER model used
+characters:
+- name: Rian
+  count: 12
+  role_guess: primary
+  first_context: Rian found it before dawn, when the street lamps were still breathing
+    orange and the city had not yet learned to speak.
+- name: Lette
+  count: 6
+  role_guess: supporting
+  first_context: Her name was Lette.
+- name: 'No'
+  count: 3
+  role_guess: unknown
+  first_context: No return address.
+- name: There
+  count: 3
+  role_guess: unknown
+  first_context: There are rules you don’t write down in Rian’s neighborhood.
+- name: One
+  count: 2
+  role_guess: unknown
+  first_context: One name.
+- name: Rule
+  count: 2
+  role_guess: unknown
+  first_context: 'Rule one: ledgers change things.'
+- name: Instead
+  count: 2
+  role_guess: unknown
+  first_context: Instead, he knocked.
+- name: Maybe
+  count: 2
+  role_guess: unknown
+  first_context: '”
+
+
+    “Maybe they were killed,” Rian said.'
+- name: Episode
+  count: 1
+  role_guess: unknown
+  first_context: "---\ntitle: \"Episode 1 — The Last Ledger\"\nproject_id: \"E1_S1\"\
+    \ntype: \"episode\"\nyear: \"GEN01\"\nlocation: \"—\"\nwordcount: 2210\ncanonical_status:\
+    \ \"candidate\"\nprovenance:\n  sources: []\nvalidators:\n  tone_guard: pass\n\
+    \  canon_gate: pass\n  contradiction_scan: pass\n  citation_map: pass\n  continuity_check:\
+    \ n/a\n---\n\nThe ledger waited on the doorstep like bad weather."
+- name: Last
+  count: 1
+  role_guess: unknown
+  first_context: "---\ntitle: \"Episode 1 — The Last Ledger\"\nproject_id: \"E1_S1\"\
+    \ntype: \"episode\"\nyear: \"GEN01\"\nlocation: \"—\"\nwordcount: 2210\ncanonical_status:\
+    \ \"candidate\"\nprovenance:\n  sources: []\nvalidators:\n  tone_guard: pass\n\
+    \  canon_gate: pass\n  contradiction_scan: pass\n  citation_map: pass\n  continuity_check:\
+    \ n/a\n---\n\nThe ledger waited on the doorstep like bad weather."
+- name: Ledger
+  count: 1
+  role_guess: unknown
+  first_context: "---\ntitle: \"Episode 1 — The Last Ledger\"\nproject_id: \"E1_S1\"\
+    \ntype: \"episode\"\nyear: \"GEN01\"\nlocation: \"—\"\nwordcount: 2210\ncanonical_status:\
+    \ \"candidate\"\nprovenance:\n  sources: []\nvalidators:\n  tone_guard: pass\n\
+    \  canon_gate: pass\n  contradiction_scan: pass\n  citation_map: pass\n  continuity_check:\
+    \ n/a\n---\n\nThe ledger waited on the doorstep like bad weather."
+- name: Just
+  count: 1
+  role_guess: unknown
+  first_context: Just the weight of whatever had been closed up inside, like someone
+    pressing a fist through the morning.
+- name: Inside
+  count: 1
+  role_guess: unknown
+  first_context: 'Inside: a ledger, old as someone’s habit, bound with heavy thread.'
+- name: Whoever
+  count: 1
+  role_guess: unknown
+  first_context: 'Whoever sent it wanted two things: for the ledger to be read, and
+    for the ledger to leave its reader changed.'
+- name: Beside
+  count: 1
+  role_guess: unknown
+  first_context: 'Beside her name: a balance, a record of a favor not yet repaid.'
+- name: Below
+  count: 1
+  role_guess: unknown
+  first_context: 'Below the balance: a narrow column of dates and names that read
+    like a trail: who had held the favor; who had honored it; who had broken it.'
+- name: Outside
+  count: 1
+  role_guess: unknown
+  first_context: Outside, the city’s morning was building toward bustle.
+- name: Voices
+  count: 1
+  role_guess: unknown
+  first_context: Voices rose and braided like threads.
+- name: People
+  count: 1
+  role_guess: unknown
+  first_context: People went about their arrangements, trading sweat for bread, gossip
+    for favors, keeping their small economies running because that was how the city
+    survived its long gray years.
+- name: Sometimes
+  count: 1
+  role_guess: unknown
+  first_context: “Sometimes.
+- name: Whatever
+  count: 1
+  role_guess: unknown
+  first_context: “Whatever’s inside wants answers,” she said.
+- name: Together
+  count: 1
+  role_guess: unknown
+  first_context: Together, they sat before the shop and opened the ledger.
+- name: Someone
+  count: 1
+  role_guess: unknown
+  first_context: “Someone stopped filling it in.
+- name: To
+  count: 1
+  role_guess: unknown
+  first_context: To stitch that truth, they would have to go looking.
+- name: Look
+  count: 1
+  role_guess: unknown
+  first_context: Look for the person the ledger last mentioned.
+- name: Track
+  count: 1
+  role_guess: unknown
+  first_context: Track down others.
+- name: Ask
+  count: 1
+  role_guess: unknown
+  first_context: Ask neighbors and barmaids and the children who remembered more than
+    they should.
+- name: Each
+  count: 1
+  role_guess: unknown
+  first_context: Each inquiry would be a friction, a rubbing at long-hidden abrasions.
+- name: Cost
+  count: 1
+  role_guess: unknown
+  first_context: Cost arrived on the second evening as a knock on his door and a pair
+    of men who wore badges and knew how to smile.
+- name: Yet
+  count: 1
+  role_guess: unknown
+  first_context: Yet in the ledger’s blank place something began to move.
+- name: Either
+  count: 1
+  role_guess: unknown
+  first_context: Either way, the ledger had set the city in motion, and that motion
+    would not stop for his later regrets.
+- name: Others
+  count: 1
+  role_guess: unknown
+  first_context: Others exist to keep people in their place.
+objects:
+- name: ledger
+  mentions: 56
+- name: binding
+  mentions: 2
+- name: kettle
+  mentions: 1
+- name: chair
+  mentions: 2
+- name: market
+  mentions: 6
+- name: shop
+  mentions: 2
+- name: basket
+  mentions: 1
+- name: twine
+  mentions: 1
+- name: paper
+  mentions: 5
+- name: child
+  mentions: 6
+- name: coat
+  mentions: 1
+- name: pot
+  mentions: 1
+- name: crate
+  mentions: 1
+- name: seal
+  mentions: 1
+- name: stoop
+  mentions: 1
+- name: window
+  mentions: 1
+places:
+- name: market
+  mentions: 6
+- name: alley
+  mentions: 2
+- name: office
+  mentions: 4
+- name: registrar
+  mentions: 6
+- name: dock
+  mentions: 1
+- name: bakery
+  mentions: 1
+- name: staircase
+  mentions: 1
+- name: table
+  mentions: 3
+- name: window
+  mentions: 1
+- name: neighborhood
+  mentions: 1
+themes:
+- name: debt
+- name: memory
+- name: favor
+- name: choice
+- name: cost
+- name: power
+- name: safety
+- name: trust
+- name: record
+- name: truth
+- name: watch
+threads:
+- id: blank_line
+  summary: Interrupted ledger entry / blank line that needs closure
+  importance: high
+  locations:
+  - ledger
+- id: men_badges
+  summary: Two men with badges questioned Rian — possible official interest / threat
+  importance: high
+  locations:
+  - Rian's lodging
+  - market
+- id: neighbor_filled_line
+  summary: A neighbor later fills one line in ledger — possible new testimony or action
+  importance: medium
+  locations:
+  - ledger
+  - neighborhood
+- id: registrar_watch
+  summary: Registrar expected to stamp and file ledger; institutional interest
+  importance: medium
+  locations:
+  - office
+  - registrar
+- id: next_name
+  summary: Rian intends to call the next person on ledger — sets up next episode/action
+  importance: high
+  locations:
+  - ledger
+  - various_address
+scene_hooks:
+- para_index: 0
+  snippet: '--- title: "Episode 1 — The Last Ledger" project_id: "E1_S1" type: "episode"
+    year: "GEN01" location: "—" wordcount: 2210 canonical_status: "candidate" provenance:
+    sources: [] validators: tone_guard: pass canon_gate: pass contradiction_scan:
+    pass...'
+- para_index: 1
+  snippet: The ledger waited on the doorstep like bad weather.
+- para_index: 2
+  snippet: Rian found it before dawn, when the street lamps were still breathing orange
+    and the city had not yet learned to speak. A square of wood, neatly wrapped in
+    grease-stained...
+- para_index: 4
+  snippet: 'Inside: a ledger, old as someone’s habit, bound with heavy thread. Its
+    pages smelled of iron and rain. The first page had one entry. One name. One number.
+    A note...'
+- para_index: 6
+  snippet: Rian read it three times before he understood the instruction wasn’t for
+    him.
+- para_index: 7
+  snippet: 'The ledger belonged to others — to debtors and keepers, to people who
+    traded favors in paper instead of coin. Whoever sent it wanted two things: for
+    the ledger to...'
+- para_index: 8
+  snippet: He could take it to the office. The office would make it official, give
+    it an index and a seal and fold him into the ledger’s inevitable list of clerks...
+- para_index: 9
+  snippet: 'There are rules you don’t write down in Rian’s neighborhood. You learn
+    them the way you learn how not to lean on fresh paint: by noticing the people
+    who don’t...'
+- para_index: 10
+  snippet: He sat at the table and opened the ledger where the binding sighed, and
+    the first pages felt all at once like a promise and a blade.
+- para_index: 12
+  snippet: That trail ended with a blank space and a line scored through it, as if
+    a hand had begun to write and then been interrupted.
+- para_index: 13
+  snippet: He studied the interruption until his eyes stung. There was no natural
+    reason for the blank. The ledger was meticulous. The blank was a mistake — or
+    an omission meant...
+- para_index: 14
+  snippet: When a ledger writes a blank where an ending should be, something in the
+    ledger expects you to finish the sentence.

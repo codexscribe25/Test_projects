@@ -1,0 +1,57 @@
+# 03_E1_S1-scaffold-refs.yml instructions
+# ---
+# purpose: "Turn the selected concept into a compact scaffold: beats, POV, stakes, cost, 3 continuity hooks."
+# run_command: "Run the ticket in 03_E1_S1-scaffold-refs.yml"
+# ai_create_ticket_prompt: |
+#   Create a REFS-style SCAFFOLD ticket YAML that:
+#     - reads selection.json
+#     - builds scaffold.md and scaffold.json with required fields:
+#         beats: [inciting_jolt, complication, choice_cost]
+#         pov, stakes, cost, hooks
+#     - produces scaffold_check.json verifying required fields
+# outputs_to_expect:
+#   - "scaffold.md"
+#   - "scaffold.json"
+#   - "scaffold_check.json"
+# guidance: "scaffold_check.json must pass before Draft step; keep scaffold concise (<=250 words)."
+# 03_E1_S1-scaffold-refs.yml — preflight
+# File: tickets/03_E1_S1-scaffold-refs.yml
+preflight:
+  description: "Produce scaffold (beats, POV, stakes, hooks) from selected concept."
+  require_files:
+    - "artifacts/02_selection_<ts>.md"
+  outputs_expected:
+    - "10_drafts/scaffold_<ts>.md"
+  fail_on_missing: true
+
+job_ticket:
+  id: "03_E1_S1-scaffold.<ts>"
+  mode: fidelity
+  intent: "Create a scaffold for the chosen selection."
+
+inputs:
+  selection: "artifacts/02_selection_<ts>.md"
+  scaffold_template: "00_inputs/scaffold.md"
+
+steps:
+  - load_selection:
+      file: "{{inputs.selection}}"
+      out: "artifacts/03_selection_<ts>.json"
+  - generate_scaffold:
+      selection: "artifacts/03_selection_<ts>.json"
+      template: "{{inputs.scaffold_template}}"
+      out: "10_drafts/scaffold_<ts>.md"
+  - append_logmark:
+      event: "scaffold_generated"
+      payload: "10_drafts/scaffold_<ts>.md"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "scaffold"
+    path: "10_drafts/scaffold_<ts>.md"
+    suggested_folder: "10_drafts"
+    artifact_type: "scaffold"
+    retention: "workspace"
+    required: true
+    checksum: false
+    description: "Scaffold describing beats, POV, stakes, and hooks."

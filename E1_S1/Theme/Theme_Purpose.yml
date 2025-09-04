@@ -1,0 +1,19 @@
+# Theme_Purpose.yml — preflight
+preflight:
+  description: "Project purpose/config. Optional but recommended."
+  require_files:
+    - "Theme_Purpose.yml"
+  fail_on_missing: false
+
+meta:
+  version: 1
+purpose:
+  mission: "Deliver short-form narrative episodes with consistent tone and verifiable facts."
+  audience: "General readers; pilot publication tests"
+  constraints:
+    - "IP-agnostic pipeline; no specific world until indexed."
+    - "Story-first for E1_S1."
+success_criteria:
+  - "Overall score >= 80"
+  - "Tone accuracy >= 85"
+  - "Zero hard contradictions"

@@ -1,0 +1,77 @@
+# 00b_E1_S1-sync-theme-from-memory-refs.yml instructions
+# ---
+# purpose: "Rebuild Theme_LoreIndex.yml (file-location pointers) and Theme_Main.yml (short digests) from MemoryLog_Lore.yml so other sessions/LLMs can quickly access canonical lore and summary digests."
+# run_command: "Run the ticket in 00b_E1_S1-sync-theme-from-memory-refs.yml"
+# ai_create_ticket_prompt: |
+#   Create a SYNC-THEME ticket YAML for E1_S1 that:
+#     - reads MemoryLog_Lore.yml (the canonical memory)
+#     - produces Theme_LoreIndex.yml (index_entries: canonical_id, term, file_refs, confidence)
+#     - produces Theme_Main.yml (digest entries: canonical_id, short_description, tags, status)
+#     - emits a 'theme_index_synced_from_memory' event to logs/logmarks.ndjson
+# preflight_checks:
+#   - require presence of MemoryLog_Lore.yml
+#   - warn_if MemoryLog_Lore.yml has entries with status != approved (optionally skip those)
+#   - require Theme_Lock.json if you want to gate changes (optional)
+# outputs_to_expect:
+#   - "Theme_LoreIndex.yml"
+#   - "Theme_Main.yml"
+#   - "logs/logmarks.ndjson"
+# acceptance:
+#   - overwrite_theme_files: true (document in ticket to make the destructive action explicit)
+# guidance:
+#   - Run after any approved memory appends (05b) or at session start to provide fresh context
+#   - Keep Theme_LoreIndex.yml as pointers only (not the authoritative memory contents)
+#   - Keep Theme_Main.yml short — one-line/one-paragraph digests per canonical entry for quick context
+# notes:
+#   - Use this ticket to ensure cross-session consistency: MemoryLog_Lore.yml is the source-of-truth; Theme_* files are derived.
+# 00b_E1_S1-sync-theme-from-memory-refs.yml — preflight
+# File: tickets/00b_E1_S1-sync-theme-from-memory-refs.yml
+preflight:
+  description: "Regenerate Theme_LoreIndex and Theme_Main from memory."
+  require_files:
+    - "memory/MemoryLog_Lore.yml"
+  outputs_expected:
+    - "Theme/Theme_LoreIndex.yml"
+    - "Theme/Theme_Main.yml"
+  fail_on_missing: true
+
+job_ticket:
+  id: "00b_E1_S1-sync-theme.<ts>"
+  mode: performance
+  intent: "Sync canonical theme indices from MemoryLog_Lore."
+
+inputs:
+  memory: "memory/MemoryLog_Lore.yml"
+
+steps:
+  - load_memory:
+      file: "{{inputs.memory}}"
+      out: "artifacts/00b_memory_<ts>.json"
+  - build_lore_index:
+      memory: "artifacts/00b_memory_<ts>.json"
+      out: "Theme/Theme_LoreIndex.yml"
+  - build_theme_main:
+      memory: "artifacts/00b_memory_<ts>.json"
+      out: "Theme/Theme_Main.yml"
+  - append_logmark:
+      event: "theme_synced_from_memory"
+      payload: ["Theme/Theme_LoreIndex.yml","Theme/Theme_Main.yml"]
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "lore_index"
+    path: "Theme/Theme_LoreIndex.yml"
+    suggested_folder: "Theme"
+    artifact_type: "index"
+    retention: "workspace"
+    required: true
+    checksum: true
+    description: "Index pointing to canonical lore artifacts."
+  - id: "theme_main"
+    path: "Theme/Theme_Main.yml"
+    suggested_folder: "Theme"
+    artifact_type: "digest"
+    retention: "workspace"
+    required: true
+    checksum: false
+    description: "Short digests and metadata for fast lookup."

@@ -1,0 +1,54 @@
+# 02_E1_S1-select-refs.yml instructions
+# ---
+# purpose: "Select a single ideation concept to carry forward and record selection rationale."
+# run_command: "Run the ticket in 02_E1_S1-select-refs.yml"
+# ai_create_ticket_prompt: |
+#   Create a REFS-style SELECT ticket YAML that:
+#     - reads ideation.md and ideation_scores.json
+#     - applies selection rules: strongest hook, clearest cost, minimal overlap
+#     - writes selection.json and selection.md (with rationale and IDs)
+# outputs_to_expect:
+#   - "selection.json"
+#   - "selection.md"
+# guidance: "Selection should include a short why (2–3 lines) so later steps can reference rationale."
+# 02_E1_S1-select-refs.yml — preflight
+# File: tickets/02_E1_S1-select-refs.yml
+preflight:
+  description: "Select best ideation candidate and record rationale."
+  require_files:
+    - "artifacts/01_ideation_candidates_<ts>.md"
+    - "artifacts/01_ideation_scores_<ts>.json"
+  outputs_expected:
+    - "artifacts/02_selection_<ts>.md"
+  fail_on_missing: true
+
+job_ticket:
+  id: "02_E1_S1-select.<ts>"
+  mode: fidelity
+  intent: "Choose a single concept and produce selection justification."
+
+inputs:
+  ideation: "artifacts/01_ideation_candidates_<ts>.md"
+  scores: "artifacts/01_ideation_scores_<ts>.json"
+
+steps:
+  - load_candidates:
+      files: ["{{inputs.ideation}}","{{inputs.scores}}"]
+      out: "artifacts/02_candidates_<ts>.json"
+  - select_best:
+      candidates: "artifacts/02_candidates_<ts>.json"
+      out: "artifacts/02_selection_<ts>.md"
+  - append_logmark:
+      event: "selection_made"
+      payload: "artifacts/02_selection_<ts>.md"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "selection_doc"
+    path: "artifacts/02_selection_<ts>.md"
+    suggested_folder: "artifacts"
+    artifact_type: "selection"
+    retention: "workspace"
+    required: true
+    checksum: true
+    description: "Selection with rationale and scoring breakdown."

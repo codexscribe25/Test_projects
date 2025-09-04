@@ -1,0 +1,52 @@
+archive_name: E1_S1_archive_20250903T210738Z.zip
+created_at: '2025-09-03T21:07:38.795692Z'
+source_ticket: /mnt/data/E1_S1-archive-inline.yml
+files:
+- path: /mnt/data/40_exports/episode1_final.md
+  arcname: episode1_final.md
+  size: 12524
+  sha256: b2f4c29349663186a36a65ffb343898d2ca73d0a2170e972ccf6b543543255ae
+- path: /mnt/data/10_drafts/episode1_v1.md
+  arcname: episode1_v1.md
+  size: 12524
+  sha256: b2f4c29349663186a36a65ffb343898d2ca73d0a2170e972ccf6b543543255ae
+- path: /mnt/data/20_reviews/validators.json
+  arcname: validators.json
+  size: 1202
+  sha256: e3c525c1dc01a99e54981f24fc8c2dd0fee4813dcc8f342f7b3c908eb6c46ba6
+- path: /mnt/data/logs/ProcessLog.csv
+  arcname: ProcessLog.csv
+  size: 296
+  sha256: 5b4cbebf87dbe146c85c17cf2f37f84291acaa025e0ef44c11f5e0e4534164f0
+- path: /mnt/data/50_extracted_hooks/E1_S1_hooks.yml
+  arcname: E1_S1_hooks.yml
+  size: 9418
+  sha256: b37134101213abe82d02f9f1d5d875d568192af42eb36c0fe5a803bb20d8cd1b
+- path: /mnt/data/50_extracted_hooks/episode1_final_annotated.md
+  arcname: episode1_final_annotated.md
+  size: 12869
+  sha256: 63f1694f44f9b5665854eb455c1ffad81f112bd25bb73f186963282e098e2172
+- path: /mnt/data/logs/ExtractHooks_Log.csv
+  arcname: ExtractHooks_Log.csv
+  size: 370
+  sha256: 0f7ba462c9ed4dd1880a80524ecd3b646e563d03f7341c0e36aeefff73381eae
+- path: /mnt/data/E1_S1-extract-hooks-inline.yml
+  arcname: E1_S1-extract-hooks-inline.yml
+  size: 518
+  sha256: f8a05dcf5816ae27ee62a05ab6cab034400ab70045804ffab713f3b937c6a966
+- path: /mnt/data/E1_S1-validate-export-refs.yml
+  arcname: E1_S1-validate-export-refs.yml
+  size: 1348
+  sha256: 91c53ba7e95c21c312ec0111a8655190f66f3471ac380ded41a52b152baf6667
+- path: /mnt/data/E1_S1-draft-refs.yml
+  arcname: E1_S1-draft-refs.yml
+  size: 393
+  sha256: bc6d79b50706e8bdf797f4775432c6eba66a54ff5c927686eaaccca945ecb3a6
+- path: /mnt/data/E1_S1-extract-hooks-inline.yml
+  arcname: E1_S1-extract-hooks-inline.yml
+  size: 518
+  sha256: f8a05dcf5816ae27ee62a05ab6cab034400ab70045804ffab713f3b937c6a966
+- path: /mnt/data/E1_S1-archive-inline.yml
+  arcname: E1_S1-archive-inline.yml
+  size: 549
+  sha256: 88439beeb851c361c0a11fa03181a9cc5e06a98ddf161c3ca874dc9abb17f6b5

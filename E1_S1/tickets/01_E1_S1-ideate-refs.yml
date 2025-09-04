@@ -1,0 +1,286 @@
+# 01_E1_S1-ideate-refs.yml instructions
+# ---
+# purpose: "Generate ideation (8 loglines), score them, expand top 2 to 3-beat outlines + opening para."
+# run_command: "Run the ticket in 01_E1_S1-ideate-refs.yml"
+# ai_create_ticket_prompt: |
+#   Create a REFS-style IDEATE ticket YAML for E1_S1 that:
+#     - references Theme_Styleguide.yml and Theme_LoreIndex.yml
+#     - generates 8 loglines (<=35 words)
+#     - scores each by: hook_strength, clarity, tone_fit, novelty
+#     - expands top 2 into 3-beat outlines and an opening paragraph (<=110 words)
+# outputs_to_expect:
+#   - "ideation.md"
+#   - "ideation_scores.json"
+# guidance: "If ideation lacks variety, re-run with mode=fidelity or tweak scoring weights."
+# 01_E1_S1-ideate-refs.yml — preflight
+# File: tickets/01_E1_S1-ideate-refs.yml
+# tickets/01_E1_S1-ideate-refs.yml
+# Normalised IDEATE ticket that preserves the original spec while
+# incorporating the "smart" fallback and input-inspection behaviour.
+# Purpose: Generate ideation (8 loglines), score them, expand top 2 to 3-beat outlines + opening para.
+meta:
+  id: "01_E1_S1-ideate-refs"
+  version: "1.4.0"
+  author: "Callen5"
+  created: "2025-09-04T19:50:00Z"
+  description: >
+    Reliable, iterative ideation for E1_S1 that enforces strict input precedence
+    and human-in-the-loop refinement. Uses 00_inputs/* as primary seeds and
+    Theme only for tone guidance (never as seeds by default).
+
+preflight:
+  description: "Strict ideation using explicit inputs. Fail if premise or seeds missing."
+  require_files:
+    - "00_inputs/premise.md"
+    - "00_inputs/seeds.md"
+  source_whitelist:
+    - "00_inputs/*"
+  source_blacklist:
+    - "Theme/*"
+    - "memory/*"
+    - "artifacts/*"
+    - "tickets/*"
+    - "logs/*"
+  outputs_expected:
+    - "artifacts/01_ideation_candidates_<ts>.md"
+    - "artifacts/01_ideation_scores_<ts>.json"
+    - "artifacts/01_ideation_convo_<ts>.md"
+    - "artifacts/01_ideation_expansions_<ts>.md"
+  fail_on_missing: true
+
+job_ticket:
+  id: "01_E1_S1-ideate.<ts>"
+  mode: performance
+  intent: "Produce an ideation pack (candidates, scores, convo, expansions) from explicit seeds with human-in-loop refinement."
+  params:
+    ideas:
+      type: integer
+      default: 8
+      description: "Number of loglines to generate."
+    max_rounds:
+      type: integer
+      default: 3
+      description: "Maximum human-refinement rounds (includes initial generation)."
+    acceptance_score_threshold:
+      type: number
+      default: 0.72
+      description: "Avg top candidate score threshold for auto-accept."
+    aggressive_infer:
+      type: boolean
+      default: false
+      description: "If true, allow memory/theme top-level keys as HINTS only (requires human confirmation)."
+    deterministic_seed:
+      type: integer
+      default: 0
+      description: "If >0, use a deterministic seed for repeatable outputs."
+    temperature:
+      type: number
+      default: 0.85
+      description: "LLM temperature."
+
+inputs:
+  styleguide:
+    path: "Theme/Theme_Styleguide.yml"
+    use_for: "tone_guidance_only"
+  premise: "00_inputs/premise.md"
+  seeds: "00_inputs/seeds.md"
+  lore_index: "Theme/Theme_LoreIndex.yml"
+  memory: "memory/MemoryLog_Lore.yml"
+
+steps:
+  - load_inputs:
+      files:
+        - "{{inputs.premise}}"
+        - "{{inputs.seeds}}"
+        - "{{inputs.styleguide}}"
+        - "{{inputs.lore_index}}"
+        - "{{inputs.memory}}"
+      out: "artifacts/01_ideation_inputs_<ts>.json"
+      continue_on_missing: true
+
+  - inspect_intent_hints:
+      in: "artifacts/01_ideation_inputs_<ts>.json"
+      behaviour:
+        - scan_keys: [project_type, intent, deliverable, tone, audience, mode]
+        - collect_snippets_chars: 1200
+      out: "artifacts/01_ideation_intent_hints_<ts>.json"
+      note: "Hints may influence phrasing only; do NOT become seeds unless aggressive_infer=true and human confirms."
+
+  - build_seed_pool:
+      inputs:
+        explicit_seeds: "{{inputs.seeds}}"
+        premise: "{{inputs.premise}}"
+        theme_main: "Theme/Theme_Main.yml"
+        lore_index: "{{inputs.lore_index}}"
+        memory: "{{inputs.memory}}"
+      logic:
+        - primary: use explicit_seeds + premise ONLY as seeds
+        - if job_ticket.params.aggressive_infer == true:
+            include: top-level keys from memory/theme_main AS HINTS (NOT canonical facts)
+        - fallback: do NOT use theme/main/memory content as seeds unless permitted and human-confirmed
+      dedupe: true
+      out: "artifacts/01_ideation_pool_raw_<ts>.json"
+
+  - seed_sanitizer:
+      in: "artifacts/01_ideation_pool_raw_<ts>.json"
+      out: "artifacts/01_ideation_pool_sanitized_<ts>.json"
+      rules:
+        - remove_tokens_matching_regex: "(?i)\\b(call(en)?|core|module|registry|operators|vision|rolefit|plugin|memory|manifest|artifact|ticket|log)\\b"
+        - remove_tokens_matching_regex: "\\w+\\d+"   # drop tokens containing digits (e.g., Module5)
+        - min_token_length: 3
+      behavior:
+        - if sanitized_pool_empty: emit "ask-user" seeds file and STOP for human feedback
+      note: "Sanitizer prevents internal/system tokens leaking into creative seeds."
+
+  - construct_initial_prompt:
+      template_out: "artifacts/01_ideation_prompt_<ts>.txt"
+      template: |
+        You are an ideation assistant. Follow these strict rules:
+        1) USE ONLY this seed source for creative generation: artifacts/01_ideation_pool_sanitized_<ts>.json
+        2) USE Theme/Theme_Styleguide.yml only for tone phrasing guidance (do NOT use Theme or Memory as facts/seeds).
+        3) Produce up to {{params.ideas}} candidate loglines. For each candidate:
+           - ID (C01...), 1–2 sentence logline (<=35 words), 1-sentence expansion, 1-line risk note, 2–4 tags.
+        4) Provide a small JSON block at the end with candidates and raw scores (hook_strength, clarity, tone_fit, novelty).
+        5) If you cannot produce at least 3 unique creative candidates from the sanitized seeds, output 2–3 ask-user clarification seeds and halt.
+        TONE: follow Theme/Theme_Styleguide.yml for phrasing only.
+
+  - llm_iterative_generation:
+      prompt_file: "artifacts/01_ideation_prompt_<ts>.txt"
+      convo_log: "artifacts/01_ideation_convo_<ts>.md"
+      outputs:
+        candidates_md: "artifacts/01_ideation_candidates_<ts>.md"
+        scores_json: "artifacts/01_ideation_scores_<ts>.json"
+      params:
+        temperature: "{{job_ticket.params.temperature}}"
+        deterministic_seed: "{{job_ticket.params.deterministic_seed}}"
+        max_rounds: "{{job_ticket.params.max_rounds}}"
+        acceptance_threshold: "{{job_ticket.params.acceptance_score_threshold}}"
+      behaviour:
+        - round_1: mode="performance" generate initial candidates
+        - subsequent_rounds: 
+          mode: "fidelity"  # refine ONLY if human feedback file present: artifacts/01_ideation_feedback_<ts>.md
+        - stop_conditions:
+            - human_mark_accept present in artifacts/01_ideation_feedback_<ts>.md
+            - avg_top_score >= acceptance_threshold
+            - rounds >= max_rounds
+
+  - postprocess_and_validate:
+      inputs:
+        - "artifacts/01_ideation_candidates_<ts>.md"
+        - "artifacts/01_ideation_scores_<ts>.json"
+      logic:
+        - ensure every candidate has full score object
+        - normalize scores to 0.0–1.0
+        - detect_banned_terms_in_files:
+            files: ["artifacts/01_ideation_candidates_<ts>.md","artifacts/01_ideation_expansions_<ts>.md"]
+            validator_source: "Theme/Theme_LoreValidator.yml"
+        - if banned_terms_found: FAIL ticket with remediation report
+      out: "artifacts/01_ideation_scores_<ts>.json"
+
+  - rank_and_select_top:
+      scores: "artifacts/01_ideation_scores_<ts>.json"
+      candidates: "artifacts/01_ideation_candidates_<ts>.md"
+      params:
+        top_n: 2
+      out: "artifacts/01_ideation_top_<ts>.json"
+
+  - expand_top_candidates:
+      in: "artifacts/01_ideation_top_<ts>.json"
+      params:
+        beats: 3
+        opening_para_max_words: 110
+      out: "artifacts/01_ideation_expansions_<ts>.md"
+      format: |
+        For each top candidate:
+        - Title / Logline
+        - Three-beat outline (Setup / Escalation / Cost)
+        - Opening paragraph (<=110 words)
+
+  - package_outputs:
+      inputs:
+        - "artifacts/01_ideation_candidates_<ts>.md"
+        - "artifacts/01_ideation_scores_<ts>.json"
+        - "artifacts/01_ideation_expansions_<ts>.md"
+        - "artifacts/01_ideation_convo_<ts>.md"
+      out_zip: "artifacts/project_extracted_ideate_<ts>.zip"
+      out_paths:
+        - "artifacts/01_ideation_candidates_<ts>.md"
+        - "artifacts/01_ideation_scores_<ts>.json"
+        - "artifacts/01_ideation_expansions_<ts>.md"
+        - "artifacts/01_ideation_convo_<ts>.md"
+        - "artifacts/project_extracted_ideate_<ts>.zip"
+
+  - append_logmark:
+      event: "ideation_completed"
+      payload:
+        candidates: "artifacts/01_ideation_candidates_<ts>.md"
+        scores: "artifacts/01_ideation_scores_<ts>.json"
+        expansions: "artifacts/01_ideation_expansions_<ts>.md"
+      log: "logs/logmarks.ndjson"
+
+prompts:
+  initial_prompt_file: "artifacts/01_ideation_prompt_<ts>.txt"
+  refinement_prompt_template: |
+    You are an ideation refiner. Apply the human feedback below to the candidate list.
+    FEEDBACK:
+    {{file:artifacts/01_ideation_feedback_<ts>.md}}
+    CANDIDATES:
+    {{file:artifacts/01_ideation_candidates_<ts>.md}}
+    Produce:
+      - refined candidate list (retain IDs where possible)
+      - rationale per change
+      - updated scores (hook_strength, clarity, tone_fit, novelty)
+      - recommendation per candidate: accept / refine / discard
+    Strict rule: Do NOT pull facts from Theme/Memory/Artifacts. Use only convo + feedback + original sanitized seeds.
+
+outputs:
+  - id: "ideation_md"
+    path: "artifacts/01_ideation_candidates_<ts>.md"
+    artifact_type: "ideation"
+    required: true
+    checksum: true
+
+  - id: "ideation_scores"
+    path: "artifacts/01_ideation_scores_<ts>.json"
+    artifact_type: "scores"
+    required: true
+    checksum: true
+
+  - id: "ideation_expansions"
+    path: "artifacts/01_ideation_expansions_<ts>.md"
+    artifact_type: "expansions"
+    required: true
+    checksum: false
+
+  - id: "ideation_convo"
+    path: "artifacts/01_ideation_convo_<ts>.md"
+    artifact_type: "conversation"
+    required: true
+    checksum: false
+
+validators:
+  - id: "V1_min_candidate_count"
+    type: "post"
+    assert: "count_candidates_in_md(artifacts/01_ideation_candidates_<ts>.md) >= 3"
+    message: "Ticket must produce at least 3 creative candidates."
+
+  - id: "V2_scores_complete"
+    type: "post"
+    assert: "every_candidate_has_scores(artifacts/01_ideation_scores_<ts>.json)"
+    message: "Every candidate must have a full score object."
+
+  - id: "V3_no_banned_terms"
+    type: "post"
+    assert: "no_banned_terms_in_files([artifacts/01_ideation_candidates_<ts>.md,artifacts/01_ideation_expansions_<ts>.md])"
+    message: "Generated output must not contain banned/system tokens per Theme/Theme_LoreValidator.yml."
+
+acceptance_criteria:
+  - "Produces N loglines where N == job_ticket.params.ideas (subject to dedupe), at least 3 required."
+  - "If sanitized seeds are insufficient, outputs ask-user prompts and pauses for human input."
+  - "Top 2 candidates expanded into 3-beat outlines + <=110-word opening paragraph."
+  - "Outputs written, zipped, and a logmark appended."
+
+notes:
+  - "Runner MUST enforce source_whitelist/source_blacklist and the seed_sanitizer rules before calling the LLM."
+  - "If aggressive_infer=true, candidate hints from memory/theme require human confirmation before use as seeds."
+  - "Set deterministic_seed > 0 for repeatable runs during testing."

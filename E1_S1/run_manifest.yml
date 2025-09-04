@@ -1,14 +1,205 @@
+# run_manifest.yml — improved (help the engine locate files reliably)
+# Notes:
+#  - Every entry uses a relative `path:` (relative to ZIP root / workspace root).
+#  - `core:` maps the file to a virtual CORE (PromptCORE / StoryCORE / MemoryCORE / Operator) so tickets
+#    that accept virtual references can resolve them via core_resolver.json.
+#  - `expected_format` helps quick sanity checks (yaml / md / ndjson / csv / zip).
+#  - `required: true` means BOOT must verify presence for the pipeline to continue.
+#  - `checksum:` is optional — populate with SHA256 if you want strict integrity checks.
+preflight:
+  description: "Manifest must exist and list required files. BOOT/session-snapshot will use this for deterministic checks."
+  require_files:
+    - "run_manifest.yml"
+  fail_on_missing: true
+  checks:
+    - validate_manifest_schema: true
+    - all_required_flags_present: true
+    - resolve_core_map_if_present: true
+
+core_map:                # virtual → physical path mapping (used by 00_map_virtual_cores.yml)
+  PromptCORE: "00_inputs"                # prompts, premise, seeds, small operator inputs
+  StoryCORE:  "10_drafts"                # story drafts, scaffolds, rewrites, exports
+  MemoryCORE: "memory"                   # MemoryLog_Lore.yml and other persistent memory artifacts
+  OperatorCORE: "00_inputs"              # operator guidance files
+  default_prompt_file: "00_inputs/premise.md"
+
 run_manifest:
   project: "E1_S1"
-  timestamp: "20250903T163511Z"
-  inputs:
-    premise: "00_inputs/premise.md"
-    tone_bible: "/@workspace/Theme_Styleguide.yml"
-    theme_index: "/@workspace/Theme_LoreIndex.yml"
-  outputs:
-    draft: "10_drafts/episode1_v1.md"
-    validators: "20_reviews/validators.json"
-    rewrite: "30_rewrites/episode1_v2.md"
-    export: "40_exports/episode1_final.md"
-  metrics_file: "logs/ProcessLog.csv"
-  kpis: [overall_score, tone_accuracy, contradiction_index, cycle_time_draft_min, validator_pass_rate]
+  created: "2025-09-04T13:30:56Z"
+  description: "Authoritative manifest listing files and where they live in the project ZIP/workspace."
+  version: "v1"
+  files:
+    - path: "tickets/00_E1_S1-BOOT.yml"
+      role: "ticket:boot"
+      required: true
+      core: "OperatorCORE"
+      expected_format: "yaml"
+      description: "Initial boot — verify presence of files, compute checksums, build Theme_Lock.json."
+      checksum: null
+
+    - path: "tickets/00_map_virtual_cores.yml"
+      role: "ticket:map"
+      required: true
+      core: "OperatorCORE"
+      expected_format: "yaml"
+      description: "Resolve core_map.yml into core_resolver.json; create placeholders and append a logmark."
+
+    - path: "tickets/00a_E1_S1-session-snapshot.yml"
+      role: "ticket:session_snapshot"
+      required: true
+      core: "OperatorCORE"
+      expected_format: "yaml"
+      description: "Create session_snapshot_<ts>.json (paths, sizes, checksums) and missing_files.md."
+
+    - path: "tickets/00b_E1_S1-sync-theme-from-memory-refs.yml"
+      role: "ticket:theme_sync"
+      required: true
+      core: "MemoryCORE"
+      expected_format: "yaml"
+      description: "Regenerate Theme_LoreIndex.yml and Theme_Main.yml from MemoryLog_Lore.yml."
+
+    - path: "tickets/00c_E1_S1-theme-validate.yml"
+      role: "ticket:theme_validate"
+      required: true
+      core: "OperatorCORE"
+      expected_format: "yaml"
+      description: "Run Theme_LoreValidator.yml against Theme_Main.yml/Theme_LoreIndex.yml; produce a detailed report."
+
+    - path: "tickets/00d_E1_S1-lore-deepscan.yml"
+      role: "ticket:lore_deepscan"
+      required: false
+      core: "MemoryCORE"
+      expected_format: "yaml"
+      description: "Deep-scan / confidence scoring on MemoryLog and Theme index; outputs low_confidence_lore.md."
+
+    - path: "tickets/00e_E1_S1-set-enforcement-phase.yml"
+      role: "ticket:phase_change"
+      required: true
+      core: "OperatorCORE"
+      expected_format: "yaml"
+      description: "Canonical ticket to change enforcement phase (draft → controlled → locked)."
+
+    - path: "Theme/Theme_Styleguide.yml"
+      role: "theme:styleguide"
+      required: true
+      core: "PromptCORE"
+      expected_format: "yaml"
+      description: "Tone and style guide used by ideation and validators."
+
+    - path: "Theme/Theme_LoreValidator.yml"
+      role: "theme:lore_validator"
+      required: true
+      core: "OperatorCORE"
+      expected_format: "yaml"
+      description: "Validation rules (phased) guiding banned tokens, provenance checks, severity mapping."
+
+    - path: "Theme/Theme_LoreIndex.yml"
+      role: "theme:lore_index"
+      required: true
+      core: "MemoryCORE"
+      expected_format: "yaml"
+      description: "Pointer index (canonical_id -> file paths) for fast lookup."
+
+    - path: "Theme/Theme_Main.yml"
+      role: "theme:main"
+      required: true
+      core: "MemoryCORE"
+      expected_format: "yaml"
+      description: "Short digests derived from MemoryLog for quick LLM context."
+
+    - path: "memory/MemoryLog_Lore.yml"
+      role: "memory:lore"
+      required: true
+      core: "MemoryCORE"
+      expected_format: "yaml"
+      description: "Persistent project-scale lore memory — append-only via 05b ticket."
+
+    - path: "templates/canon_packet_stub.md"
+      role: "template:canon_packet_stub"
+      required: false
+      core: "OperatorCORE"
+      expected_format: "md + frontmatter"
+      description: "Human-fillable canon packet stub produced by lore-audit and used by 05b approval."
+
+    - path: "templates/05b_human_ack_template.md"
+      role: "template:human_ack"
+      required: false
+      core: "OperatorCORE"
+      expected_format: "md | yaml-block"
+      description: "Human approval template for 05b (approver, timestamp, approved:true)."
+
+    - path: "00_inputs/Operator_Intent_Prime.yml"
+      role: "operator:intent"
+      required: false
+      core: "OperatorCORE"
+      expected_format: "yaml"
+      description: "Operator guidance (high-level policies & contact points)."
+
+    - path: "00_inputs/premise.md"
+      role: "input:premise"
+      required: false
+      core: "PromptCORE"
+      expected_format: "md"
+      description: "Short creative brief used by ideation ticket."
+
+    - path: "00_inputs/seeds.md"
+      role: "input:seeds"
+      required: false
+      core: "PromptCORE"
+      expected_format: "text"
+      description: "Seed prompts and idea starters for ideation."
+
+    - path: "10_drafts/episode1_v1.md"
+      role: "artifact:draft"
+      required: false
+      core: "StoryCORE"
+      expected_format: "md"
+      description: "Working draft artifact."
+
+    - path: "30_rewrites/episode1_v2.md"
+      role: "artifact:rewrite"
+      required: false
+      core: "StoryCORE"
+      expected_format: "md"
+      description: "Rewritten draft from controlled rewrite step."
+
+    - path: "40_exports/episode1_final.md"
+      role: "artifact:export"
+      required: false
+      core: "StoryCORE"
+      expected_format: "md"
+      description: "Final exported artifact with frontmatter and provenance."
+
+    - path: "logs/logmarks.ndjson"
+      role: "logs:logmarks"
+      required: false
+      core: "OperatorCORE"
+      expected_format: "ndjson"
+      description: "Append-only event log for pipeline events."
+
+    - path: "logs/ProcessLog.csv"
+      role: "logs:process_csv"
+      required: false
+      core: "OperatorCORE"
+      expected_format: "csv"
+      description: "CSV process log for exports and major events."
+
+    - path: "run_manifest.yml"
+      role: "manifest"
+      required: true
+      core: "OperatorCORE"
+      expected_format: "yaml"
+      description: "This manifest (meta). Keep updated when files move or are renamed."
+
+  validation_policy:
+    - rule: "All 'required: true' files must exist and be readable for BOOT to pass."
+    - rule: "If a required file is missing, BOOT emits missing_files.md and halts pipeline until resolved."
+    - rule: "If `core_map.yml` is present, run 00_map_virtual_cores.yml to produce core_resolver.json before other tickets that accept virtual refs."
+    - rule: "Tickets MUST use the `path:` values in this manifest as the canonical file locations. Virtual references are allowed only when core_resolver.json is present and was produced by the mapping ticket."
+    - rule: "When `checksum` is present and non-null, BOOT must verify SHA256 before proceeding; mismatch -> fail."
+    - rule: "Paths are case-sensitive. Update manifest when renaming or moving files."
+
+# quick operational guidance (small, human-readable)
+notes:
+  - "Run order for strict preflight: tickets/00_E1_S1-BOOT.yml -> tickets/00_map_virtual_cores.yml -> tickets/00a_E1_S1-session-snapshot.yml -> tickets/00b_E1_S1-sync-theme-from_memory-refs.yml -> tickets/00c_E1_S1-theme-validate.yml -> tickets/00d_E1_S1-lore-deepscan.yml"
+  - "Keep the manifest up-to-date. Prefer `path:` lookups in tickets for determinism; use `core:` only for logical grouping & resolver-based workflows."

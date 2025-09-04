@@ -1,0 +1,99 @@
+# 05b_E1_S1-lore-approve-refs.yml instructions
+# ---
+# purpose: "Validate a filled canon_packet_stub.md, require human acknowledgement, and append approved canonical lore to the persistent MemoryLog_Lore.yml. Update Theme_LoreIndex.yml (pointers) and Theme_Main.yml (digests) if configured. Emit audit logmarks."
+# run_command: "Run the ticket in 05b_E1_S1-lore-approve-refs.yml"
+# ai_create_ticket_prompt: |
+#   Create an APPROVE-LORE ticket YAML for E1_S1 that:
+#     - reads canon_packet_stub.md (produced by lore-audit)
+#     - validates contents against Theme_LoreValidator.yml rules
+#     - produces 05b_validated_canon.json (validator report)
+#     - requires explicit human acknowledgement (approver name, timestamp, approved:true) before write
+#     - appends a structured entry to MemoryLog_Lore.yml using the project's MemoryLog schema
+#     - optionally upserts pointer(s) into Theme_LoreIndex.yml and refreshes Theme_Main.yml digests
+#     - appends events to logs/logmarks.ndjson: lore_proposed -> lore_approved -> memory_appended
+# preflight_checks:
+#   - require presence of: canon_packet_stub.md
+#   - require Theme_Lock.json (optional, but recommended)
+#   - fail_if_missing: true
+# required_fields_in_packet:
+#   - canonical_id
+#   - term
+#   - short_description
+#   - created_by (approver)
+#   - approval_timestamp
+#   - approved: true
+# validators_to_run: ["Theme_LoreValidator.yml"]
+# outputs_to_expect:
+#   - "05b_validated_canon.json"
+#   - "05b_human_ack.md"  # human ack artifact
+#   - "MemoryLog_Lore.yml" (appended)
+#   - "05b_theme_index_updates.json" (if theme index updated)
+#   - "05b_theme_main_updates.md" (if theme main updated)
+#   - "logs/logmarks.ndjson"
+# gate_rules:
+#   - require human acknowledgement record before append (approved:true + approver + timestamp)
+#   - do not write to MemoryLog_Lore.yml if validation severity contains any 'error'
+#   - append-only semantics: this ticket is the only allowed writer for approved memory entries
+# guidance:
+#   - Use this ticket after canon_packet_stub.md has been fully completed/verified by a human
+#   - Keep canon packet concise; provenance is required to ensure cross-session trust
+#   - For bulk approvals, run approvals one entry-per-run or use a batched approval mode that still records per-entry approver metadata
+# notes:
+#   - MemoryLog_Lore.yml is the persistent, cross-session memory store — do not edit it directly. Use this ticket.
+# 05b_E1_S1-lore-approve-refs.yml — preflight
+# File: tickets/05b_E1_S1-lore-approve-refs.yml
+preflight:
+  description: "Approve completed canon_packet_stub(s) and append to MemoryLog_Lore.yml (append-only)."
+  require_files:
+    - "templates/canon_packet_stub_<ts>.md"
+    - "memory/MemoryLog_Lore.yml"
+  outputs_expected:
+    - "memory/MemoryLog_Lore.yml"
+    - "artifacts/05b_ack_<ts>.json"
+  fail_on_missing: true
+
+job_ticket:
+  id: "05b_E1_S1-lore-approve.<ts>"
+  mode: fidelity
+  intent: "Validate human approval block, append canonical entries to memory, and audit."
+
+inputs:
+  stub: "templates/canon_packet_stub_<ts>.md"
+  memory: "memory/MemoryLog_Lore.yml"
+
+steps:
+  - parse_stub:
+      file: "{{inputs.stub}}"
+      out: "artifacts/05b_stub_parsed_<ts>.json"
+  - require_human_ack:
+      stub: "artifacts/05b_stub_parsed_<ts>.json"
+      ack_field: "approver_name"
+      ack_required: true
+      out: "artifacts/05b_ack_<ts>.json"
+  - append_to_memory:
+      stub: "artifacts/05b_ack_<ts>.json"
+      memory: "{{inputs.memory}}"
+      out: "memory/MemoryLog_Lore.yml"
+      append_only: true
+  - append_logmark:
+      event: "lore_approved"
+      payload: "artifacts/05b_ack_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "memory_updated"
+    path: "memory/MemoryLog_Lore.yml"
+    suggested_folder: "memory"
+    artifact_type: "memory"
+    retention: "persistent"
+    required: true
+    checksum: true
+    description: "Memory log appended with approved canon entries."
+  - id: "ack_record"
+    path: "artifacts/05b_ack_<ts>.json"
+    suggested_folder: "artifacts"
+    artifact_type: "ack"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Human approval record and metadata."

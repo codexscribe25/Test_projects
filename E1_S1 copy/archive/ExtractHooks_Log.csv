@@ -1,0 +1,5 @@
+timestamp,action,detail
+2025-09-03T20:50:44.809432Z,read_ticket,/mnt/data/E1_S1-extract-hooks-inline.yml
+2025-09-03T20:50:44.809476Z,read_export,/mnt/data/40_exports/episode1_final.md
+2025-09-03T20:50:44.809478Z,write_hooks,/mnt/data/50_extracted_hooks/E1_S1_hooks.yml
+2025-09-03T20:50:44.809479Z,write_annotated,/mnt/data/50_extracted_hooks/episode1_final_annotated.md

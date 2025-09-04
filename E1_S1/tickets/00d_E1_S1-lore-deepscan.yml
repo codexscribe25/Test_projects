@@ -1,0 +1,73 @@
+# 00d_E1_S1-lore-deepscan.yml instructions
+# ---
+# purpose: "Perform a deep-scan / scoring pass on lore entries in MemoryLog_Lore.yml and Theme_LoreIndex.yml. Rank entries by confidence and provenance completeness and produce a low-confidence report for targeted action (approve/fill/remove)."
+# run_command: "Run the ticket in 00d_E1_S1-lore-deepscan.yml"
+# ai_create_ticket_prompt: |
+#   Create a LORE-DEEPSCAN ticket YAML for E1_S1 that:
+#     - loads MemoryLog_Lore.yml and Theme_LoreIndex.yml
+#     - computes per-entry scores: confidence_score, provenance_score, tag_completeness, recency_score
+#     - outputs lore_deepscan_scores.json and low_confidence_lore.md with suggested next actions
+# preflight_checks:
+#   - require MemoryLog_Lore.yml
+#   - recommend Theme_LoreIndex.yml present (fallback allowed)
+# outputs_to_expect:
+#   - lore_deepscan_scores.json
+#   - low_confidence_lore.md
+#   - suggested_actions.json
+# gate_rules:
+#   - produce an actionable list of entries below project threshold; do NOT auto-modify MemoryLog_Lore.yml (human review required)
+# 00d_E1_S1-lore-deepscan.yml — preflight
+# File: tickets/00d_E1_S1-lore-deepscan.yml
+preflight:
+  description: "Deep-scan lore & theme for provenance and confidence gaps."
+  require_files:
+    - "memory/MemoryLog_Lore.yml"
+  outputs_expected:
+    - "artifacts/deepscan_report_<ts>.json"
+    - "artifacts/low_confidence_lore_<ts>.md"
+  fail_on_missing: true
+
+job_ticket:
+  id: "00d_E1_S1-lore-deepscan.<ts>"
+  mode: fidelity
+  intent: "Score lore entries for confidence and provenance gaps."
+
+inputs:
+  memory: "memory/MemoryLog_Lore.yml"
+  index: "Theme/Theme_LoreIndex.yml"
+  config:
+    confidence_threshold: 0.75
+
+steps:
+  - extract_candidates:
+      memory: "{{inputs.memory}}"
+      out: "artifacts/00d_candidates_<ts>.json"
+  - score_candidates:
+      candidates: "artifacts/00d_candidates_<ts>.json"
+      threshold: "{{inputs.config.confidence_threshold}}"
+      out: "artifacts/deepscan_report_<ts>.json"
+  - generate_low_confidence_md:
+      report: "artifacts/deepscan_report_<ts>.json"
+      out: "artifacts/low_confidence_lore_<ts>.md"
+  - append_logmark:
+      event: "lore_deepscan_completed"
+      payload: "artifacts/deepscan_report_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "deepscan_report"
+    path: "artifacts/deepscan_report_<ts>.json"
+    suggested_folder: "artifacts"
+    artifact_type: "report"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Confidence/provenance scoring for lore."
+  - id: "low_confidence_report"
+    path: "artifacts/low_confidence_lore_<ts>.md"
+    suggested_folder: "artifacts"
+    artifact_type: "list"
+    retention: "artifacts"
+    required: true
+    checksum: false
+    description: "Human-readable list of low-confidence lore candidates."

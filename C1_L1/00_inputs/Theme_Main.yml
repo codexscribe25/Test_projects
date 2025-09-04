@@ -1,0 +1,17 @@
+# Theme_Main.yml
+meta:
+  version: 1
+  description: "Theme anchor for this project; holds chapter-level tags & hooks."
+chapter_profile:
+  tags: []
+  target_length_words: 3000-4500
+  continuity_hooks_for_ch2:
+    - id: hook1
+      text: "<promise to be addressed in Chapter 2>"
+      status: planned
+    - id: hook2
+      text: "<promise to be addressed in Chapter 2>"
+      status: planned
+    - id: hook3
+      text: "<promise to be addressed in Chapter 2>"
+      status: planned

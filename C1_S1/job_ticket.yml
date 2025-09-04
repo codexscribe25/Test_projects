@@ -1,0 +1,31 @@
+job_ticket:
+  id: "C1_S1-run-<timestamp>"
+  mode: fidelity
+  intent: "Story-first chapter: draft, then research/validate, then export."
+  inputs:
+    premise_path: "00_inputs/premise.md"
+    arc_map_path: "00_inputs/arc_map.yml"
+    continuity_plan_path: "00_inputs/continuity_plan.yml"
+    theme_index: "00_inputs/Theme_LoreIndex.yml"
+    tone_bible: "00_inputs/Theme_Styleguide.yml"
+    lore_validator: "00_inputs/Theme_LoreValidator.yml"
+    purpose: "00_inputs/Theme_Purpose.yml"
+    theme_main: "00_inputs/Theme_Main.yml"
+  steps:
+    - draft_chapter: { target_words: [3000,4500] }
+    - post_draft_research: {}
+    - run_validators: {}
+    - rewrite_addressing_flags: { enforce_tone: true }
+    - export_with_front_matter: {}
+  validators: [tone_guard, canon_gate, contradiction_scan, citation_map, style_guard, export_guard]
+  deliverables:
+    - "10_drafts/*"
+    - "20_reviews/validators.json"
+    - "30_rewrites/*"
+    - "40_exports/*"
+    - "logs/ProcessLog.csv"
+  acceptance:
+    overall_score_min: 80
+    tone_accuracy_min: 85
+    validator_pass_rate_min: 90
+    hard_contradictions: 0

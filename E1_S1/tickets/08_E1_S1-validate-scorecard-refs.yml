@@ -1,0 +1,80 @@
+# 08_E1_S1-validate-scorecard-refs.yml instructions
+# ---
+# purpose: "Re-run validators on the rewritten draft, create scorecard, produce acceptance_decision."
+# run_command: "Run the ticket in 08_E1_S1-validate-scorecard-refs.yml"
+# ai_create_ticket_prompt: |
+#   Create a REFS-style POST-VALIDATE + SCORECARD ticket YAML that:
+#     - runs validators on 30_rewrites/episode1_v2.md (tone_guard, style_guard, contradiction_scan, canon_gate, citation_map, continuity_check)
+#     - writes validators_post_rewrite.json
+#     - builds episode_scorecard.md (compare pre/post)
+#     - writes acceptance_decision.md with gates: overall>=80, tone>=85, validator_pass_rate>=90, hard_contradictions==0
+# outputs_to_expect:
+#   - "20_reviews/validators_post_rewrite.json"
+#   - "episode_scorecard.md"
+#   - "acceptance_decision.md"
+# gate_rule: "Proceed to export only if acceptance_decision.md indicates PASS."
+# 08_E1_S1-validate-scorecard-refs.yml — preflight
+# File: tickets/08_E1_S1-validate-scorecard-refs.yml
+preflight:
+  description: "Post-rewrite validation and scorecard generation for acceptance decision."
+  require_files:
+    - "30_rewrites/episode1_v2_<ts>.md"
+    - "Theme/Theme_LoreValidator.yml"
+  outputs_expected:
+    - "artifacts/08_post_validators_<ts>.json"
+    - "artifacts/08_scorecard_<ts>.json"
+    - "artifacts/acceptance_decision_<ts>.md"
+  fail_on_missing: true
+
+job_ticket:
+  id: "08_E1_S1-validate-scorecard.<ts>"
+  mode: fidelity
+  intent: "Compute post-rewrite validator reports and acceptance scorecard."
+
+inputs:
+  rewrite: "30_rewrites/episode1_v2_<ts>.md"
+  validators: "Theme/Theme_LoreValidator.yml"
+  acceptance_threshold: 0.80
+
+steps:
+  - run_post_validators:
+      file: "{{inputs.rewrite}}"
+      validators: "{{inputs.validators}}"
+      out: "artifacts/08_post_validators_<ts>.json"
+  - compute_scorecard:
+      validators_report: "artifacts/08_post_validators_<ts>.json"
+      out: "artifacts/08_scorecard_<ts>.json"
+  - decide_acceptance:
+      scorecard: "artifacts/08_scorecard_<ts>.json"
+      threshold: "{{inputs.acceptance_threshold}}"
+      out: "artifacts/acceptance_decision_<ts>.md"
+  - append_logmark:
+      event: "post_rewrite_validation"
+      payload: "artifacts/acceptance_decision_<ts>.md"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "post_validators"
+    path: "artifacts/08_post_validators_<ts>.json"
+    suggested_folder: "artifacts"
+    artifact_type: "report"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Post-rewrite validators report."
+  - id: "scorecard"
+    path: "artifacts/08_scorecard_<ts>.json"
+    suggested_folder: "artifacts"
+    artifact_type: "scorecard"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Scorecard summarizing validators into a single score."
+  - id: "acceptance_decision"
+    path: "artifacts/acceptance_decision_<ts>.md"
+    suggested_folder: "artifacts"
+    artifact_type: "decision"
+    retention: "artifacts"
+    required: true
+    checksum: false
+    description: "Human or auto PASS/FAIL decision with rationale."

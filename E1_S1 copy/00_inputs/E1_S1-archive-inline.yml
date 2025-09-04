@@ -1,0 +1,13 @@
+job_ticket:
+  id: "E1_S1-archive-<ts>"
+  mode: performance
+  inputs:
+    final_path: "episode1_final.md"
+    validator_json_path: "validators.json"
+  steps:
+    - append_process_log: { phase: "export", fields: ["run_id","duration_min","overall_score","tone_score","validator_pass_rate"] }
+    - make_release_bundle: { include: ["episode1_final.md","validators.json","E1_S1-validation.md"], zip_name: "E1_S1_release.zip" }
+  validators: []
+  outputs:
+    release_zip_path: "E1_S1_release.zip"
+    process_log_path: "logs/ProcessLog.csv"

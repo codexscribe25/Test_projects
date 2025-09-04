@@ -1,0 +1,16 @@
+run_manifest:
+  project: "C1_S1"
+  timestamp: "20250903T200506Z"
+  inputs:
+    premise: "00_inputs/premise.md"
+    arc_map: "00_inputs/arc_map.yml"
+    continuity_plan: "00_inputs/continuity_plan.yml"
+    tone_bible: "00_inputs/Theme_Styleguide.yml"
+    theme_index: "00_inputs/Theme_LoreIndex.yml"
+  outputs:
+    draft: "10_drafts/chapter1_v1.md"
+    validators: "20_reviews/validators.json"
+    rewrite: "30_rewrites/chapter1_v2.md"
+    export: "40_exports/chapter1_final.md"
+  metrics_file: "logs/ProcessLog.csv"
+  kpis: [overall_score, tone_accuracy, contradiction_index, cycle_time_draft_min, validator_pass_rate]

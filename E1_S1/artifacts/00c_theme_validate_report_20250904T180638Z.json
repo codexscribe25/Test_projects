@@ -1,0 +1,15 @@
+{
+  "generated_at": "20250904T180638Z",
+  "theme_main_exists": true,
+  "theme_index_exists": true,
+  "validator_exists": true,
+  "entries_checked": 0,
+  "issues": [],
+  "summary": {
+    "digests_count": 0,
+    "index_entries_count": 0,
+    "banned_terms_count": 0,
+    "min_confidence": 0.0,
+    "warn_confidence_threshold": 0.5
+  }
+}

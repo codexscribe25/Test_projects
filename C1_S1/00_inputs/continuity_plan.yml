@@ -1,0 +1,8 @@
+# continuity_plan.yml
+continuity_promises:
+  - id: c2_promise_1
+    text: "<named thread to resolve in Chapter 2>"
+  - id: c2_promise_2
+    text: "<named thread to develop in Chapter 2>"
+  - id: c2_promise_3
+    text: "<named thread to echo in Chapter 2>"
