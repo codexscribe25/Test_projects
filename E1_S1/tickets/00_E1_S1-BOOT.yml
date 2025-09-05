@@ -1,74 +1,139 @@
-# 00_E1_S1-BOOT.yml instructions
+# 00_E1_S1-BOOT.yml — BOOT (gated, ZIP-mounted)
 # ---
-# purpose: "Verify uploaded theme & ticket files, compute checksums, build Theme_Lock.json and aliases."
+# purpose: >
+#   Read the gated overlay list, validate required CORE keys via core_map.json,
+#   enumerate overlay + ticket files, compute SHA-256 checksums, and emit a
+#   Theme_Lock for this session. Never touches sources outside the gate.
+#
 # run_command: "Run the ticket in 00_E1_S1-BOOT.yml"
+#
+# requires:
+#   - "/mnt/data/build/overlay_paths.json"   # from ticket_00_boot_gate.yml
+#   - "/mnt/data/build/core_map.json"        # from 00_map_virtual_cores.yml
+#
 # ai_create_ticket_prompt: |
 #   Create a BOOT ticket YAML for project E1_S1 that:
-#     - verifies the presence of required Theme_* files and numbered tickets
-#     - computes MD5 checksums and compares to run_manifest.yml (if present)
-#     - emits checksums.json, Theme_Lock.json, Theme_Lock.md, Theme_Aliases.json, missing_files.md
-#     - fails if required files are missing (unless configured otherwise)
+#     - loads the gated overlay paths from /mnt/data/build/overlay_paths.json
+#     - loads / validates required CORE keys from /mnt/data/build/core_map.json
+#     - enumerates overlay and ticket files within the gated paths only
+#     - computes SHA-256 checksums and (if present) compares to /mnt/data/run_manifest.yml
+#     - emits:
+#         /mnt/data/build/checksums.json
+#         /mnt/data/build/Theme_Lock.json
+#         /mnt/data/build/Theme_Lock.md
+#         /mnt/data/build/manifest_diff.md
+#         /mnt/data/build/missing_files.md
+#     - fails fast if required CORE keys are missing; otherwise continues and reports
+#     - does not import user/global memories; relies only on gated overlays + core_map
+#
 # watch_for_outputs:
-#   - "Theme_Lock.json (exists)"
-#   - "checksums.json (matches manifest if provided)"
-#   - "missing_files.md (should be empty for clean run)"
-# notes: "Run BOOT first in a fresh session whenever you upload new theme or ticket files."
-# 00_E1_S1-BOOT.yml — preflight
-# File: tickets/00_E1_S1-BOOT.yml
-preflight:
-  description: "Boot: validate manifest, compute checksums, generate session snapshot & Theme_Lock."
-  require_files:
-    - "run_manifest.yml"
-  outputs_expected:
-    - "artifacts/session_snapshot_<ts>.json"
-    - "Theme/Theme_Lock.json"
-  fail_on_missing: false
+#   - "/mnt/data/build/Theme_Lock.json (exists)"
+#   - "/mnt/data/build/checksums.json (exists)"
+#   - "/mnt/data/build/missing_files.md (empty for clean run)"
+#   - "/mnt/data/build/manifest_diff.md (optional; present if manifest provided)"
+#
+# acceptance_criteria:
+#   - overlay_paths.json exists and lists only mounted overlay(s)
+#   - core_map.json present; all required CORE keys resolved
+#   - checksums.json contains overlays + tickets + core files with sha256
+#   - Theme_Lock.json/Theme_Lock.md generated under /mnt/data/build/
+#   - missing_files.md is empty for a clean run (else BOOT fails)
+#
+# notes:
+#   - Run order: ticket_00_boot_gate.yml → 00_map_virtual_cores.yml → 00_E1_S1-BOOT.yml
+#   - This BOOT is isolation-safe: it never scans outside the gated overlay paths.
+#   - All artifacts are written to /mnt/data/build/ for ZIP-mounted sessions.
+#
+# File: 00_E1_S1-BOOT.yml
 
-job_ticket:
-  id: "00_E1_S1-BOOT.<ts>"
-  mode: performance
-  intent: "Boot sequence: authoritative scan, checksums, and theme lock generation."
+meta:
+  id: "00_preflight"
+  version: "1.0.0"
+purpose: >
+  Sanity checks after the gate: verify overlay mount, core presence, YAML health,
+  memory policy, and write a single preflight report (report-only).
 
-inputs:
-  manifest: "run_manifest.yml"
+params:
+  overlay_paths_from: "/mnt/data/build/overlay_paths.json"
+  core_map_json: "/mnt/data/build/core_map.json"        # will exist after 00_map_virtual_cores (but we allow it to be missing here)
+  max_core_size_mb: 2
+  required_core_names:
+    - "01_System_Policy.yml"
+    - "02_ProjectCORE.yml"
+    - "03_PromptPersonaCORE.yml"
+    - "04_MemoryCORE.yml"
+    - "05_NarrativeCORE.yml"
+    - "07_OperatorsPlugins.yml"
+    - "09_SpiralCORE.yml"
 
 steps:
-  - load_manifest:
-      file: "{{inputs.manifest}}"
-      out: "artifacts/00boot_manifest_<ts>.json"
-      continue_on_missing: true
-  - workspace_scan:
-      out: "artifacts/00boot_scan_<ts>.json"
-      compute_checksums: true
-  - compare_manifest_scan:
-      manifest: "artifacts/00boot_manifest_<ts>.json"
-      scan: "artifacts/00boot_scan_<ts>.json"
-      out: "artifacts/00boot_discrepancies_<ts>.json"
-  - write_snapshot:
-      scan: "artifacts/00boot_scan_<ts>.json"
-      out: "artifacts/session_snapshot_<ts>.json"
-  - write_theme_lock:
-      source: "artifacts/00boot_scan_<ts>.json"
-      out: "Theme/Theme_Lock.json"
-  - append_logmark:
-      event: "boot_completed"
-      payload: "artifacts/session_snapshot_<ts>.json"
-      log: "logs/logmarks.ndjson"
+  - load_overlay_paths:
+      from: "${overlay_paths_from}"
+      var: "OVERLAYS"
+      on_missing: "fail-fast"
 
+  - assert_single_project_scope:
+      overlays: "${OVERLAYS}"
+      max_distinct_roots: 1
+      on_fail: "fail-fast"
+
+  - enumerate_overlay_files:
+      overlays: "${OVERLAYS}"
+      include_globs: ["**/*.yml","**/*.yaml","**/*.md","**/*.txt"]
+      exclude_globs: ["**/.git/**","**/Caches/**"]
+      out: "/mnt/data/build/preflight_overlay_files.json"
+
+  - check_required_cores_present:
+      required_names: "${required_core_names}"
+      search_roots:
+        - "/mnt/data/project_extracted/"
+        - "/mnt/data/"
+        - "."
+      out_missing: "/mnt/data/build/preflight_missing_cores.json"
+      fail_if_missing: true
+
+  - yaml_quick_lint:
+      files_json: "/mnt/data/build/preflight_overlay_files.json"
+      out_report: "/mnt/data/build/preflight_yaml_lint.md"
+      treat_warnings_as: "report"
+
+  - size_guard:
+      files:
+        - "01_System_Policy.yml"
+        - "02_ProjectCORE.yml"
+        - "03_PromptPersonaCORE.yml"
+        - "04_MemoryCORE.yml"
+        - "05_NarrativeCORE.yml"
+        - "06_VisionCORE.yml"
+        - "07_OperatorsPlugins.yml"
+        - "08_RoutingMountsOverlay.yml"
+        - "09_SpiralCORE.yml"
+      max_mb: "${max_core_size_mb}"
+      out_report: "/mnt/data/build/preflight_size_report.md"
+      on_exceed: "report"
+
+  - assert_memory_policy:
+      expected:
+        memory_scope: "project-only"
+        import_user_knowledge_memories: false
+        allow_session_history_lookup: false
+      sources:
+        - "01_System_Policy.yml"
+        - "02_ProjectCORE.yml"
+      out_report: "/mnt/data/build/preflight_memory_policy.md"
+      on_mismatch: "report"
+
+  - write_preflight_summary:
+      out: "/mnt/data/build/preflight_summary.md"
+      include:
+        - "overlay roots found"
+        - "missing cores (if any)"
+        - "yaml lint digest"
+        - "size guard digest"
+        - "memory policy check"
 outputs:
-  - id: "session_snapshot"
-    path: "artifacts/session_snapshot_<ts>.json"
-    suggested_folder: "artifacts"
-    artifact_type: "snapshot"
-    retention: "artifacts"
-    required: true
-    checksum: true
-    description: "Authoritative session snapshot with checksums."
-  - id: "theme_lock"
-    path: "Theme/Theme_Lock.json"
-    suggested_folder: "Theme"
-    artifact_type: "lock"
-    retention: "workspace"
-    required: true
-    checksum: false
-    description: "Theme lock (snapshot of theme files at boot)."
+  - "/mnt/data/build/preflight_overlay_files.json"
+  - "/mnt/data/build/preflight_yaml_lint.md"
+  - "/mnt/data/build/preflight_size_report.md"
+  - "/mnt/data/build/preflight_memory_policy.md"
+  - "/mnt/data/build/preflight_summary.md"

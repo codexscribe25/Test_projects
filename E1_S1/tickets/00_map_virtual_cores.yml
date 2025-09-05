@@ -1,59 +1,88 @@
-# Run the ticket in 00_map_virtual_cores.yml
-# Purpose: read core_map.yml and produce core_resolver.json and optional symlinks or placeholders.
-# File: tickets/00_map_virtual_cores.yml
-preflight:
-  description: "Resolve virtual CORE mappings to physical paths. Requires core_map.yml if present."
-  require_files:
-    - "core_map.yml"
-  outputs_expected:
-    - "core_resolver.json"
-    - "artifacts/core_map_report_<ts>.md"
-  fail_on_missing: false
+meta:
+  id: "00_map_virtual_cores"
+  version: "2.0.0"
+  author: "Callen5"
+  description: >
+    Resolve the new CORE filenames to virtual core keys (with legacy aliases),
+    compute checksums, and emit a definitive core_map for downstream tickets.
+    Fail-fast if any required core is missing.
 
-job_ticket:
-  id: "00_map_virtual_cores.<ts>"
-  mode: performance
-  intent: "Produce core_resolver.json mapping virtual CORE names to physical paths; create placeholders for cores."
+params:
+  overlay_paths_from: "/mnt/data/build/overlay_paths.json"   # optional; for audit only
+  search_roots:
+    - "/mnt/data/project_extracted/"
+    - "/mnt/data/"
+    - "."
 
-inputs:
-  core_map: "core_map.yml"
-  manifest: "run_manifest.yml"
+virtual_cores:
+  system_policy:
+    required: true
+    candidates: ["01_System_Policy.yml", "system_instructions.yml"]
+  project_core:
+    required: true
+    candidates: ["02_ProjectCORE.yml", "ProjectCORE.yml", "ProjectCORE5.yml"]
+  prompt_persona_core:
+    required: true
+    candidates: ["03_PromptPersonaCORE.yml", "PromptPersonaCORE.yml", "PromptCORE5.yml"]
+  memory_core:
+    required: true
+    candidates: ["04_MemoryCORE.yml", "MemoryCORE.yml", "MemoryCORE5.yml", "MemoryCORE5.yaml"]
+  narrative_core:
+    required: true
+    candidates: ["05_NarrativeCORE.yml", "NarrativeCORE.yml", "NarrativeCORE5.yml"]
+  vision_core:
+    required: false
+    candidates: ["06_VisionCORE.yml", "VisionCORE.yml", "VisionCORE5.yml"]
+  operators_plugins:
+    required: true
+    candidates: ["07_OperatorsPlugins.yml", "OperatorsPlugins.yml", "Operators5.yml"]
+  routing_mounts_overlay:
+    required: false
+    candidates: ["08_RoutingMountsOverlay.yml", "RoutingMountsOverlay.yml", "Callen5_RoutingMap.yml"]
+  spiral_core:
+    required: true
+    candidates: ["09_SpiralCORE.yml", "SpiralCORE.yml", "SpiralLoop5.yml"]
 
 steps:
-  - load_core_map:
-      file: "{{inputs.core_map}}"
-      out: "artifacts/00_map_raw_<ts>.json"
-      continue_on_missing: true
-  - validate_against_manifest:
-      manifest: "{{inputs.manifest}}"
-      map: "artifacts/00_map_raw_<ts>.json"
-      out: "artifacts/00_map_validated_<ts>.json"
-      continue_on_missing: true
-  - write_resolver:
-      validated_map: "artifacts/00_map_validated_<ts>.json"
-      out: "core_resolver.json"
-  - create_placeholders:
-      targets: ["PromptCORE","StoryCORE","MemoryCORE"]
-      base_path: "."
-  - append_logmark:
-      event: "core_map_resolved"
-      payload: "core_resolver.json"
-      log: "logs/logmarks.ndjson"
+  - note: "Load allowed overlay paths (for audit context only; mapping does not mount)."
+  - load_overlay_paths:
+      from: "${overlay_paths_from}"
+      var: "OVERLAY_PATHS"
+      optional: true
+
+  - resolve_cores:
+      search_roots: "${search_roots}"
+      map: "${virtual_cores}"
+      hash_method: "sha256"
+      out_json: "/mnt/data/build/core_map.json"
+      out_yaml: "/mnt/data/build/core_map.yml"
+      export_env_prefix: "CORE_"   # e.g., CORE_PROJECT_CORE=/abs/path/02_ProjectCORE.yml
+
+  - validate_resolved:
+      required_keys:
+        - system_policy
+        - project_core
+        - prompt_persona_core
+        - memory_core
+        - narrative_core
+        - operators_plugins
+        - spiral_core
+      on_fail: "fail-fast"
+
+  - write_summary:
+      to: "/mnt/data/build/core_map.summary.txt"
+      include:
+        - "Resolved keys with paths"
+        - "Missing optional cores (if any)"
+        - "Overlay paths (if provided)"
 
 outputs:
-  - id: "core_resolver"
-    path: "core_resolver.json"
-    suggested_folder: "."
-    artifact_type: "resolver"
-    retention: "workspace"
-    required: true
-    checksum: true
-    description: "Resolver mapping virtual cores to physical paths."
-  - id: "core_map_report"
-    path: "artifacts/core_map_report_<ts>.md"
-    suggested_folder: "artifacts"
-    artifact_type: "report"
-    retention: "artifacts"
-    required: false
-    checksum: false
-    description: "Human-readable report of core map validation."
+  - "/mnt/data/build/core_map.json"
+  - "/mnt/data/build/core_map.yml"
+  - "/mnt/data/build/core_map.summary.txt"
+
+acceptance_criteria:
+  - "All required virtual cores resolved to existing files."
+  - "core_map.json contains: key, path, size_bytes, mtime_utc, sha256."
+  - "Environment variables CORE_* set for each resolved key."
+  - "No references outside search_roots are included."
