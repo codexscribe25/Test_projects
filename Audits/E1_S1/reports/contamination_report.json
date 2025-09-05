@@ -1,0 +1,721 @@
+{
+  "scanned_root": "/mnt/data/project_extracted_callen5_session",
+  "total_flagged_files": 25,
+  "files": [
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/40_exports/episode1_v6.md",
+      "severity": "HIGH",
+      "counts": {
+        "hard": 3,
+        "soft": 1,
+        "amb": 15,
+        "style": 10
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "sum",
+          "snippet": " out of danger like accountants moving through accounts\u2014break the rules and the sum turned on you. A steam vent hissed as they dropped through the loading bay. The"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "a faint chemical tang gripped the back of Ilya's throat. Under a tarpaulin, the reliquary lay like an animal curled around its own breath. One maintenance lamp threw a s"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "g list, and Ilya sensed his own breath tighten and loosen in answer. Inside the reliquary's crate a lattice of ancient wiring curled around its core\u2014strands browned and "
+        },
+        {
+          "kind": "hard",
+          "term": "LumanSphere",
+          "snippet": "nds browned and soft as old vines. A name stamped faintly on a brass plate read LUMAN SPHERE \u2014 PROPERTY: 33RD COUNCIL. The words stayed with him like a bruise. The sphere p"
+        },
+        {
+          "kind": "soft",
+          "term": "Luman",
+          "snippet": "nds browned and soft as old vines. A name stamped faintly on a brass plate read LUMAN SPHERE \u2014 PROPERTY: 33RD COUNCIL. The words stayed with him like a bruise. The s"
+        },
+        {
+          "kind": "amb",
+          "term": "Sphere",
+          "snippet": "owned and soft as old vines. A name stamped faintly on a brass plate read LUMAN SPHERE \u2014 PROPERTY: 33RD COUNCIL. The words stayed with him like a bruise. The sphere p"
+        },
+        {
+          "kind": "hard",
+          "term": "33rdCouncil",
+          "snippet": "ld vines. A name stamped faintly on a brass plate read LUMAN SPHERE \u2014 PROPERTY: 33RD COUNCIL. The words stayed with him like a bruise. The sphere pulsed with something that"
+        },
+        {
+          "kind": "amb",
+          "term": "Sphere",
+          "snippet": "N SPHERE \u2014 PROPERTY: 33RD COUNCIL. The words stayed with him like a bruise. The sphere pulsed with something that wasn't glare so much as a trace trying to be heard. "
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/10_drafts/05_lore_audit_20250904T233106Z.json",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "atched_word\": \"Human\"       },       {         \"beat\": \"Choice & Cost: grab the reliquary and escape, or stall to free innocents and risk capture.\",         \"found\": tru"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/10_drafts/05_lore_audit_report_20250904T233106Z.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "sweeps, a humming chil ... Found: True  at pos 1320   - Choice & Cost: grab the reliquary and escape, or stall to free innocents and ris ... Found: True  at pos 2224 - B"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/10_drafts/episode1_final.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 56
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "--- title: \"Episode 1 \u2014 The Last Ledger\" project_id: \"E1_S1\" type: \"episode\" year: \"GEN01\" location: \"\u2014\" wordcount: 221"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": " contradiction_scan: pass   citation_map: pass   continuity_check: n/a ---  The ledger waited on the doorstep like bad weather.  Rian found it before dawn, when the s"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "if it were glass and he feared cracking a picture on the other side.  Inside: a ledger, old as someone\u2019s habit, bound with heavy thread. Its pages smelled of iron and"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "n read it three times before he understood the instruction wasn\u2019t for him.  The ledger belonged to others \u2014 to debtors and keepers, to people who traded favors in pap"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "ded favors in paper instead of coin. Whoever sent it wanted two things: for the ledger to be read, and for the ledger to leave its reader changed. The margin let him "
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "coin. Whoever sent it wanted two things: for the ledger to be read, and for the ledger to leave its reader changed. The margin let him know which of those two was the"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "ffice would make it official, give it an index and a seal and fold him into the ledger\u2019s inevitable list of clerks and archivists. Or he could read the ledger in the "
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "nto the ledger\u2019s inevitable list of clerks and archivists. Or he could read the ledger in the dim light of his room and learn what it wanted with no witness, with no "
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/10_drafts/episode1_v1.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 56
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "--- title: \"Episode One \u2014 The Last Ledger\" id: \"E1_S1-episode1_v1\" draft_path: \"10_drafts/episode1_v1.md\" mode: \"fidelity"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "ow jargon, banned_terms omitted. :contentReference[oaicite:6]{index=6} ---  The ledger waited on the doorstep like bad weather.  Rian found it before dawn, when the s"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "if it were glass and he feared cracking a picture on the other side.  Inside: a ledger, old as someone\u2019s habit, bound with heavy thread. Its pages smelled of iron and"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "n read it three times before he understood the instruction wasn\u2019t for him.  The ledger belonged to others \u2014 to debtors and keepers, to people who traded favors in pap"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "ded favors in paper instead of coin. Whoever sent it wanted two things: for the ledger to be read, and for the ledger to leave its reader changed. The margin let him "
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "coin. Whoever sent it wanted two things: for the ledger to be read, and for the ledger to leave its reader changed. The margin let him know which of those two was the"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "ffice would make it official, give it an index and a seal and fold him into the ledger\u2019s inevitable list of clerks and archivists. Or he could read the ledger in the "
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "nto the ledger\u2019s inevitable list of clerks and archivists. Or he could read the ledger in the dim light of his room and learn what it wanted with no witness, with no "
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/10_drafts/episode1_v1_20250904T232522Z.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 5
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "e paid him in coin and danger, and the job was simple on paper: slip in, take a reliquary, leave before dawn.  The manifest named the target as 'household relics'\u2014a code"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "der a crate, a voice that made Ilya's throat close.  Inside the loading bay the reliquary lay under a tarpaulin like a sleeping thing; its metal caught a single beam of "
+        },
+        {
+          "kind": "style",
+          "term": "hymn",
+          "snippet": "ild then, not a silhouette but a small face streaked with grime and wonder; the hymn she'd hummed was a sea-chant his mother used to hum when the harbor lights were"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": " sea-chant his mother used to hum when the harbor lights were still honest. The reliquary's value warmed the back of his neck like a fever; the payment would fix everyth"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "pinged a black-market buyer; a thread had been pulled that would not stop.  The reliquary hummed cold in Ilya's bag, an object that belonged to tides and rituals and old"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/10_drafts/episode1_v2_20250904T234107Z.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 5
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "e paid him in coin and danger, and the job was simple on paper: slip in, take a reliquary, leave before dawn. The shipment list named the target as 'household relics'\u2014a "
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "nder a crate, a voice that made Ilya's throat close. Inside the loading bay the reliquary lay under a tarpaulin like a sleeping thing; its metal caught a single beam of "
+        },
+        {
+          "kind": "style",
+          "term": "hymn",
+          "snippet": "ild then. not a silhouette but a small face streaked with grime and wonder; the hymn she'd hummed was a sea-chant his mother used to hum when the harbor lights were"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": " sea-chant his mother used to hum when the harbor lights were still honest. The reliquary's value warmed the back of his neck like a fever; the payment would fix everyth"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": " pinged a black-market buyer; a thread had been pulled that would not stop. The reliquary hummed cold in Ilya's bag, an object that belonged to tides and rituals and old"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/10_drafts/episode1_v3.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 14
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "ey were pragmatic. The manifest made the job simple on paper: slip in, lift the reliquary, leave before the second-shift thermal sweep ran its programmed arcs. Night job"
+        },
+        {
+          "kind": "style",
+          "term": "hymn",
+          "snippet": " a crate, a child\u2019s shape hunched against the cold. The sound came then: a thin hymn, half-melody, half-ritual. It was a sea-chant, the kind of cadence that belonge"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "line of song\u2014tightened behind his ribs.  Inside the bay, under a tarpaulin, the reliquary lay like an animal folded in its sleep. A single beam of a maintenance lamp cau"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "r cargo to come in. The chant was a map and an accusation. Whoever brought this reliquary to Karo\u2019s auction had not thought to separate the objects from the people bound"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "ion had not thought to separate the objects from the people bound to them.  The reliquary\u2019s worth pressed against his skin\u2014the payment would buy a life of fixes if they "
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "und rope and tools the same way they closed around decisions. He could take the reliquary with one hand and offer the child nothing, or he could risk the job and reach f"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": " Marlo fed clamps and hooks while Kito kept an eye on the cams. Ilya worked the reliquary free. It came with a soft sound like metal waking, the kind of noise old things"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "he currency of consequences.  By the time they reached the first safehouse, the reliquary was a cold presence at Ilya\u2019s back. The child\u2019s chant had imprinted like a seam"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/10_drafts/scaffold_20250904T231329Z.json",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "rmal sweeps, a humming child in the loading bay.\",     \"Choice & Cost: grab the reliquary and escape, or stall to free innocents and risk capture.\"   ],   \"pov\": \"Close "
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/10_drafts/scaffold_20250904T231329Z.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 4
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "mpact scaffold Logline: At midnight, a small-team extractor must steal a sacred reliquary from a fortified warehouse auction, racing shifting patrols and a hidden human "
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "ce improvisation; a humming child in the loading bay reveals a human tie to the reliquary. 3) Choice & Cost \u2014 Get It or Save Them: extraction triggers lockdown; Ilya mus"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": " Cost \u2014 Get It or Save Them: extraction triggers lockdown; Ilya must choose the reliquary (and payment) or stall to free innocents, risking capture.  POV: Close third-pe"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "risonment, loss of moral redemption, and a strengthened warlord.  Hooks: 1) The reliquary's inscription links to a coastal ritual tied to Ilya's past. 2) A guard's watch"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/10_drafts/scaffold_annotated_20250904T231329Z.json",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "rmal sweeps, a humming child in the loading bay.\",     \"Choice & Cost: grab the reliquary and escape, or stall to free innocents and risk capture.\"   ],   \"pov\": \"Close "
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/30_rewrites/08_post_validators_20250905T073723Z.json",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "ll\": 98.56,     \"pass_rate\": 100.0,     \"accepted\": true,     \"found\": {       \"reliquary\": true,       \"child\": true,       \"thermal\": true,       \"gantry\": true,      "
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/30_rewrites/episode1_v5b_20250905T073723Z_fixed.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 14
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "re pragmatic. The shipment list made the job simple on paper: slip in, lift the reliquary, leave before the second-shift thermal sweep ran its programmed arcs. Night job"
+        },
+        {
+          "kind": "style",
+          "term": "hymn",
+          "snippet": "r a crate, a child\u2019s shape hunched against the cold. The sound came then\u2014a thin hymn, half-melody, half-ritual. The note caught Ilya in the throat. For a moment the"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "line of song\u2014tightened behind his ribs.  Inside the bay, under a tarpaulin, the reliquary lay like an animal folded in its sleep. A single beam of a maintenance lamp cau"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "hide from warlords. The chant was a map and an accusation. Whoever brought this reliquary to Karo\u2019s auction had not thought to separate the objects from the people bound"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "ion had not thought to separate the objects from the people bound to them.  The reliquary\u2019s worth pressed against his skin\u2014the payment would buy a life of fixes if they "
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "und rope and tools the same way they closed around decisions. He could take the reliquary with one hand and offer the child nothing, or he could risk the job and reach f"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": " Marlo fed clamps and hooks while Kito kept an eye on the cams. Ilya worked the reliquary free. It came with a soft sound like metal waking\u2014the kind of noise old things "
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "the currency of consequences. By the time they reached the first safehouse, the reliquary was a cold presence at Ilya\u2019s back. The child\u2019s chant had imprinted like a seam"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/40_exports/08_post_validators_20250905T073723Z.json",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "ll\": 98.56,     \"pass_rate\": 100.0,     \"accepted\": true,     \"found\": {       \"reliquary\": true,       \"child\": true,       \"thermal\": true,       \"gantry\": true,      "
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/40_exports/E1_S1-extract-hooks.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 5
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "other capitalized names found in the text. Full list is in the YAML. * Objects: ledger, binding, kettle, chair, market, shop, basket, twine, paper, child, coat, pot, "
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "ity, corruption, watch. * Threads / plot hooks:    * `blank_line` \u2014 interrupted ledger entry / blank line needing closure (HIGH).   * `men_badges` \u2014 two men with badg"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "terest / threat).   * `neighbor_filled_line` \u2014 a neighbor later fills a line in ledger (MED).   * `registrar_watch` \u2014 registrar expected to file and stamp (MED).   * "
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "OOK:character:Rian:primary]`   * `Lette [HOOK:character:Lette:supporting]`   * `ledger [HOOK:object:ledger]`   * the blank-line sentence annotated with `[HOOK:thread:"
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "rimary]`   * `Lette [HOOK:character:Lette:supporting]`   * `ledger [HOOK:object:ledger]`   * the blank-line sentence annotated with `[HOOK:thread:blank_line]` * The a"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/40_exports/episode1_v5.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 14
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "re pragmatic. The shipment list made the job simple on paper: slip in, lift the reliquary, leave before the second-shift thermal sweep ran its programmed arcs. Night job"
+        },
+        {
+          "kind": "style",
+          "term": "hymn",
+          "snippet": "r a crate, a child\u2019s shape hunched against the cold. The sound came then\u2014a thin hymn, half-melody, half-ritual. The note caught Ilya in the throat. For a moment the"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "line of song\u2014tightened behind his ribs.  Inside the bay, under a tarpaulin, the reliquary lay like an animal folded in its sleep. A single beam of a maintenance lamp cau"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "hide from warlords. The chant was a map and an accusation. Whoever brought this reliquary to Karo\u2019s auction had not thought to separate the objects from the people bound"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "ion had not thought to separate the objects from the people bound to them.  The reliquary\u2019s worth pressed against his skin\u2014the payment would buy a life of fixes if they "
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "und rope and tools the same way they closed around decisions. He could take the reliquary with one hand and offer the child nothing, or he could risk the job and reach f"
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": " Marlo fed clamps and hooks while Kito kept an eye on the cams. Ilya worked the reliquary free. It came with a soft sound like metal waking\u2014the kind of noise old things "
+        },
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "the currency of consequences. By the time they reached the first safehouse, the reliquary was a cold presence at Ilya\u2019s back. The child\u2019s chant had imprinted like a seam"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/artifacts/06_validation_report_20250904T233716Z.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "humming child in the loading bay. \u2014 Found: True - Beat: Choice & Cost: grab the reliquary and escape, or stall to free innocents and risk capture. \u2014 Found: True  Beats o"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/artifacts/06_validators_20250904T233716Z.json",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "    \"pos\": 1320         },         {           \"beat\": \"Choice & Cost: grab the reliquary and escape, or stall to free innocents and risk capture.\",           \"found\": t"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/artifacts/ideation.md",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 1,
+        "style": 0
+      },
+      "samples": [
+        {
+          "kind": "amb",
+          "term": "Helios",
+          "snippet": " \u2014 hook: 73, clarity: 50, tone: 36, novelty: 87, avg: 61.5_  **6.** A disgraced Helios finds **Seed 04 \u2014 Ghost Frequency** \u2014 now they must protect a truth no one can "
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/artifacts/ideation_scores.json",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 1,
+        "style": 0
+      },
+      "samples": [
+        {
+          "kind": "amb",
+          "term": "Helios",
+          "snippet": " 87,         \"average\": 61.5       }     },     {       \"logline\": \"A disgraced Helios finds **Seed 04 \\u2014 Ghost Frequency** \\u2014 now they must protect a truth n"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/memory/MemoryLog_Lore.yml",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 2
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "short_description: \"A maritime merchant house specializing in sealed crates and ledger secrets.\" #     first_appearance: #       file: \"10_drafts/episode1_v1.md\" #   "
+        },
+        {
+          "kind": "style",
+          "term": "ledger",
+          "snippet": "short_description: \"A maritime merchant house specializing in sealed crates and ledger secrets.\"       first_appearance:         file: \"10_drafts/episode1_v1.md\"     "
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/presets/scoring_presets.yml",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "sum",
+          "snippet": "ketScore (hook, clarity, tone, novelty, genrefit, producibility) # Weights must sum to 1.0 in each weights block.  presets:   balanced:     description: \"Default b"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/Theme/Theme_HumanPolish.yml",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "   preserve_proper_nouns: true     preserve_numbers: true     continuity_keys: [reliquary, child, thermal, gantry, clamps, tags, safehouse, alarm, watch-data, bay]  targ"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/tickets/01_E1_S1-ideate-refs.yml",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "sum",
+          "snippet": "ault weights. If custom_weights provided, the runner MUST validate that weights sum to 1.0 and then apply custom values.\" "
+        }
+      ]
+    },
+    {
+      "path": "/mnt/data/project_extracted_callen5_session/tickets/10_E1_S1-human-polish-refs.yml",
+      "severity": "LOW",
+      "counts": {
+        "hard": 0,
+        "soft": 0,
+        "amb": 0,
+        "style": 1
+      },
+      "samples": [
+        {
+          "kind": "style",
+          "term": "reliquary",
+          "snippet": "to dates/quantities/unique lore terms\"         - \"Continuity phrases retained: [reliquary, child, thermal, gantry, clamps, tags, safehouse, alarm, watch-data, bay]\"    -"
+        }
+      ]
+    }
+  ]
+}

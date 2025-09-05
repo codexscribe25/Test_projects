@@ -1,0 +1,14 @@
+{
+  "word_count": 1838,
+  "sentence_count": 113,
+  "avg_sentence_length": 16.27,
+  "approx_reading_time_min": 10,
+  "provenance": {
+    "source_draft": "/mnt/data/workspace_project/10_drafts/episode1_v1_20250904T232522Z.md",
+    "rewritten_at": "2025-09-04T23:41:07.458523Z",
+    "replacements": {
+      "manifest": "shipment list",
+      "memory": "recollection"
+    }
+  }
+}

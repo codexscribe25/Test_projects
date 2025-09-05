@@ -1,0 +1,82 @@
+# 09_E1_S1-export-refs.yml instructions
+# ---
+# purpose: "Export final episode with front-matter, attach provenance, create release bundle, append logs."
+# run_command: "Run the ticket in 09_E1_S1-export-refs.yml"
+# ai_create_ticket_prompt: |
+#   Create a REFS-style EXPORT ticket YAML that:
+#     - asserts acceptance_decision.md is PASS
+#     - applies front-matter from Theme_Styleguide.yml
+#     - writes 40_exports/episode1_final.md
+#     - bundles release into E1_S1_release_<ts>.zip including key artifacts
+#     - appends a run row to logs/ProcessLog.csv and logmarks.ndjson
+# outputs_to_expect:
+#   - "40_exports/episode1_final.md"
+#   - "E1_S1_release_<ts>.zip"
+# guidance: "Confirm logs updated; include missing_lore.md in the bundle to keep provenance."
+# 09_E1_S1-export-refs.yml — preflight
+# File: tickets/09_E1_S1-export-refs.yml
+preflight:
+  description: "Export final approved artifact with provenance and package release."
+  require_files:
+    - "artifacts/acceptance_decision_<ts>.md"
+    - "30_rewrites/episode1_v2_<ts>.md"
+  outputs_expected:
+    - "40_exports/episode1_final_<ts>.md"
+    - "artifacts/E1_S1_release_<ts>.zip"
+    - "artifacts/E1_S1_release_<ts>.zip.sha256"
+  fail_on_missing: true
+
+job_ticket:
+  id: "09_E1_S1-export.<ts>"
+  mode: fidelity
+  intent: "Enrich final artifact with frontmatter, package release, and produce checksums."
+
+inputs:
+  rewrite: "30_rewrites/episode1_v2_<ts>.md"
+  acceptance: "artifacts/acceptance_decision_<ts>.md"
+  styleguide: "Theme/Theme_Styleguide.yml"
+
+steps:
+  - check_acceptance:
+      file: "{{inputs.acceptance}}"
+      require_pass: true
+  - enrich_frontmatter:
+      file: "{{inputs.rewrite}}"
+      styleguide: "{{inputs.styleguide}}"
+      out: "40_exports/episode1_final_<ts>.md"
+  - package_release:
+      files: ["40_exports/episode1_final_<ts>.md","Theme/*","memory/MemoryLog_Lore.yml"]
+      out: "artifacts/E1_S1_release_<ts>.zip"
+  - generate_checksums:
+      file: "artifacts/E1_S1_release_<ts>.zip"
+      out: "artifacts/E1_S1_release_<ts>.zip.sha256"
+  - append_logmark:
+      event: "export_completed"
+      payload: "artifacts/E1_S1_release_<ts>.zip"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "final_export"
+    path: "40_exports/episode1_final_<ts>.md"
+    suggested_folder: "40_exports"
+    artifact_type: "final"
+    retention: "archive"
+    required: true
+    checksum: true
+    description: "Final exported episode with frontmatter and provenance."
+  - id: "release_zip"
+    path: "artifacts/E1_S1_release_<ts>.zip"
+    suggested_folder: "artifacts"
+    artifact_type: "zip"
+    retention: "archive"
+    required: true
+    checksum: true
+    description: "Release package containing final artifact and theme/memory snapshots."
+  - id: "release_zip_sha256"
+    path: "artifacts/E1_S1_release_<ts>.zip.sha256"
+    suggested_folder: "artifacts"
+    artifact_type: "checksum"
+    retention: "archive"
+    required: true
+    checksum: false
+    description: "SHA256 checksum for release zip."

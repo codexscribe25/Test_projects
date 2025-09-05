@@ -1,0 +1,54 @@
+# 01a_E1_S1-quick-override-inline.yml instructions
+# ---
+# purpose: "Inline utility for quick overrides, experiments, or hotfix drafts."
+# run_command: "Run the ticket in 01a_E1_S1-quick-override-inline.yml"
+# ai_create_ticket_prompt: |
+#   Create an INLINE utility ticket YAML for E1_S1 that:
+#     - includes theme_summary, style_inline and scaffold_inline
+#     - drafts a short episode (600-900 words)
+#     - runs tone/style validators and logs inline_used=true
+# outputs_to_expect:
+#   - "10_drafts/episode1_quick.md"
+#   - "20_reviews/inline_validators.json"
+# guidance: "Inline is a temporary override; do not use to update canonical theme files."
+# 01a_E1_S1-quick-override-inline.yml — preflight
+# File: tickets/01a_E1_S1-quick-override-inline.yml
+preflight:
+  description: "Quick inline override to produce a short draft for rapid iteration."
+  require_files: []
+  outputs_expected:
+    - "10_drafts/episode1_quick_<ts>.md"
+  fail_on_missing: false
+
+job_ticket:
+  id: "01a_E1_S1-quick-override-inline.<ts>"
+  mode: performance
+  intent: "Fast utility to produce a short draft from inline seeds and styleguide."
+
+inputs:
+  seeds: "00_inputs/seeds.md"
+  styleguide: "Theme/Theme_Styleguide.yml"
+
+steps:
+  - load_seeds:
+      file: "{{inputs.seeds}}"
+      out: "artifacts/01a_seeds_<ts>.json"
+      continue_on_missing: true
+  - quick_generate:
+      seeds: "artifacts/01a_seeds_<ts>.json"
+      styleguide: "{{inputs.styleguide}}"
+      out: "10_drafts/episode1_quick_<ts>.md"
+  - append_logmark:
+      event: "quick_override_generated"
+      payload: "10_drafts/episode1_quick_<ts>.md"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "quick_draft"
+    path: "10_drafts/episode1_quick_<ts>.md"
+    suggested_folder: "10_drafts"
+    artifact_type: "draft"
+    retention: "workspace"
+    required: false
+    checksum: true
+    description: "Quickly generated short draft for rapid iteration."

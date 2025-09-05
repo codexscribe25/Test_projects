@@ -1,0 +1,93 @@
+{
+  "generated": "2025-09-04T20:32:14.487394Z",
+  "loglines_ranked": [
+    {
+      "logline": "A moonlit courier steals After a small quake, a roadside diner\u2019s back door opens to a landscape that isn\u2019t on any map.. They must save the last map to a vanished city or lose themselves.",
+      "seed": "After a small quake, a roadside diner\u2019s back door opens to a landscape that isn\u2019t on any map.",
+      "scores": {
+        "hook_strength": 65,
+        "clarity": 93,
+        "tone_fit": 87,
+        "novelty": 74,
+        "average": 79.75
+      }
+    },
+    {
+      "logline": "A cartwright finds # Episode Seeds (Lore-free) \u2014 now they must protect a memory that births a tyrant or lose themselves.",
+      "seed": "# Episode Seeds (Lore-free)",
+      "scores": {
+        "hook_strength": 64,
+        "clarity": 93,
+        "tone_fit": 65,
+        "novelty": 79,
+        "average": 75.25
+      }
+    },
+    {
+      "logline": "An archivist binds A courier receives a package from their future self with strict instructions: deliver it unopened\u2014or forfeit someone you love. \u2014 now they must protect the village's fading past or lose themselves.",
+      "seed": "A courier receives a package from their future self with strict instructions: deliver it unopened\u2014or forfeit someone you love.",
+      "scores": {
+        "hook_strength": 67,
+        "clarity": 77,
+        "tone_fit": 83,
+        "novelty": 30,
+        "average": 64.25
+      }
+    },
+    {
+      "logline": "A quiet healer trades **Seed 02 \u2014 Borrowed Tomorrow** \u2014 now they must protect a memory that births a tyrant or lose themselves.",
+      "seed": "**Seed 02 \u2014 Borrowed Tomorrow**",
+      "scores": {
+        "hook_strength": 72,
+        "clarity": 91,
+        "tone_fit": 30,
+        "novelty": 59,
+        "average": 63.0
+      }
+    },
+    {
+      "logline": "A cartwright trades **Seed 03 \u2014 Fault Line Diner** \u2014 now they must protect the last map to a vanished city or lose themselves.",
+      "seed": "**Seed 03 \u2014 Fault Line Diner**",
+      "scores": {
+        "hook_strength": 73,
+        "clarity": 50,
+        "tone_fit": 36,
+        "novelty": 87,
+        "average": 61.5
+      }
+    },
+    {
+      "logline": "A disgraced Helios finds **Seed 04 \u2014 Ghost Frequency** \u2014 now they must protect a truth no one can bear or lose themselves.",
+      "seed": "**Seed 04 \u2014 Ghost Frequency**",
+      "scores": {
+        "hook_strength": 40,
+        "clarity": 74,
+        "tone_fit": 86,
+        "novelty": 44,
+        "average": 61.0
+      }
+    },
+    {
+      "logline": "A cartwright trades A night ferry makes an unscheduled stop at a dark pier; a lone passenger discovers the captain cannot see or hear the pier at all.. They must save the currency of\u2026",
+      "seed": "A night ferry makes an unscheduled stop at a dark pier; a lone passenger discovers the captain cannot see or hear the pier at all.",
+      "scores": {
+        "hook_strength": 65,
+        "clarity": 73,
+        "tone_fit": 59,
+        "novelty": 36,
+        "average": 58.25
+      }
+    },
+    {
+      "logline": "A moonlit courier finds **Seed 01 \u2014 The Silent Ferry** \u2014 now they must protect a secret that could end the council or lose themselves.",
+      "seed": "**Seed 01 \u2014 The Silent Ferry**",
+      "scores": {
+        "hook_strength": 72,
+        "clarity": 31,
+        "tone_fit": 42,
+        "novelty": 36,
+        "average": 45.25
+      }
+    }
+  ]
+}

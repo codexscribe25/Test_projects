@@ -1,0 +1,88 @@
+# File: tickets/10_E1_S1-human-polish-refs.yml
+preflight:
+  description: "Logic-only human polish on the accepted chapter; no new facts."
+  require_files:
+    - "30_rewrites/episode1_v5b_*_fixed.md"
+    - "Theme/Theme_HumanPolish.yml"
+  outputs_expected:
+    - "40_polished/episode1_human_polish_<ts>.md"
+    - "40_polished/episode1_human_polish_diff_<ts>.md"
+    - "artifacts/human_polish_metrics_<ts>.json"
+    - "artifacts/human_polish_scorecard_<ts>.json"
+    - "artifacts/human_polish_decision_<ts>.md"
+  fail_on_missing: true
+
+job_ticket:
+  id: "10_E1_S1-human-polish.<ts>"
+  mode: fidelity
+  intent: "Raise human_likeness via rules: rhythm, clarity, specificity, de-cliché, and punctuation."
+
+inputs:
+  chapter: "30_rewrites/episode1_v5b_*_fixed.md"
+  rules: "Theme/Theme_HumanPolish.yml"
+
+steps:
+  - analyze_baseline:
+      file: "{{inputs.chapter}}"
+      out: "artifacts/human_polish_baseline_<ts>.json"
+
+  - apply_logic_rules:
+      file: "{{inputs.chapter}}"
+      rules: "{{inputs.rules}}"
+      out: "40_polished/episode1_human_polish_<ts>.md"
+      guarantees:
+        - "No new proper nouns"
+        - "No changes to dates/quantities/unique lore terms"
+        - "Continuity phrases retained: [reliquary, child, thermal, gantry, clamps, tags, safehouse, alarm, watch-data, bay]"
+
+  - compute_metrics:
+      file: "40_polished/episode1_human_polish_<ts>.md"
+      out: "artifacts/human_polish_metrics_<ts>.json"
+
+  - make_diff:
+      before: "{{inputs.chapter}}"
+      after: "40_polished/episode1_human_polish_<ts>.md"
+      out: "40_polished/episode1_human_polish_diff_<ts>.md"
+
+  - scorecard:
+      metrics: "artifacts/human_polish_metrics_<ts>.json"
+      out: "artifacts/human_polish_scorecard_<ts>.json"
+
+  - decide_acceptance:
+      scorecard: "artifacts/human_polish_scorecard_<ts>.json"
+      thresholds:
+        human_likeness: 85
+        style_clarity: 75
+        flow_cohesion: 75
+        continuity: 90
+        canon_clean: 100
+      out: "artifacts/human_polish_decision_<ts>.md"
+
+  - append_logmark:
+      event: "human_polish_completed"
+      payload:
+        file: "40_polished/episode1_human_polish_<ts>.md"
+        scorecard: "artifacts/human_polish_scorecard_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "polished_md"
+    path: "40_polished/episode1_human_polish_<ts>.md"
+    artifact_type: "polished"
+    required: true
+  - id: "polish_diff"
+    path: "40_polished/episode1_human_polish_diff_<ts>.md"
+    artifact_type: "diff"
+    required: true
+  - id: "polish_metrics"
+    path: "artifacts/human_polish_metrics_<ts>.json"
+    artifact_type: "metrics"
+    required: true
+  - id: "polish_scorecard"
+    path: "artifacts/human_polish_scorecard_<ts>.json"
+    artifact_type: "scorecard"
+    required: true
+  - id: "polish_decision"
+    path: "artifacts/human_polish_decision_<ts>.md"
+    artifact_type: "decision"
+    required: true

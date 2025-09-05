@@ -1,0 +1,70 @@
+# scoring_presets.yml
+# Preset weight sets for seed scoring.
+# Each preset defines:
+#  - originality_weights: weights for OriginalityScore (hook, clarity, tone, novelty)
+#  - genremarket_weights: weights for GenreMarketScore (hook, clarity, tone, novelty, genrefit, producibility)
+# Weights must sum to 1.0 in each weights block.
+
+presets:
+  balanced:
+    description: "Default balanced preset for production/discovery mix."
+    originality_weights:
+      hook: 0.25
+      clarity: 0.25
+      tone: 0.25
+      novelty: 0.25
+    genremarket_weights:
+      hook: 0.20
+      clarity: 0.20
+      tone: 0.15
+      novelty: 0.05
+      genrefit: 0.25
+      producibility: 0.15
+
+  discovery:
+    description: "Novelty-forward preset for experimentation and R&D."
+    originality_weights:
+      hook: 0.25
+      clarity: 0.20
+      tone: 0.15
+      novelty: 0.40
+    genremarket_weights:
+      hook: 0.20
+      clarity: 0.15
+      tone: 0.10
+      novelty: 0.30
+      genrefit: 0.15
+      producibility: 0.10
+
+  production:
+    description: "Conservative preset for marketable, production-ready ideas."
+    originality_weights:
+      hook: 0.30
+      clarity: 0.30
+      tone: 0.20
+      novelty: 0.20
+    genremarket_weights:
+      hook: 0.25
+      clarity: 0.25
+      tone: 0.15
+      novelty: 0.05
+      genrefit: 0.20
+      producibility: 0.10
+
+  genre_biased:
+    description: "Prioritise genre-appropriate seeds and producibility."
+    originality_weights:
+      hook: 0.25
+      clarity: 0.25
+      tone: 0.25
+      novelty: 0.25
+    genremarket_weights:
+      hook: 0.18
+      clarity: 0.17
+      tone: 0.10
+      novelty: 0.05
+      genrefit: 0.30
+      producibility: 0.20
+
+# default preset name used by tickets when none specified
+default_preset: balanced

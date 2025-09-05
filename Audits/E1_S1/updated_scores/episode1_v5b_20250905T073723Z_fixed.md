@@ -1,0 +1,52 @@
+## Beat 1 — Inciting Jolt
+
+At midnight Ilya lowered himself from the gantry into the warehouse mouth. Rain turned the metal roofs into slick knives that sighed and threw silver where the lights caught them. He landed with the practiced quiet of a man who had learned to keep his weight and his breathing to himself, and he felt both pressing like a tide against his ribs.
+
+He ran a fingertip along the forged shipment list until the paper edge wore smooth beneath his nail. The name written in a neat hand—household relics—was a lie everyone on Karo’s side knew how to read. Reliquaries, trophies, things carved for ritual and sale: those were the private goods that changed hands under locks and quiet. The pay was ruinous, enough to buy a small repair to everything that had broken in the last few years. It was the kind of job that called to the men and women who had learned to trade their skill for the cost of survival.
+
+His team would meet him on the gantry: Marlo, who moved with clamps and tools and a grin that never reached his eyes; Sera, whose forged wrist-tags had opened more doors than any officer; and Kito, quiet as a tide and sharp when he needed to be. They were not heroes. They were pragmatic. The shipment list made the job simple on paper: slip in, lift the reliquary, leave before the second-shift thermal sweep ran its programmed arcs. Night jobs had rules and windows and arithmetic—break them and the arithmetic turned on you.
+
+A steam vent hissed as they dropped into the loading bay, and in the mist something small and human shifted: a hiding place under a crate, a child’s shape hunched against the cold. The sound came then—a thin hymn, half-melody, half-ritual. The note caught Ilya in the throat. For a moment the job stalled inside him; a recollection—his mother’s mouth forming the same line of song—tightened behind his ribs.
+
+Inside the bay, under a tarpaulin, the reliquary lay like an animal folded in its sleep. A single beam of a maintenance lamp caught the metal and flung it back as if the world dared anyone to steal it. Sera’s fingers hovered over her clamps as if touching glass. Kito breathed out a white fog that dissolved into the vents; he looked nothing like a man who expected to be called a hero. Together they fit the plan, each role a notch in the practiced routine: Marlo with clamps, Sera with tags, Kito to watch the corners that refused maps.
+
+---
+
+## Beat 2 — Complication
+
+Alarms were arithmetic. They were not drama; they were numbers that multiplied—sensors and checklists and counts that turned minutes into deadlines. The plan had given them thirty minutes, a window with a beginning and a clean closure. But arithmetic could be wrong when the human element bent the variables. When half of a guard circuit stumbled—an unexpected door propped, a lover late to the gate—the numbers changed. It took a hand that hesitated, a breath that went wrong, for the window to shrink.
+
+It happened the moment a footstep clipped metal. A guard’s boot shifted on the walkway. Somewhere a watch-data chip pinged, heard and passed along: a short report of an anomaly—an extra heat signature in the loading bay. The lights shuttered into narrow cones. Corridors closed like fists. The planned window shortened into a trap. Ilya felt the tide of seconds tighten until it left no room for hesitation.
+
+He saw the child properly then—not a shadow, not a silhouette, but a small face streaked with grime and wonder. Eyes wide in a world that did not teach children to hide from warlords. The chant was a map and an accusation. Whoever brought this reliquary to Karo’s auction had not thought to separate the objects from the people bound to them.
+
+The reliquary’s worth pressed against his skin—the payment would buy a life of fixes if they could pull it off. Money was a fever; it warmed the back of his neck and sharpened the plan into hunger. Choice pried open like a clean knife: run with the prize, take the coin and leave the child to whatever came next, or stall and try to free a life that could not pay them, risking everything—the mission, the team, their freedom. He thought, quietly, of a way to save a life and be safe in the morning.
+
+His hands knew knots first. They closed around rope and tools the same way they closed around decisions. He could take the reliquary with one hand and offer the child nothing, or he could risk the job and reach for both. For a breath the world reduced to a single simple measure: what he was willing to be.
+
+---
+
+## Beat 3 — Choice & Cost
+
+He reached with both hands. It was not a hero’s choice. It was a human one—small, fragile hope in a city that had little. He moved toward the tarp with one hand and toward the child’s hiding with the other. Sera’s eyes flicked to his in the dim; a flinch, a question. Kito’s jaw tightened but he made no move to stop him. Marlo cursed under his breath and ran the clamp’s magnet through its test cycle. The bay filled with the mechanical chorus of tools in use and the small sound of a child’s song.
+
+They did not leave unmarked. Boots thundered down the southern ramp, louder than practice. A chip clattered on the floor where a guard had dropped it during a scuffle. The alarm began to call numbers into the dark, and the arithmetic the guardroom trusted multiplied into pursuit protocols. Somewhere down the wharf a watch-data chip pinged a black-market buyer’s list. A thread was pulled tight across markets and politics, and it would not slack.
+
+They split into tasks with the practiced calm of people doing what they had to do. Sera worked the tags, palms steady. Marlo fed clamps and hooks while Kito kept an eye on the cams. Ilya worked the reliquary free. It came with a soft sound like metal waking—the kind of noise old things make when unplugged from a service they have fulfilled for decades.
+
+He slid it into his pack and felt the cold hum of the thing settle against his ribs—an object that belonged to older promises and tides and ceremonies he’d long thought beached. The child’s chant clung to Ilya like a map. When he looked at her properly he saw the full smallness: a child’s hands, the ragged hem of a jacket, a face lined with the city’s dirt and a purity of belief he could not entirely shrug off. She watched them with the steady stare of someone who had learned quickly that adults moved like storms. In the hurry of the extraction she did not run; she watched. That watching would become a lodestone in Ilya’s chest.
+
+They moved to withdraw through the planned route—gantry back to rain and alleys—but nothing performed perfectly under pressure. A guard’s sweep deviated by seconds; a corridor that should have been empty had a late porter doubling back. Panic is arithmetic in reverse; it makes improbable events occur in tight succession. Ilya’s hands worked faster than thought. Sera’s forged tags opened a door she had practiced on paper; Marlo’s clamps found purchase in oil-slicked seams. But the world had noticed.
+
+Out in the open, droplets turned to a steady sheet that ran like a gray curtain. Rain ticked against corrugated roofs with a metronome rhythm that made every footstep feel measured. The city tasted of brine and coal and something older: the cold copper of coin exchanged in dim light. They scattered into alleys that smelled of fish and old paint, a small good fortune of movement and darkness. For a moment, they thought they had made it. Not everyone did. The sound of boots behind them carried different weights—some fled and melted into the night; some were bundled into the hands of men who wanted a story to sell.
+
+A chip found by a buyer would point to markets and faces that would matter later; a guard who lived would go home and write his report. Small things became the currency of consequences. By the time they reached the first safehouse, the reliquary was a cold presence at Ilya’s back. The child’s chant had imprinted like a seam. She had been hidden in the bay’s shadow by a woman who worked at the warehouse—pressed and tired, eyes that had learned to say nothing. They traded half answers to one another: a promise to find a place for the child, an exchange of coin for silence, a plan to lie about times and places. The reliquary sat between them, humming with a history they barely understood.
+
+They were lighter for having taken it, and heavier for what they had seen and what they already suspected. The payment would fix roofs and mend broken tools; it would not fix the hollow Ilya felt when he thought of leaving a child in a world run by Karo. He folded his hands around the pack and let the chant play in the back of his mind like a summons.
+
+Later, when the rain stopped and mornings came in the pale gray of harbor light, the reliquary would drift from hand to hand—the buyer’s ledger, the secreted auction, the political patron who preferred to hold such things as keys to power. A guard’s watch-data chip would appear in a buyer’s inbox, and the thread they had pulled would draw tighter. Most of that was arithmetic and chance. But the child’s chant was something else: a recollection that had found its way into his chest and would not stay quiet.
+
+They had the money they sought. They had the kind of scar a conscience keeps. They had a promise—spoken in the corner of an exhale—to return and to learn more about the chant and the people who had given it meaning. Ilya sat with the reliquary against his chest and listened to the rain slow into pools. The city kept its old rules, and Karo’s market kept its private lists. But someone else now hummed a sea-chant that connected him to a past he had not known he would answer.
+
+When dawn came, Ilya would taste the coin and the rain together and wonder at the price of decisions. He tightened the straps on his pack and felt the cold of metal through fabric. The reliquary hummed like a remembered tide. He had traded the neat arithmetic of a job for the messy math of living with what he had chosen. That reckoning would take him back to the docks, to the watch-data thread, to a buyer’s door—and to the child who had hummed the harbor hymn and, for reasons he would not yet explain, had become the reason he would return.
+

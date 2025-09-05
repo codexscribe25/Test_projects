@@ -1,0 +1,39 @@
+# 00f_E1_S1-auto-evaluate-phase.yml
+# Purpose: run 00e in auto_mode on schedule (CI/nightly) to promote when safe.
+# 00f_E1_S1-auto-evaluate-phase.yml — preflight
+# File: tickets/00f_E1_S1-auto-evaluate-phase.yml
+preflight:
+  description: "Wrapper for scheduled auto-evaluation to run 00e in auto-mode."
+  require_files:
+    - "Theme/Theme_Enforcement_State.yml"
+  outputs_expected:
+    - "Theme/Theme_Enforcement_State.yml"
+  fail_on_missing: true
+
+job_ticket:
+  id: "00f_E1_S1-auto-evaluate-phase.<ts>"
+  mode: performance
+  intent: "Invoke 00e with auto_mode to apply safe transitions."
+
+inputs:
+  auto_mode: true
+
+steps:
+  - run_child_ticket:
+      ticket: "tickets/00e_E1_S1-set-enforcement-phase.yml"
+      args:
+        auto_mode_override: true
+  - append_logmark:
+      event: "auto_evaluation_invoked"
+      payload: "tickets/00e_E1_S1-set-enforcement-phase.yml"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "enforcement_state"
+    path: "Theme/Theme_Enforcement_State.yml"
+    suggested_folder: "Theme"
+    artifact_type: "state"
+    retention: "workspace"
+    required: true
+    checksum: false
+    description: "Updated enforcement state after auto-evaluation."

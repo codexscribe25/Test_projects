@@ -1,0 +1,59 @@
+# Run the ticket in 00_map_virtual_cores.yml
+# Purpose: read core_map.yml and produce core_resolver.json and optional symlinks or placeholders.
+# File: tickets/00_map_virtual_cores.yml
+preflight:
+  description: "Resolve virtual CORE mappings to physical paths. Requires core_map.yml if present."
+  require_files:
+    - "core_map.yml"
+  outputs_expected:
+    - "core_resolver.json"
+    - "artifacts/core_map_report_<ts>.md"
+  fail_on_missing: false
+
+job_ticket:
+  id: "00_map_virtual_cores.<ts>"
+  mode: performance
+  intent: "Produce core_resolver.json mapping virtual CORE names to physical paths; create placeholders for cores."
+
+inputs:
+  core_map: "core_map.yml"
+  manifest: "run_manifest.yml"
+
+steps:
+  - load_core_map:
+      file: "{{inputs.core_map}}"
+      out: "artifacts/00_map_raw_<ts>.json"
+      continue_on_missing: true
+  - validate_against_manifest:
+      manifest: "{{inputs.manifest}}"
+      map: "artifacts/00_map_raw_<ts>.json"
+      out: "artifacts/00_map_validated_<ts>.json"
+      continue_on_missing: true
+  - write_resolver:
+      validated_map: "artifacts/00_map_validated_<ts>.json"
+      out: "core_resolver.json"
+  - create_placeholders:
+      targets: ["PromptCORE","StoryCORE","MemoryCORE"]
+      base_path: "."
+  - append_logmark:
+      event: "core_map_resolved"
+      payload: "core_resolver.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "core_resolver"
+    path: "core_resolver.json"
+    suggested_folder: "."
+    artifact_type: "resolver"
+    retention: "workspace"
+    required: true
+    checksum: true
+    description: "Resolver mapping virtual cores to physical paths."
+  - id: "core_map_report"
+    path: "artifacts/core_map_report_<ts>.md"
+    suggested_folder: "artifacts"
+    artifact_type: "report"
+    retention: "artifacts"
+    required: false
+    checksum: false
+    description: "Human-readable report of core map validation."

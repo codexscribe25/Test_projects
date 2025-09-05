@@ -1,0 +1,64 @@
+{
+  "ticket": "tickets/02_E1_S1-select-refs.yml",
+  "generated": "2025-09-04T20:47:45.130267Z",
+  "select_count": 5,
+  "total_candidate_seeds": 56,
+  "selected": [
+    {
+      "text": "Rain begins to fall as fine gray ash; emergency crews respond, but the ash isn\u2019t from any fire.",
+      "source": "workspace/00_inputs/seeds.md",
+      "scores": {
+        "hook": 84,
+        "clarity": 85,
+        "tone": 91,
+        "novelty": 89,
+        "average": 87.25
+      }
+    },
+    {
+      "text": "A baker\u2019s new yeast ferments time into the crust: eat yesterday\u2019s loaf to recall a day\u2019s taste, but snacks age the eater's patience.",
+      "source": "fresh_seeds_10.txt",
+      "scores": {
+        "hook": 63,
+        "clarity": 98,
+        "tone": 97,
+        "novelty": 69,
+        "average": 81.75
+      }
+    },
+    {
+      "text": "**Seed 01 \u2014 The Silent Ferry**",
+      "source": "workspace/00_inputs/seeds.md",
+      "scores": {
+        "hook": 71,
+        "clarity": 84,
+        "tone": 94,
+        "novelty": 73,
+        "average": 80.5
+      }
+    },
+    {
+      "text": "A baker\u2019s new yeast ferments time into the crust: eat yesterday\u2019s loaf to recall a day\u2019s taste, but snacks age the eater\u2019s patience.",
+      "source": "fresh_seeds_10.txt",
+      "scores": {
+        "hook": 97,
+        "clarity": 60,
+        "tone": 67,
+        "novelty": 93,
+        "average": 79.25
+      }
+    },
+    {
+      "text": "Midnight warehouse extraction: steal the auctioned target from a fortified warehouse under warlord guards.",
+      "source": "action_seeds_10.txt",
+      "scores": {
+        "hook": 65,
+        "clarity": 95,
+        "tone": 72,
+        "novelty": 80,
+        "average": 78.0
+      }
+    }
+  ],
+  "all_scored_count": 56
+}

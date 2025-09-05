@@ -1,0 +1,46 @@
+Fresh 10 seeds (no Aetheris, no memory)
+Generated: 2025-09-04T20:43:48.503154Z
+
+1. A streetlamp keeper discovers lamps that store weather instead of oil — lighting a street can summon fog, hail, or a clear sunset.
+2. A glassmaker blows panes that perfectly reflect tomorrow’s sky for one hour; buyers build fortunes (and superstitions) around the brief forecasts.
+3. A bridgewright carves tolls into the stones themselves; cross one and your luck shifts slightly toward whatever the stone was paid for.
+4. A market runs on barter-rituals where poems pay for goods — the worst verse costs twice as much as the best.
+5. A tide-harvester rigs coastal inlets to bottle sea-sounds; composers use the bottles to write music that heals seasick sailors.
+6. A cartography guild maps wind-ghosts — invisible currents that move lost flags and unravel stitched sails.
+7. A baker’s new yeast ferments time into the crust: eat yesterday’s loaf to recall a day’s taste, but snacks age the eater's patience.
+8. Nightwatchers hunt bioluminescent graffiti that blooms only on abandoned walls after rain; each bloom reveals one local secret.
+9. An archivist of broken machines runs a repair salon where restoring a device transfers one small flaw to the restorer.
+10. A ferry captain pilots on the city’s reflected map: the river’s surface shows an alternate route that leads to places the pilot must decide to believe.
+
+
+Scores (seed -> hook / clarity / tone_fit / novelty -> average)
+- A bridgewright carves tolls into the stones themselves; cross one and your luck shifts slightly toward whatever the stone was paid for.
+  Scores: hook=75, clarity=91, tone_fit=51, novelty=92 -> avg=77.25
+
+- A market runs on barter-rituals where poems pay for goods — the worst verse costs twice as much as the best.
+  Scores: hook=79, clarity=97, tone_fit=51, novelty=76 -> avg=75.75
+
+- Nightwatchers hunt bioluminescent graffiti that blooms only on abandoned walls after rain; each bloom reveals one local secret.
+  Scores: hook=64, clarity=80, tone_fit=86, novelty=76 -> avg=76.5
+
+- A baker’s new yeast ferments time into the crust: eat yesterday’s loaf to recall a day’s taste, but snacks age the eater’s patience.
+  Scores: hook=68, clarity=72, tone_fit=63, novelty=75 -> avg=69.5
+
+- A cartography guild maps wind-ghosts — invisible currents that move lost flags and unravel stitched sails.
+  Scores: hook=61, clarity=87, tone_fit=72, novelty=81 -> avg=75.25
+
+- A glassmaker blows panes that perfectly reflect tomorrow’s sky for one hour; buyers build fortunes (and superstitions) around the brief forecasts.
+  Scores: hook=69, clarity=81, tone_fit=52, novelty=86 -> avg=72.0
+
+- A tide-harvester rigs coastal inlets to bottle sea-sounds; composers use the bottles to write music that heals seasick sailors.
+  Scores: hook=63, clarity=87, tone_fit=75, novelty=69 -> avg=73.5
+
+- An archivist of broken machines runs a repair salon where restoring a device transfers one small flaw to the restorer.
+  Scores: hook=55, clarity=72, tone_fit=63, novelty=75 -> avg=66.25
+
+- A streetlamp keeper discovers lamps that store weather instead of oil — lighting a street can summon fog, hail, or a clear sunset.
+  Scores: hook=54, clarity=84, tone_fit=56, novelty=59 -> avg=63.25
+
+- A ferry captain pilots on the city’s reflected map: the river’s surface shows an alternate route that leads to places the pilot must decide to believe.
+  Scores: hook=46, clarity=79, tone_fit=50, novelty=77 -> avg=63.0
+

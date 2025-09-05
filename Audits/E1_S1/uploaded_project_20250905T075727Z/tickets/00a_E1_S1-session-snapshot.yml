@@ -1,0 +1,59 @@
+# 00a_E1_S1-session-snapshot.yml instructions
+# ---
+# purpose: "Create a canonical session snapshot (paths, sizes, checksums, mtimes, conflicts) and append a logmark to logs/logmarks.ndjson."
+# run_command: "Run the ticket in 00a_E1_S1-session-snapshot.yml"
+# ai_create_ticket_prompt: |
+#   Create a SESSION-SNAPSHOT ticket YAML for E1_S1 that:
+#     - enumerates files listed in run_manifest.yml (or scans workspace root if not present)
+#     - computes md5 checksums, file sizes, and mtimes
+#     - detects missing required files vs run_manifest.yml, and detects duplicate/ambiguous names
+#     - writes session_snapshot_<ts>.json, checksums.json, and missing_files.md
+#     - appends a logmark to logs/logmarks.ndjson with event=session_snapshot_created and snapshot path
+# preflight_checks:
+#   - run_manifest.yml presence (if absent, ticket will scan workspace and still produce a snapshot)
+# outputs_to_expect:
+#   - session_snapshot_<ts>.json
+#   - checksums.json
+#   - missing_files.md
+#   - logs/logmarks.ndjson (appended entry)
+# gate_rules:
+#   - if any required files are missing (per manifest) -> mark snapshot status "incomplete" and fail the pipeline until resolved
+#   - snapshot is authoritative record for this session's workspace view (keep it immutable)
+# 00a_E1_S1-session-snapshot.yml — preflight
+# File: tickets/00a_E1_S1-session-snapshot.yml
+preflight:
+  description: "Create session snapshot for provenance and auditing."
+  require_files: []
+  outputs_expected:
+    - "artifacts/session_snapshot_<ts>.json"
+  fail_on_missing: true
+
+job_ticket:
+  id: "00a_E1_S1-session-snapshot.<ts>"
+  mode: performance
+  intent: "Produce a session snapshot and append a logmark."
+
+steps:
+  - scan_workspace:
+      out: "artifacts/00a_scan_<ts>.json"
+      checksums: true
+  - detect_conflicts:
+      scan: "artifacts/00a_scan_<ts>.json"
+      out: "artifacts/00a_conflicts_<ts>.json"
+  - write_snapshot:
+      scan: "artifacts/00a_scan_<ts>.json"
+      out: "artifacts/session_snapshot_<ts>.json"
+  - append_logmark:
+      event: "session_snapshot_created"
+      payload: "artifacts/session_snapshot_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "session_snapshot"
+    path: "artifacts/session_snapshot_<ts>.json"
+    suggested_folder: "artifacts"
+    artifact_type: "snapshot"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Session snapshot for auditing."

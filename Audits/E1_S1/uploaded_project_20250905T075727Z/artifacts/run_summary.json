@@ -1,0 +1,44 @@
+{
+  "ticket": "tickets/01_E1_S1-ideate-refs.yml",
+  "session": "ideate-1757017934-0c82",
+  "generated_files": {
+    "ideation_md": "/mnt/data/run_outputs_ideate-1757017934-0c82/ideation.md",
+    "ideation_scores": "/mnt/data/run_outputs_ideate-1757017934-0c82/ideation_scores.json"
+  },
+  "top2": [
+    {
+      "logline": "A moonlit courier steals After a small quake, a roadside diner\u2019s back door opens to a landscape that isn\u2019t on any map.. They must save the last map to a vanished city or lose themselves.",
+      "seed": "After a small quake, a roadside diner\u2019s back door opens to a landscape that isn\u2019t on any map.",
+      "beats": [
+        "Setup \u2014 A moonlit courier steals After a small quake, a roadside diner\u2019s back door opens to a landscape that isn\u2019t on any map.. They must save the last map to a vanished city or lose themselves.: their ordinary life and the small mystery that haunts their days.",
+        "Escalation \u2014 a stolen memory/object reveals a larger conspiracy tied to After a small quake, a roadside diner\u2019s back door opens to a landscape that isn\u2019t on any map.; the protagonist must choose between truth and safety.",
+        "Cost \u2014 reclaiming the past will erase someone they love (or themselves), and power will answer the call in a new, terrible form."
+      ],
+      "opening_paragraph": "A moonlit courier steals After a small quake, a roadside diner\u2019s back door opens to a landscape that isn\u2019t on any map.. They must save the last map to a vanished city or lose themselves. has always lived in the small rhythms of their trade. When an impossible relic surfaces, it drags stitched memories into daylight: names vanish from ledgers, faces blur from photographs, and rumors become law. Now every decision risks more than reputation \u2014 each recovered memory buys a new debt. As allies fracture and old vows are tested, the protagonist must navigate a map of half-truths, learning that what salvaging memory costs may be greater than forgetting\u2026",
+      "scores": {
+        "hook_strength": 65,
+        "clarity": 93,
+        "tone_fit": 87,
+        "novelty": 74,
+        "average": 79.75
+      }
+    },
+    {
+      "logline": "A cartwright finds # Episode Seeds (Lore-free) \u2014 now they must protect a memory that births a tyrant or lose themselves.",
+      "seed": "# Episode Seeds (Lore-free)",
+      "beats": [
+        "Setup \u2014 A cartwright finds # Episode Seeds (Lore-free): their ordinary life and the small mystery that haunts their days.",
+        "Escalation \u2014 a stolen memory/object reveals a larger conspiracy tied to # Episode Seeds (Lore-free); the protagonist must choose between truth and safety.",
+        "Cost \u2014 reclaiming the past will erase someone they love (or themselves), and power will answer the call in a new, terrible form."
+      ],
+      "opening_paragraph": "A cartwright finds # Episode Seeds (Lore-free) has always lived in the small rhythms of their trade. When an impossible relic surfaces, it drags stitched memories into daylight: names vanish from ledgers, faces blur from photographs, and rumors become law. Now every decision risks more than reputation \u2014 each recovered memory buys a new debt. As allies fracture and old vows are tested, the protagonist must navigate a map of half-truths, learning that what salvaging memory costs may be greater than forgetting itself.",
+      "scores": {
+        "hook_strength": 64,
+        "clarity": 93,
+        "tone_fit": 65,
+        "novelty": 79,
+        "average": 75.25
+      }
+    }
+  ]
+}

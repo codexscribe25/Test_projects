@@ -1,0 +1,70 @@
+# 07_E1_S1-rewrite-refs.yml instructions
+# ---
+# purpose: "Apply limited, focused rewrites to address validator flags with strict edit-density caps."
+# run_command: "Run the ticket in 07_E1_S1-rewrite-refs.yml"
+# ai_create_ticket_prompt: |
+#   Create a REFS-style REWRITE ticket YAML that:
+#     - reads 10_drafts/episode1_v1.md and 20_reviews/validators_pre_rewrite.json
+#     - performs up to 2 rewrite passes with target_edit_density_pct_min: 8 and stop_if_edit_density_pct_gt: 45
+#     - outputs 30_rewrites/episode1_v2.md and rewrite_diff.stats.json
+# outputs_to_expect:
+#   - "30_rewrites/episode1_v2.md"
+#   - "rewrite_diff.stats.json"
+# gate_rule: "If edit density > threshold or >max_passes → stop and request human review."
+# guidance: "Keep rewrites tight and traceable; log a diff summary for audit."
+# 07_E1_S1-rewrite-refs.yml — preflight
+# File: tickets/07_E1_S1-rewrite-refs.yml
+preflight:
+  description: "Apply targeted rewrites based on validator flags; enforce edit-density cap."
+  require_files:
+    - "20_reviews/validators_pre_rewrite_<ts>.json"
+    - "10_drafts/episode1_v1_<ts>.md"
+  outputs_expected:
+    - "30_rewrites/episode1_v2_<ts>.md"
+    - "artifacts/30_rewrites_episode1_v2_<ts>.md.sha256"
+  fail_on_missing: true
+
+job_ticket:
+  id: "07_E1_S1-rewrite.<ts>"
+  mode: fidelity
+  intent: "Produce a controlled rewrite using validator guidance."
+
+inputs:
+  draft: "10_drafts/episode1_v1_<ts>.md"
+  issues: "20_reviews/validators_pre_rewrite_<ts>.json"
+  max_edit_density_pct: 45
+
+steps:
+  - load_draft:
+      file: "{{inputs.draft}}"
+      out: "artifacts/07_draft_<ts>.json"
+  - apply_rewrites:
+      draft: "artifacts/07_draft_<ts>.json"
+      issues: "{{inputs.issues}}"
+      max_edit_density: "{{inputs.max_edit_density_pct}}"
+      out: "30_rewrites/episode1_v2_<ts>.md"
+  - checksum:
+      file: "30_rewrites/episode1_v2_<ts>.md"
+      out: "artifacts/30_rewrites_episode1_v2_<ts>.md.sha256"
+  - append_logmark:
+      event: "rewrite_completed"
+      payload: "30_rewrites/episode1_v2_<ts>.md"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "rewrite_v2"
+    path: "30_rewrites/episode1_v2_<ts>.md"
+    suggested_folder: "30_rewrites"
+    artifact_type: "rewrite"
+    retention: "workspace"
+    required: true
+    checksum: true
+    description: "Controlled rewrite of the draft."
+  - id: "rewrite_v2_checksum"
+    path: "artifacts/30_rewrites_episode1_v2_<ts>.md.sha256"
+    suggested_folder: "artifacts"
+    artifact_type: "checksum"
+    retention: "artifacts"
+    required: true
+    checksum: false
+    description: "SHA256 checksum for rewrite v2."

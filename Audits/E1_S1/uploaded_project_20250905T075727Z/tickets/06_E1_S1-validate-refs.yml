@@ -1,0 +1,73 @@
+# 06_E1_S1-validate-refs.yml instructions
+# ---
+# purpose: "Run pre-rewrite validators on the raw draft and produce issues summary; block on hard errors."
+# run_command: "Run the ticket in 06_E1_S1-validate-refs.yml"
+# ai_create_ticket_prompt: |
+#   Create a REFS-style VALIDATE (pre-rewrite) ticket YAML that:
+#     - runs validators [tone_guard, style_guard, contradiction_scan, canon_gate, citation_map] on 10_drafts/episode1_v1.md
+#     - writes 20_reviews/validators_pre_rewrite.json and 20_reviews/issues_summary.md
+#     - computes contradiction_index.json and fails on hard errors
+# outputs_to_expect:
+#   - "20_reviews/validators_pre_rewrite.json"
+#   - "20_reviews/issues_summary.md"
+#   - "contradiction_index.json"
+# gate_rule: "halt if hard contradictions or canon_gate errors are present."
+# 06_E1_S1-validate-refs.yml — preflight
+# File: tickets/06_E1_S1-validate-refs.yml
+preflight:
+  description: "Run pre-rewrite validators and produce a human issues summary for edits."
+  require_files:
+    - "10_drafts/episode1_v1_<ts>.md"
+    - "Theme/Theme_LoreValidator.yml"
+  outputs_expected:
+    - "20_reviews/validators_pre_rewrite_<ts>.json"
+    - "20_reviews/issues_summary_<ts>.md"
+  fail_on_missing: true
+
+job_ticket:
+  id: "06_E1_S1-validate.<ts>"
+  mode: fidelity
+  intent: "Generate validator reports (tone, canon, contradictions) and a summary document."
+
+inputs:
+  draft: "10_drafts/episode1_v1_<ts>.md"
+  validators: "Theme/Theme_LoreValidator.yml"
+  styleguide: "Theme/Theme_Styleguide.yml"
+
+steps:
+  - run_tone_checks:
+      draft: "{{inputs.draft}}"
+      styleguide: "{{inputs.styleguide}}"
+      out: "20_reviews/06_tone_report_<ts>.json"
+  - run_canon_checks:
+      draft: "{{inputs.draft}}"
+      validators: "{{inputs.validators}}"
+      out: "20_reviews/06_canon_report_<ts>.json"
+  - synthesize_issues:
+      reports: ["20_reviews/06_tone_report_<ts>.json","20_reviews/06_canon_report_<ts>.json"]
+      out: "20_reviews/validators_pre_rewrite_<ts>.json"
+  - render_summary:
+      issues: "20_reviews/validators_pre_rewrite_<ts>.json"
+      out: "20_reviews/issues_summary_<ts>.md"
+  - append_logmark:
+      event: "pre_rewrite_validation"
+      payload: "20_reviews/issues_summary_<ts>.md"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "validators_pre_rewrite"
+    path: "20_reviews/validators_pre_rewrite_<ts>.json"
+    suggested_folder: "20_reviews"
+    artifact_type: "report"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Machine-readable validators report before rewrite."
+  - id: "issues_summary"
+    path: "20_reviews/issues_summary_<ts>.md"
+    suggested_folder: "20_reviews"
+    artifact_type: "summary"
+    retention: "artifacts"
+    required: true
+    checksum: false
+    description: "Human-readable issues and rewrite guidance."

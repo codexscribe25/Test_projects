@@ -1,0 +1,74 @@
+# 00_E1_S1-BOOT.yml instructions
+# ---
+# purpose: "Verify uploaded theme & ticket files, compute checksums, build Theme_Lock.json and aliases."
+# run_command: "Run the ticket in 00_E1_S1-BOOT.yml"
+# ai_create_ticket_prompt: |
+#   Create a BOOT ticket YAML for project E1_S1 that:
+#     - verifies the presence of required Theme_* files and numbered tickets
+#     - computes MD5 checksums and compares to run_manifest.yml (if present)
+#     - emits checksums.json, Theme_Lock.json, Theme_Lock.md, Theme_Aliases.json, missing_files.md
+#     - fails if required files are missing (unless configured otherwise)
+# watch_for_outputs:
+#   - "Theme_Lock.json (exists)"
+#   - "checksums.json (matches manifest if provided)"
+#   - "missing_files.md (should be empty for clean run)"
+# notes: "Run BOOT first in a fresh session whenever you upload new theme or ticket files."
+# 00_E1_S1-BOOT.yml — preflight
+# File: tickets/00_E1_S1-BOOT.yml
+preflight:
+  description: "Boot: validate manifest, compute checksums, generate session snapshot & Theme_Lock."
+  require_files:
+    - "run_manifest.yml"
+  outputs_expected:
+    - "artifacts/session_snapshot_<ts>.json"
+    - "Theme/Theme_Lock.json"
+  fail_on_missing: false
+
+job_ticket:
+  id: "00_E1_S1-BOOT.<ts>"
+  mode: performance
+  intent: "Boot sequence: authoritative scan, checksums, and theme lock generation."
+
+inputs:
+  manifest: "run_manifest.yml"
+
+steps:
+  - load_manifest:
+      file: "{{inputs.manifest}}"
+      out: "artifacts/00boot_manifest_<ts>.json"
+      continue_on_missing: true
+  - workspace_scan:
+      out: "artifacts/00boot_scan_<ts>.json"
+      compute_checksums: true
+  - compare_manifest_scan:
+      manifest: "artifacts/00boot_manifest_<ts>.json"
+      scan: "artifacts/00boot_scan_<ts>.json"
+      out: "artifacts/00boot_discrepancies_<ts>.json"
+  - write_snapshot:
+      scan: "artifacts/00boot_scan_<ts>.json"
+      out: "artifacts/session_snapshot_<ts>.json"
+  - write_theme_lock:
+      source: "artifacts/00boot_scan_<ts>.json"
+      out: "Theme/Theme_Lock.json"
+  - append_logmark:
+      event: "boot_completed"
+      payload: "artifacts/session_snapshot_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "session_snapshot"
+    path: "artifacts/session_snapshot_<ts>.json"
+    suggested_folder: "artifacts"
+    artifact_type: "snapshot"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Authoritative session snapshot with checksums."
+  - id: "theme_lock"
+    path: "Theme/Theme_Lock.json"
+    suggested_folder: "Theme"
+    artifact_type: "lock"
+    retention: "workspace"
+    required: true
+    checksum: false
+    description: "Theme lock (snapshot of theme files at boot)."

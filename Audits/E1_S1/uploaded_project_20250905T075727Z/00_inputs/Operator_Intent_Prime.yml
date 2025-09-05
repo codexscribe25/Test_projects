@@ -1,0 +1,27 @@
+# Operator_Intent_Prime.yml
+# Operator_Intent_Prime.yml — preflight
+preflight:
+  description: "Operator intent guidance (optional). Tickets may reference for operator-level policies."
+  require_files:
+    - "Operator_Intent_Prime.yml"
+  fail_on_missing: false
+
+meta:
+  version: 1
+  description: "Prime operator intent spec for project runs (non-executable schema)."
+operator_intent_prime:
+  id: "op.intent.prime.e1_s1"
+  mode: fidelity
+  lanes: [draft, validate, rewrite, export]
+  validators: [tone_guard, canon_gate, contradiction_scan, citation_map, style_guard, export_guard]
+  acceptance:
+    overall_score_min: 80
+    tone_accuracy_min: 85
+    validator_pass_rate_min: 90
+    hard_contradictions: 0
+  references:
+    style_guide: "00_inputs/Theme_Styleguide.yml"
+    lore_index: "00_inputs/Theme_LoreIndex.yml"
+    lore_validator: "00_inputs/Theme_LoreValidator.yml"
+    theme_purpose: "00_inputs/Theme_Purpose.yml"
+    theme_main: "00_inputs/Theme_Main.yml"

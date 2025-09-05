@@ -1,0 +1,82 @@
+{
+  "generated": "2025-09-04T21:42:56.646553Z",
+  "select_count": 5,
+  "ranking_mode": "hybrid",
+  "selected": [
+    {
+      "text": "Rain begins to fall as fine gray ash; emergency crews respond, but the ash isn\u2019t from any fire.",
+      "source": "/mnt/data/workspace_project/artifacts/selection_report.json",
+      "score": "Originality",
+      "OriginalityScore": 80.75,
+      "GenreMarketScore": 69.7,
+      "components": {
+        "hook": 84,
+        "clarity": 85,
+        "tone": 91,
+        "novelty": 63,
+        "genrefit": 56,
+        "producibility": 34
+      }
+    },
+    {
+      "text": "**Seed 02 \u2014 Borrowed Tomorrow**",
+      "source": "/mnt/data/workspace_project/00_inputs/seeds.md",
+      "score": "Originality",
+      "OriginalityScore": 80.75,
+      "GenreMarketScore": 65.2,
+      "components": {
+        "hook": 76,
+        "clarity": 66,
+        "tone": 88,
+        "novelty": 93,
+        "genrefit": 50,
+        "producibility": 43
+      }
+    },
+    {
+      "text": "A baker\u2019s new yeast ferments time into the crust: eat yesterday\u2019s loaf to recall a day\u2019s taste, but snacks age the eater's patience.",
+      "source": "/mnt/data/workspace_project/artifacts/selection_report.json",
+      "score": "GenreMarket",
+      "OriginalityScore": 76.75,
+      "GenreMarketScore": 71.0,
+      "components": {
+        "hook": 63,
+        "clarity": 98,
+        "tone": 97,
+        "novelty": 49,
+        "genrefit": 50,
+        "producibility": 62
+      }
+    },
+    {
+      "text": "Midnight warehouse extraction: steal the auctioned target from a fortified warehouse under warlord guards.",
+      "source": "/mnt/data/workspace_project/artifacts/selection_report.json",
+      "score": "GenreMarket",
+      "OriginalityScore": 73.0,
+      "GenreMarketScore": 70.75,
+      "components": {
+        "hook": 65,
+        "clarity": 95,
+        "tone": 72,
+        "novelty": 60,
+        "genrefit": 62,
+        "producibility": 63
+      }
+    },
+    {
+      "text": "**Seed 01 \u2014 The Silent Ferry**",
+      "source": "/mnt/data/workspace_project/artifacts/selection_report.json",
+      "score": "Combined",
+      "OriginalityScore": 77.25,
+      "GenreMarketScore": 68.4,
+      "components": {
+        "hook": 71,
+        "clarity": 84,
+        "tone": 94,
+        "novelty": 60,
+        "genrefit": 50,
+        "producibility": 52
+      }
+    }
+  ]
+}

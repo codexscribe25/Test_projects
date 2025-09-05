@@ -1,0 +1,65 @@
+{
+  "generated_at": "2025-09-04T23:37:16.397847Z",
+  "draft": "/mnt/data/workspace_project/10_drafts/episode1_v1_20250904T232522Z.md",
+  "metrics": {
+    "word_count": 1814,
+    "sentence_count": 108,
+    "avg_sentence_length": 16.8
+  },
+  "validators": {
+    "banned_terms": {
+      "found": [
+        "manifest",
+        "memory"
+      ],
+      "status": "fail"
+    },
+    "tone_guard": {
+      "exclamation_count": 0,
+      "question_count": 0,
+      "pos_count": 1,
+      "neg_count": 12,
+      "tone_score": 0.0
+    },
+    "style_guard": {
+      "avg_sentence_length": 16.8,
+      "long_sentence_fraction": 0.019,
+      "style_score": 0.981
+    },
+    "contradiction_scan": [],
+    "continuity_check": {
+      "beats": [
+        {
+          "beat": "The Job Drops: forged manifest, midnight private auction at warlord Karo's fortified warehouse.",
+          "found": true,
+          "pos": 325
+        },
+        {
+          "beat": "Fortified Routine, Human Unknowns: rooftop entry, thermal sweeps, a humming child in the loading bay.",
+          "found": true,
+          "pos": 1320
+        },
+        {
+          "beat": "Choice & Cost: grab the reliquary and escape, or stall to free innocents and risk capture.",
+          "found": true,
+          "pos": 2224
+        }
+      ],
+      "beats_order_ok": true
+    },
+    "named_entity_inventory": {
+      "counts": {
+        "Ilya": 25,
+        "Marlo": 12,
+        "Sera": 2,
+        "Kito": 2,
+        "Karo": 0
+      }
+    }
+  },
+  "summary": {
+    "total_checks": 5,
+    "passed_checks": 3,
+    "pass_rate": 0.6
+  }
+}

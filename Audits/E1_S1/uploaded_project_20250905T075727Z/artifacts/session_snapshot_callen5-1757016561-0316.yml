@@ -1,0 +1,14 @@
+file_count: 62
+sample_files:
+- core_map.yml
+- core_resolver.json
+- README.md
+- run_manifest.yml
+- 00_inputs/Operator_Intent_Prime.yml
+- 00_inputs/premise.md
+- 00_inputs/README_MEMORY.md
+- 00_inputs/scaffold.md
+- 00_inputs/seeds.md
+- 10_drafts/.keep
+session_id: callen5-1757016561-0316
+timestamp: '2025-09-04T20:09:21Z'

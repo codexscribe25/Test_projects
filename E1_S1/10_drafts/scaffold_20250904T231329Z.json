@@ -1,0 +1,41 @@
+{
+  "id": "scaffold_20250904T231329Z",
+  "selection_id": "Midnight warehouse extraction: steal the auctioned target from a fortified warehouse under warlord guards.",
+  "text": "Midnight warehouse extraction: steal the auctioned target from a fortified warehouse under warlord guards.",
+  "beats": [
+    "The Job Drops: forged manifest, midnight private auction at warlord Karo's fortified warehouse.",
+    "Fortified Routine, Human Unknowns: rooftop entry, thermal sweeps, a humming child in the loading bay.",
+    "Choice & Cost: grab the reliquary and escape, or stall to free innocents and risk capture."
+  ],
+  "pov": "Close third-person (Ilya)",
+  "stakes": {
+    "immediate": "Escape before second-shift sweep to avoid capture or execution.",
+    "human": "Press-ganged workers and stowaways will be harmed if extraction is rushed.",
+    "long_term": "Warlord empowerment and moral collapse for protagonist."
+  },
+  "cost": "Death, imprisonment, loss of moral redemption, and a strengthened warlord presence.",
+  "hooks": [
+    "Inscription references a forgotten port ritual linked to Ilya's past.",
+    "Guard watch-data chip points to black-market buyer with political ties.",
+    "Child's sea chant triggers a personal connection for Ilya."
+  ],
+  "components": {
+    "hook": 65,
+    "clarity": 95,
+    "tone": 72,
+    "novelty": 60,
+    "genrefit": 62,
+    "producibility": 63
+  },
+  "scores": {
+    "OriginalityScore": 73.0,
+    "GenreMarketScore": 70.75
+  },
+  "provenance": {
+    "source": "/mnt/data/run_outputs_select_rerun_1757022176/selection_list.json",
+    "chosen_from": "GenreMarket",
+    "generated_at": "2025-09-04T23:13:29.811973Z"
+  },
+  "_trimmed": true,
+  "_trimmed_at": "2025-09-04T23:20:59.212798Z"
+}
