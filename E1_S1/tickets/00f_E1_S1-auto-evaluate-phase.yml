@@ -1,7 +1,9 @@
-# 00f_E1_S1-auto-evaluate-phase.yml
-# Purpose: run 00e in auto_mode on schedule (CI/nightly) to promote when safe.
-# 00f_E1_S1-auto-evaluate-phase.yml — preflight
-# File: tickets/00f_E1_S1-auto-evaluate-phase.yml
+# 00f_E1_S1-auto-evaluate-phase.yml — AUTO-EVALUATE (critic1)
+# Purpose: Auto-score latest outputs; surface risks & next actions.
+# Reads: recent artifacts
+# Outputs: auto_eval_scorecard.json, auto_eval_notes.md
+# RUN: critic1 — Run 00f_E1_S1-auto-evaluate-phase.
+
 preflight:
   description: "Wrapper for scheduled auto-evaluation to run 00e in auto-mode."
   require_files:

@@ -1,19 +1,10 @@
-# 07_E1_S1-rewrite-refs.yml instructions
-# ---
-# purpose: "Apply limited, focused rewrites to address validator flags with strict edit-density caps."
-# run_command: "Run the ticket in 07_E1_S1-rewrite-refs.yml"
-# ai_create_ticket_prompt: |
-#   Create a REFS-style REWRITE ticket YAML that:
-#     - reads 10_drafts/episode1_v1.md and 20_reviews/validators_pre_rewrite.json
-#     - performs up to 2 rewrite passes with target_edit_density_pct_min: 8 and stop_if_edit_density_pct_gt: 45
-#     - outputs 30_rewrites/episode1_v2.md and rewrite_diff.stats.json
-# outputs_to_expect:
-#   - "30_rewrites/episode1_v2.md"
-#   - "rewrite_diff.stats.json"
-# gate_rule: "If edit density > threshold or >max_passes → stop and request human review."
-# guidance: "Keep rewrites tight and traceable; log a diff summary for audit."
-# 07_E1_S1-rewrite-refs.yml — preflight
-# File: tickets/07_E1_S1-rewrite-refs.yml
+# 07_E1_S1-rewrite-refs.yml — REWRITE (doctor2)
+# Purpose: Diagnose weak spots; produce targeted rewrites with diffs.
+# Inputs: —
+# Reads: draft.md, validation_report.md
+# Outputs: rewrites.md (or rewrites.patch)
+# RUN: doctor2 — Run 07_E1_S1-rewrite-refs.
+
 preflight:
   description: "Apply targeted rewrites based on validator flags; enforce edit-density cap."
   require_files:

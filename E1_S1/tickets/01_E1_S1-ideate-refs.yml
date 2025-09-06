@@ -1,24 +1,10 @@
-# 01_E1_S1-ideate-refs.yml instructions
-# ---
-# purpose: "Generate ideation (8 loglines), score them, expand top 2 to 3-beat outlines + opening para."
-# run_command: "Run the ticket in 01_E1_S1-ideate-refs.yml"
-# ai_create_ticket_prompt: |
-#   Create a REFS-style IDEATE ticket YAML for E1_S1 that:
-#     - references Theme_Styleguide.yml and Theme_LoreIndex.yml
-#     - generates 8 loglines (<=35 words)
-#     - scores each by: hook_strength, clarity, tone_fit, novelty
-#     - expands top 2 into 3-beat outlines and an opening paragraph (<=110 words)
-# outputs_to_expect:
-#   - "ideation.md"
-#   - "ideation_scores.json"
-# guidance: "If ideation lacks variety, re-run with mode=fidelity or tweak scoring weights."
-# 01_E1_S1-ideate-refs.yml — preflight
-# File: tickets/01_E1_S1-ideate-refs.yml
-# tickets/01_E1_S1-ideate-refs.yml
-# Normalised IDEATE ticket that preserves the original spec while
-# incorporating the "smart" fallback and input-inspection behaviour.
-# Purpose: Generate ideation (8 loglines), score them, expand top 2 to 3-beat outlines + opening para.
-# 01_E1_S1-ideate-refs.yml — preflight (modified to support dual scoring)
+# 01_E1_S1-ideate-refs.yml — IDEATE (muse1 x2)
+# Purpose: 8 loglines (≤35w) → score (hook 35, clarity 25, tone 20, novelty 20) → expand top 2 (3 beats + ≤110w opener).
+# Inputs: Theme/Theme_Styleguide.yml, Theme/Theme_LoreIndex.yml  (opt: 00_inputs/premise.md)
+# Reads: —
+# Outputs: ideation.md, ideation_scores.json
+# RUN: muse1 x2 — Run 01_E1_S1-ideate-refs. Premise: "<one line>"
+
 meta:
   id: "01_E1_S1-ideate-refs"
   version: "1.5.0"

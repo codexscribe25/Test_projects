@@ -1,19 +1,10 @@
-# 02_E1_S1-select-refs.yml instructions
-# ---
-# purpose: "Select a single ideation concept to carry forward and record selection rationale."
-# run_command: "Run the ticket in 02_E1_S1-select-refs.yml"
-# ai_create_ticket_prompt: |
-#   Create a REFS-style SELECT ticket YAML that:
-#     - reads ideation.md and ideation_scores.json
-#     - applies selection rules: strongest hook, clearest cost, minimal overlap
-#     - writes selection.json and selection.md (with rationale and IDs)
-# outputs_to_expect:
-#   - "selection.json"
-#   - "selection.md"
-# guidance: "Selection should include a short why (2–3 lines) so later steps can reference rationale."
-# 02_E1_S1-select-refs.yml — preflight
-# File: tickets/02_E1_S1-select-refs.yml
-# 02_E1_S1-select-refs.yml — enhanced selector (dual-score aware)
+# 02_E1_S1-select-refs.yml — SELECT (critic1)
+# Purpose: Pick one concept; record 2–3 line rationale.
+# Inputs: —
+# Reads: ideation.md, ideation_scores.json
+# Outputs: selection.json, selection.md
+# RUN: critic1 — Run 02_E1_S1-select-refs. Rule: strongest hook, clear cost, minimal overlap.
+
 meta:
   id: "02_E1_S1-select-refs"
   version: "1.2.0"

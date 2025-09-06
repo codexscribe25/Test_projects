@@ -1,47 +1,9 @@
-# 05b_E1_S1-lore-approve-refs.yml instructions
-# ---
-# purpose: "Validate a filled canon_packet_stub.md, require human acknowledgement, and append approved canonical lore to the persistent MemoryLog_Lore.yml. Update Theme_LoreIndex.yml (pointers) and Theme_Main.yml (digests) if configured. Emit audit logmarks."
-# run_command: "Run the ticket in 05b_E1_S1-lore-approve-refs.yml"
-# ai_create_ticket_prompt: |
-#   Create an APPROVE-LORE ticket YAML for E1_S1 that:
-#     - reads canon_packet_stub.md (produced by lore-audit)
-#     - validates contents against Theme_LoreValidator.yml rules
-#     - produces 05b_validated_canon.json (validator report)
-#     - requires explicit human acknowledgement (approver name, timestamp, approved:true) before write
-#     - appends a structured entry to MemoryLog_Lore.yml using the project's MemoryLog schema
-#     - optionally upserts pointer(s) into Theme_LoreIndex.yml and refreshes Theme_Main.yml digests
-#     - appends events to logs/logmarks.ndjson: lore_proposed -> lore_approved -> memory_appended
-# preflight_checks:
-#   - require presence of: canon_packet_stub.md
-#   - require Theme_Lock.json (optional, but recommended)
-#   - fail_if_missing: true
-# required_fields_in_packet:
-#   - canonical_id
-#   - term
-#   - short_description
-#   - created_by (approver)
-#   - approval_timestamp
-#   - approved: true
-# validators_to_run: ["Theme_LoreValidator.yml"]
-# outputs_to_expect:
-#   - "05b_validated_canon.json"
-#   - "05b_human_ack.md"  # human ack artifact
-#   - "MemoryLog_Lore.yml" (appended)
-#   - "05b_theme_index_updates.json" (if theme index updated)
-#   - "05b_theme_main_updates.md" (if theme main updated)
-#   - "logs/logmarks.ndjson"
-# gate_rules:
-#   - require human acknowledgement record before append (approved:true + approver + timestamp)
-#   - do not write to MemoryLog_Lore.yml if validation severity contains any 'error'
-#   - append-only semantics: this ticket is the only allowed writer for approved memory entries
-# guidance:
-#   - Use this ticket after canon_packet_stub.md has been fully completed/verified by a human
-#   - Keep canon packet concise; provenance is required to ensure cross-session trust
-#   - For bulk approvals, run approvals one entry-per-run or use a batched approval mode that still records per-entry approver metadata
-# notes:
-#   - MemoryLog_Lore.yml is the persistent, cross-session memory store — do not edit it directly. Use this ticket.
-# 05b_E1_S1-lore-approve-refs.yml — preflight
-# File: tickets/05b_E1_S1-lore-approve-refs.yml
+# 05b_E1_S1-lore-approve-refs.yml — LORE APPROVE REFS (auditor2 → courier1)
+# Purpose: Approve vetted lore refs; mark status; emit approvals manifest + changelog.
+# Reads: lore_audit.* , validation_report.md
+# Outputs: lore_approvals.json, approvals_note.md
+# RUN: auditor2 → courier1 — Run 05b_E1_S1-lore-approve-refs.
+
 preflight:
   description: "Approve completed canon_packet_stub(s) and append to MemoryLog_Lore.yml (append-only)."
   require_files:

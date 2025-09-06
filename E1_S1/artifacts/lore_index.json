@@ -1,0 +1,35 @@
+{
+  "generated": "2025-09-05T21:51:14.352756Z",
+  "overlays": [
+    "/mnt/data/overlay_skeleton_callen5_v1_theme/Theme/Overlays/callen5_v1_theme"
+  ],
+  "files": [
+    {
+      "overlay_root": "/mnt/data/overlay_skeleton_callen5_v1_theme/Theme/Overlays/callen5_v1_theme",
+      "rel_path": "overlay.yml",
+      "abs_path": "/mnt/data/overlay_skeleton_callen5_v1_theme/Theme/Overlays/callen5_v1_theme/overlay.yml",
+      "ext": ".yml",
+      "size_bytes": 202,
+      "mtime_utc": "2025-09-05T21:08:55.316321Z",
+      "sha256": "47500873bb77ffe0c3322687f34d9072344affe74afdbb1c9b3f66ce0af73f08"
+    },
+    {
+      "overlay_root": "/mnt/data/overlay_skeleton_callen5_v1_theme/Theme/Overlays/callen5_v1_theme",
+      "rel_path": "lexicon.yml",
+      "abs_path": "/mnt/data/overlay_skeleton_callen5_v1_theme/Theme/Overlays/callen5_v1_theme/lexicon.yml",
+      "ext": ".yml",
+      "size_bytes": 29,
+      "mtime_utc": "2025-09-05T21:08:55.316685Z",
+      "sha256": "0725058dbb833f307102508f064b8f2235af59e00f2aca2c574defb6bd8bfa2d"
+    },
+    {
+      "overlay_root": "/mnt/data/overlay_skeleton_callen5_v1_theme/Theme/Overlays/callen5_v1_theme",
+      "rel_path": "README.md",
+      "abs_path": "/mnt/data/overlay_skeleton_callen5_v1_theme/Theme/Overlays/callen5_v1_theme/README.md",
+      "ext": ".md",
+      "size_bytes": 103,
+      "mtime_utc": "2025-09-05T21:08:55.316922Z",
+      "sha256": "8b1188d2be0e8f63d39d2e48783898f378407b2f58536fe016d108ed306f6972"
+    }
+  ]
+}

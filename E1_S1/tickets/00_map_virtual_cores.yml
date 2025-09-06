@@ -1,3 +1,9 @@
+# 00_map_virtual_cores.yml — MAP VIRTUAL CORES (architect1)
+# Purpose: Map virtual cores → real paths; emit canonical map.
+# Reads: CORE deck
+# Outputs: virtual_cores_map.json, map_report.md
+# RUN: architect1 — Run 00_map_virtual_cores.
+
 meta:
   id: "00_map_virtual_cores"
   version: "2.0.0"

@@ -1,175 +1,52 @@
-# 08_E1_S1-validate-scorecard-refs.yml — post-validate + scorecard (dual-score aware)
+# 08_E1_S1-validate-scorecard-refs.yml — SCORECARD (critic1)
+# Purpose: Final scoring across clarity, tone-fit, hook, coherence; keep/kill notes.
+# Inputs: —
+# Reads: rewrites.md (or updated draft)
+# Outputs: validate_scorecard.json, validate_scorecard.md
+# RUN: critic1 — Run 08_E1_S1-validate-scorecard-refs.
+
 meta:
   id: "08_E1_S1-validate-scorecard-refs"
-  version: "1.1.0"
+  version: "2.0.0"
   author: "Callen5"
-  created: "2025-09-04T21:10:00Z"
-  description: >
-    Run post-rewrite validators on the rewritten draft, compute a scorecard comparing
-    pre/post metrics where available, and produce an acceptance decision.
-    This ticket is aware of provenance fields (OriginalityScore & GenreMarketScore)
-    and will surface them in the scorecard for auditability.
-
-preflight:
-  description: "Post-rewrite validation and scorecard generation for acceptance decision."
-  require_files:
-    - "30_rewrites/episode1_v2_<ts>.md"
-    - "Theme/Theme_LoreValidator.yml"
-  outputs_expected:
-    - "artifacts/08_post_validators_<ts>.json"
-    - "artifacts/08_scorecard_<ts>.json"
-    - "artifacts/acceptance_decision_<ts>.md"
-  fail_on_missing: true
-
-job_ticket:
-  id: "08_E1_S1-validate-scorecard.<ts>"
-  mode: fidelity
-  intent: "Compute post-rewrite validator reports and an acceptance scorecard comparing metrics and scores."
+purpose: >
+  Aggregate validator outputs into a scorecard and produce a human-readable MD.
+  Does NOT block; reports acceptance decision recommendation only.
 
 params:
-  # numeric thresholds for acceptance (0.0–1.0)
-  overall_threshold:
-    type: number
-    default: 0.80
-    description: "Minimum overall score required to PASS (0.0–1.0)."
-  tone_threshold:
-    type: number
-    default: 0.85
-    description: "Minimum tone guard score required to PASS (0.0–1.0)."
-  validator_pass_rate_threshold:
-    type: number
-    default: 0.90
-    description: "Minimum fraction of validators that must pass."
-  hard_contradictions_allowed:
-    type: integer
-    default: 0
-    description: "Maximum allowed hard contradictions (strict gate)."
-  include_pre_rewrite_comparison:
-    type: boolean
-    default: true
-    description: "If true, ticket will attempt to read pre-rewrite scorecard/metrics to show deltas."
-  pre_rewrite_scorecard:
-    type: string
-    default: "artifacts/08_pre_scorecard_<ts>.json"
-    description: "Optional path to pre-rewrite scorecard (if available) for comparison."
-
-inputs:
-  rewrite: "30_rewrites/episode1_v2_<ts>.md"
-  validators: "Theme/Theme_LoreValidator.yml"
-  pre_scorecard: "{{job_ticket.params.pre_rewrite_scorecard}}"   # optional
+  out_dir: "/mnt/data/build"
+  inputs:
+    validators_json: "/mnt/data/build/validators_pre_rewrite.json"
+    contradiction_index: "/mnt/data/build/contradiction_index.json"
+    provenance_note: "/mnt/data/build/provenance_note.md"
+  thresholds:
+    min_pass_fraction: 0.75
+    max_contradictions: 0          # recommend rewrite if > 0
+    warn_on_provenance: true
 
 steps:
-  - run_post_validators:
-      file: "{{inputs.rewrite}}"
-      validators: "{{inputs.validators}}"
-      out: "artifacts/08_post_validators_<ts>.json"
-      behavior:
-        - run_suite: ["tone_guard","style_guard","contradiction_scan","canon_gate","citation_map","continuity_check"]
-        - produce_diagnostics: true
+  - assert_file: { path: "${inputs.validators_json}", on_missing: "report", message: "validators_pre_rewrite.json missing" }
+  - assert_file: { path: "${inputs.contradiction_index}", on_missing: "report" }
 
   - compute_scorecard:
-      validators_report: "artifacts/08_post_validators_<ts>.json"
-      out: "artifacts/08_scorecard_<ts>.json"
-      logic:
-        - compute_per_validator_scores: map each validator -> {pass:true/false, score:0-1, notes}
-        - compute_aggregates:
-            - validator_pass_rate = number_passed / total_validators
-            - tone_score = score_for('tone_guard') or 0.0
-            - style_score = score_for('style_guard') or 0.0
-            - contradiction_count = count_hard_contradictions(artifacts/08_post_validators_<ts>.json)
-            - overall_score = weighted_sum([tone_score, style_score, validator_pass_rate], weights=[0.4,0.3,0.3])
-        - provenance_and_scores:
-            - attempt to extract provenance fields from draft metrics or embedded headers:
-              - OriginalityScore (if present)
-              - GenreMarketScore (if present)
-            - include metrics: word_count, readability, sentence_count if available in diagnostics
-        - If job_ticket.params.include_pre_rewrite_comparison == true and file exists(job_ticket.params.pre_rewrite_scorecard):
-            - compute deltas: overall_delta, tone_delta, style_delta, validator_pass_rate_delta
-      note: "Produce a compact JSON scorecard with aggregates, per-validator results, provenance and optional pre/post deltas."
+      validators_json: "${inputs.validators_json}"
+      contradiction_index: "${inputs.contradiction_index}"
+      out_json: "${out_dir}/scorecard.json"
 
-  - decide_acceptance:
-      scorecard: "artifacts/08_scorecard_<ts>.json"
-      params:
-        overall_threshold: "{{job_ticket.params.overall_threshold}}"
-        tone_threshold: "{{job_ticket.params.tone_threshold}}"
-        validator_pass_rate_threshold: "{{job_ticket.params.validator_pass_rate_threshold}}"
-        hard_contradictions_allowed: "{{job_ticket.params.hard_contradictions_allowed}}"
-      out: "artifacts/acceptance_decision_<ts>.md"
-      logic:
-        - read aggregates from scorecard:
-            overall_score, tone_score, validator_pass_rate, contradiction_count
-        - determine PASS if:
-            overall_score >= overall_threshold
-            AND tone_score >= tone_threshold
-            AND validator_pass_rate >= validator_pass_rate_threshold
-            AND contradiction_count <= hard_contradictions_allowed
-        - determine FAIL otherwise
-        - produce human-readable acceptance_decision markdown:
-            - PASS/FAIL headline
-            - key numbers: overall_score, tone_score, validator_pass_rate, contradiction_count
-            - provenance: OriginalityScore / GenreMarketScore (if available)
-            - short rationale (2–4 lines)
-            - remediation suggestions if FAIL (e.g., rewrite tone, fix contradictions)
-      note: "This decision file is the gating artifact for exports."
+  - produce_md:
+      from_json: "${out_dir}/scorecard.json"
+      provenance_note: "${inputs.provenance_note}"
+      out_md: "${out_dir}/scorecard.md"
 
-  - append_logmark:
-      event: "post_rewrite_validation"
-      payload:
-        validators_report: "artifacts/08_post_validators_<ts>.json"
-        scorecard: "artifacts/08_scorecard_<ts>.json"
-        acceptance_decision: "artifacts/acceptance_decision_<ts>.md"
-      log: "logs/logmarks.ndjson"
+  - recommend_acceptance:
+      scorecard_json: "${out_dir}/scorecard.json"
+      thresholds: "${thresholds}"
+      out_txt: "${out_dir}/acceptance_recommendation.txt"
 
 outputs:
-  - id: "post_validators"
-    path: "artifacts/08_post_validators_<ts>.json"
-    suggested_folder: "artifacts"
-    artifact_type: "report"
-    retention: "artifacts"
-    required: true
-    checksum: true
-    description: "Post-rewrite validators report with diagnostics."
-
-  - id: "scorecard"
-    path: "artifacts/08_scorecard_<ts>.json"
-    suggested_folder: "artifacts"
-    artifact_type: "scorecard"
-    retention: "artifacts"
-    required: true
-    checksum: true
-    description: "Scorecard summarizing validator outputs, aggregate scores, provenance and optional pre/post deltas."
-
-  - id: "acceptance_decision"
-    path: "artifacts/acceptance_decision_<ts>.md"
-    suggested_folder: "artifacts"
-    artifact_type: "decision"
-    retention: "artifacts"
-    required: true
-    checksum: false
-    description: "Human-readable PASS/FAIL decision with rationale and gating numbers."
-
-validators:
-  - id: "V1_validators_ran"
-    type: "post"
-    assert: "file_exists('artifacts/08_post_validators_<ts>.json') and json_has_key('artifacts/08_post_validators_<ts>.json','validators')"
-    message: "Post-validation report missing or malformed."
-
-  - id: "V2_scorecard_fields"
-    type: "post"
-    assert: "json_has_keys('artifacts/08_scorecard_<ts>.json',['overall_score','tone_score','validator_pass_rate','contradiction_count'])"
-    message: "Scorecard missing required aggregate fields."
-
-  - id: "V3_acceptance_documented"
-    type: "post"
-    assert: "file_exists('artifacts/acceptance_decision_<ts>.md')"
-    message: "Acceptance decision document missing."
-
-acceptance_criteria:
-  - "All validators run and artifacts/08_post_validators_<ts>.json produced."
-  - "artifacts/08_scorecard_<ts>.json includes aggregates and provenance (OriginalityScore/GenreMarketScore if present)."
-  - "artifacts/acceptance_decision_<ts>.md clearly states PASS or FAIL and includes the gating numbers and rationale."
+  - "/mnt/data/build/scorecard.json"
+  - "/mnt/data/build/scorecard.md"
+  - "/mnt/data/build/acceptance_recommendation.txt"
 
 notes:
-  - "This ticket surfaces selection provenance (OriginalityScore & GenreMarketScore) if present in the draft metrics or embedded headers; these are informative and included in the scorecard for auditability."
-  - "If pre/post comparison is enabled but pre-rewrite scorecard is missing, the ticket will continue and note absence in the scorecard."
-  - "Acceptance gates (overall, tone, validator pass rate, contradictions) are configurable via params."
+  - "Report-only. Gate actual enforcement in 00e/00f after you review the scorecard."

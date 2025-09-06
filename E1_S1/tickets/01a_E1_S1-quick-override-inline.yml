@@ -1,18 +1,9 @@
-# 01a_E1_S1-quick-override-inline.yml instructions
-# ---
-# purpose: "Inline utility for quick overrides, experiments, or hotfix drafts."
-# run_command: "Run the ticket in 01a_E1_S1-quick-override-inline.yml"
-# ai_create_ticket_prompt: |
-#   Create an INLINE utility ticket YAML for E1_S1 that:
-#     - includes theme_summary, style_inline and scaffold_inline
-#     - drafts a short episode (600-900 words)
-#     - runs tone/style validators and logs inline_used=true
-# outputs_to_expect:
-#   - "10_drafts/episode1_quick.md"
-#   - "20_reviews/inline_validators.json"
-# guidance: "Inline is a temporary override; do not use to update canonical theme files."
-# 01a_E1_S1-quick-override-inline.yml — preflight
-# File: tickets/01a_E1_S1-quick-override-inline.yml
+# 01a_E1_S1-quick-override-inline.yml — QUICK OVERRIDE (architect1 → courier2)
+# Purpose: Apply temporary inline overrides to params/settings; record audit + revert note.
+# Reads: current run state, override args
+# Outputs: override_patch.yml, override_log.md
+# RUN: architect1 → courier2 — Run 01a_E1_S1-quick-override-inline.
+
 preflight:
   description: "Quick inline override to produce a short draft for rapid iteration."
   require_files: []

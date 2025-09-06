@@ -1,20 +1,10 @@
-# 09_E1_S1-export-refs.yml instructions
-# ---
-# purpose: "Export final episode with front-matter, attach provenance, create release bundle, append logs."
-# run_command: "Run the ticket in 09_E1_S1-export-refs.yml"
-# ai_create_ticket_prompt: |
-#   Create a REFS-style EXPORT ticket YAML that:
-#     - asserts acceptance_decision.md is PASS
-#     - applies front-matter from Theme_Styleguide.yml
-#     - writes 40_exports/episode1_final.md
-#     - bundles release into E1_S1_release_<ts>.zip including key artifacts
-#     - appends a run row to logs/ProcessLog.csv and logmarks.ndjson
-# outputs_to_expect:
-#   - "40_exports/episode1_final.md"
-#   - "E1_S1_release_<ts>.zip"
-# guidance: "Confirm logs updated; include missing_lore.md in the bundle to keep provenance."
-# 09_E1_S1-export-refs.yml — preflight
-# File: tickets/09_E1_S1-export-refs.yml
+# 09_E1_S1-export-refs.yml — EXPORT (courier2)
+# Purpose: Package deliverables; checksums; manifest for handoff.
+# Inputs: —
+# Reads: final draft and assets
+# Outputs: export_manifest.json, exports/*
+# RUN: courier2 — Run 09_E1_S1-export-refs.
+
 preflight:
   description: "Export final approved artifact with provenance and package release."
   require_files:

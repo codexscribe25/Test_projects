@@ -1,50 +1,8 @@
-# 00_E1_S1-BOOT.yml — BOOT (gated, ZIP-mounted)
-# ---
-# purpose: >
-#   Read the gated overlay list, validate required CORE keys via core_map.json,
-#   enumerate overlay + ticket files, compute SHA-256 checksums, and emit a
-#   Theme_Lock for this session. Never touches sources outside the gate.
-#
-# run_command: "Run the ticket in 00_E1_S1-BOOT.yml"
-#
-# requires:
-#   - "/mnt/data/build/overlay_paths.json"   # from ticket_00_boot_gate.yml
-#   - "/mnt/data/build/core_map.json"        # from 00_map_virtual_cores.yml
-#
-# ai_create_ticket_prompt: |
-#   Create a BOOT ticket YAML for project E1_S1 that:
-#     - loads the gated overlay paths from /mnt/data/build/overlay_paths.json
-#     - loads / validates required CORE keys from /mnt/data/build/core_map.json
-#     - enumerates overlay and ticket files within the gated paths only
-#     - computes SHA-256 checksums and (if present) compares to /mnt/data/run_manifest.yml
-#     - emits:
-#         /mnt/data/build/checksums.json
-#         /mnt/data/build/Theme_Lock.json
-#         /mnt/data/build/Theme_Lock.md
-#         /mnt/data/build/manifest_diff.md
-#         /mnt/data/build/missing_files.md
-#     - fails fast if required CORE keys are missing; otherwise continues and reports
-#     - does not import user/global memories; relies only on gated overlays + core_map
-#
-# watch_for_outputs:
-#   - "/mnt/data/build/Theme_Lock.json (exists)"
-#   - "/mnt/data/build/checksums.json (exists)"
-#   - "/mnt/data/build/missing_files.md (empty for clean run)"
-#   - "/mnt/data/build/manifest_diff.md (optional; present if manifest provided)"
-#
-# acceptance_criteria:
-#   - overlay_paths.json exists and lists only mounted overlay(s)
-#   - core_map.json present; all required CORE keys resolved
-#   - checksums.json contains overlays + tickets + core files with sha256
-#   - Theme_Lock.json/Theme_Lock.md generated under /mnt/data/build/
-#   - missing_files.md is empty for a clean run (else BOOT fails)
-#
-# notes:
-#   - Run order: ticket_00_boot_gate.yml → 00_map_virtual_cores.yml → 00_E1_S1-BOOT.yml
-#   - This BOOT is isolation-safe: it never scans outside the gated overlay paths.
-#   - All artifacts are written to /mnt/data/build/ for ZIP-mounted sessions.
-#
-# File: 00_E1_S1-BOOT.yml
+# 00_E1_S1-BOOT.yml — BOOT (courier2)
+# Purpose: Extract/mount, index, verify CORE, set clean-room flags.
+# Reads: @workspace/core/* (and uploaded bundles)
+# Outputs: boot_report.md, boot_state.json
+# RUN: courier2 — Run 00_E1_S1-BOOT.
 
 meta:
   id: "00_preflight"

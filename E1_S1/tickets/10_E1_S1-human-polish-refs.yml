@@ -1,4 +1,10 @@
-# File: tickets/10_E1_S1-human-polish-refs.yml
+# 10_E1_S1-human-polish-refs.yml — HUMAN POLISH (editor1 → diplomat1)
+# Purpose: Final line edit for human feel; soften tone for readers/stakeholders.
+# Inputs: style_notes.md (opt)
+# Reads: final draft (pre-export or post-rewrite)
+# Outputs: final_polish.md, edit_notes.md
+# RUN: editor1 — polish; then diplomat1 — reader-safe pass. Ticket: 10_E1_S1-human-polish-refs.
+
 preflight:
   description: "Logic-only human polish on the accepted chapter; no new facts."
   require_files:

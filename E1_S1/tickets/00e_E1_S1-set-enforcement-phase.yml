@@ -1,21 +1,9 @@
-# 00e_E1_S1-set-enforcement-phase.yml instructions
-# ---
-# purpose: "Change the project's enforcement phase (draft -> controlled -> locked). Supports manual request (with human ack) or auto-apply when auto_mode=true and transition conditions are satisfied."
-# run_command: "Run the ticket in 00e_E1_S1-set-enforcement-phase.yml"
-# ai_create_ticket_prompt: |
-#   Create a PHASE-CHANGE ticket that:
-#     - loads Theme_LoreValidator.yml.transition_rules and Theme_Enforcement_State.yml
-#     - evaluates transition conditions using runtime artifacts:
-#         * theme_validators_report.json
-#         * MemoryLog_Lore.yml (counts)
-#     - if auto_mode true and all conditions for a transition are true -> update Theme_Enforcement_State.yml (append history) and append logmark
-#     - else produce a change_request.md and require human_ack (approver,name,timestamp,reason) to proceed
-# preflight_checks:
-#   - require Theme_LoreValidator.yml
-#   - require Theme_Enforcement_State.yml
-#   - if conditions reference theme_validators_report.json, that file must exist (or the ticket will run validators first)
-# 00e_E1_S1-set-enforcement-phase.yml — preflight
-# File: tickets/00e_E1_S1-set-enforcement-phase.yml
+# 00e_E1_S1-set-enforcement-phase.yml — ENFORCEMENT PHASE (architect1 → courier1)
+# Purpose: Set enforcement flags/validators; lock phase state.
+# Reads: current run state
+# Outputs: enforcement_state.json
+# RUN: architect1 — configure; then courier1 — apply.
+
 preflight:
   description: "Evaluate and set Theme enforcement phase based on rules."
   require_files:

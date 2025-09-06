@@ -1,77 +1,41 @@
-# 00b_E1_S1-sync-theme-from-memory-refs.yml instructions
-# ---
-# purpose: "Rebuild Theme_LoreIndex.yml (file-location pointers) and Theme_Main.yml (short digests) from MemoryLog_Lore.yml so other sessions/LLMs can quickly access canonical lore and summary digests."
-# run_command: "Run the ticket in 00b_E1_S1-sync-theme-from-memory-refs.yml"
-# ai_create_ticket_prompt: |
-#   Create a SYNC-THEME ticket YAML for E1_S1 that:
-#     - reads MemoryLog_Lore.yml (the canonical memory)
-#     - produces Theme_LoreIndex.yml (index_entries: canonical_id, term, file_refs, confidence)
-#     - produces Theme_Main.yml (digest entries: canonical_id, short_description, tags, status)
-#     - emits a 'theme_index_synced_from_memory' event to logs/logmarks.ndjson
-# preflight_checks:
-#   - require presence of MemoryLog_Lore.yml
-#   - warn_if MemoryLog_Lore.yml has entries with status != approved (optionally skip those)
-#   - require Theme_Lock.json if you want to gate changes (optional)
-# outputs_to_expect:
-#   - "Theme_LoreIndex.yml"
-#   - "Theme_Main.yml"
-#   - "logs/logmarks.ndjson"
-# acceptance:
-#   - overwrite_theme_files: true (document in ticket to make the destructive action explicit)
-# guidance:
-#   - Run after any approved memory appends (05b) or at session start to provide fresh context
-#   - Keep Theme_LoreIndex.yml as pointers only (not the authoritative memory contents)
-#   - Keep Theme_Main.yml short — one-line/one-paragraph digests per canonical entry for quick context
-# notes:
-#   - Use this ticket to ensure cross-session consistency: MemoryLog_Lore.yml is the source-of-truth; Theme_* files are derived.
-# 00b_E1_S1-sync-theme-from-memory-refs.yml — preflight
-# File: tickets/00b_E1_S1-sync-theme-from-memory-refs.yml
-preflight:
-  description: "Regenerate Theme_LoreIndex and Theme_Main from memory."
-  require_files:
-    - "memory/MemoryLog_Lore.yml"
-  outputs_expected:
-    - "Theme/Theme_LoreIndex.yml"
-    - "Theme/Theme_Main.yml"
-  fail_on_missing: true
+# 00b_E1_S1-sync-theme-from-memory-refs.yml — THEME SYNC (architect1)
+# Purpose: Sync Theme_* from memory refs; align styleguide + lore index.
+# Reads: Theme_* and memory refs
+# Outputs: theme_sync.md
+# RUN: architect1 — Run 00b_E1_S1-sync-theme-from-memory-refs.
 
-job_ticket:
-  id: "00b_E1_S1-sync-theme.<ts>"
-  mode: performance
-  intent: "Sync canonical theme indices from MemoryLog_Lore."
+meta:
+  id: "00b_E1_S1-sync-theme-from-memory-refs"
+  version: "2.0.0"
+purpose: >
+  Overlay-scoped sync of theme refs. Does NOT import user/global memories.
+  Reads only from the gated overlay paths. Report-only if refs are missing.
 
-inputs:
-  memory: "memory/MemoryLog_Lore.yml"
+params:
+  overlay_paths_from: "/mnt/data/build/overlay_paths.json"
+  import_user_knowledge_memories: false
+  refs_scope: "overlay_only"
+  out_dir: "/mnt/data/build"
 
 steps:
-  - load_memory:
-      file: "{{inputs.memory}}"
-      out: "artifacts/00b_memory_<ts>.json"
-  - build_lore_index:
-      memory: "artifacts/00b_memory_<ts>.json"
-      out: "Theme/Theme_LoreIndex.yml"
-  - build_theme_main:
-      memory: "artifacts/00b_memory_<ts>.json"
-      out: "Theme/Theme_Main.yml"
-  - append_logmark:
-      event: "theme_synced_from_memory"
-      payload: ["Theme/Theme_LoreIndex.yml","Theme/Theme_Main.yml"]
-      log: "logs/logmarks.ndjson"
+  - load_overlay_paths:
+      from: "${overlay_paths_from}"
+      var: "OVERLAYS"
+      on_missing: "fail-fast"
+
+  - enumerate_refs:
+      overlays: "${OVERLAYS}"
+      include_globs: ["**/*.yml","**/*.yaml","**/*.md"]
+      exclude_globs: ["**/.git/**","**/Caches/**"]
+      out: "${out_dir}/sync_theme_refs.json"
+
+  - summarize_refs:
+      from: "${out_dir}/sync_theme_refs.json"
+      out: "${out_dir}/sync_theme_summary.md"
 
 outputs:
-  - id: "lore_index"
-    path: "Theme/Theme_LoreIndex.yml"
-    suggested_folder: "Theme"
-    artifact_type: "index"
-    retention: "workspace"
-    required: true
-    checksum: true
-    description: "Index pointing to canonical lore artifacts."
-  - id: "theme_main"
-    path: "Theme/Theme_Main.yml"
-    suggested_folder: "Theme"
-    artifact_type: "digest"
-    retention: "workspace"
-    required: true
-    checksum: false
-    description: "Short digests and metadata for fast lookup."
+  - "/mnt/data/build/sync_theme_refs.json"
+  - "/mnt/data/build/sync_theme_summary.md"
+
+notes:
+  - "If your original 00b ticket can't enforce overlay-only, use this as a drop-in replacement."

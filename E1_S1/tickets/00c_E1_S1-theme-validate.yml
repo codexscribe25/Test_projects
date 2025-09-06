@@ -1,64 +1,63 @@
-# 00c_E1_S1-theme-validate.yml instructions
-# ---
-# purpose: "Run Theme-level validators (Theme_LoreValidator.yml and related rules) against Theme_Main.yml and Theme_LoreIndex.yml. Produce a severity-sorted detailed report and a short human-readable remediation summary."
-# run_command: "Run the ticket in 00c_E1_S1-theme-validate.yml"
-# ai_create_ticket_prompt: |
-#   Create a THEME-VALIDATE ticket YAML for E1_S1 that:
-#     - reads Theme_LoreValidator.yml (rule set) and optional validator modules
-#     - validates Theme_Main.yml and Theme_LoreIndex.yml (and optionally MemoryLog_Lore.yml)
-#     - produces theme_validators_report.json (per-entry diagnostics with severity) and theme_validators_summary.md (human readable)
-#     - returns non-zero exit or 'error' flag if any 'error' severity items are present
-# preflight_checks:
-#   - require Theme_Main.yml
-#   - require Theme_LoreIndex.yml
-# outputs_to_expect:
-#   - theme_validators_report.json
-#   - theme_validators_summary.md
-# gate_rules:
-#   - if any error-severity findings -> fail preflight and list remediation actions (do not proceed to ideation until resolved or a documented exception is approved)
-# 00c_E1_S1-theme-validate.yml — preflight
-# File: tickets/00c_E1_S1-theme-validate.yml
-preflight:
-  description: "Run Theme_LoreValidator rules against Theme artifacts."
-  require_files:
-    - "Theme/Theme_LoreValidator.yml"
-    - "Theme/Theme_Main.yml"
-    - "Theme/Theme_LoreIndex.yml"
-  outputs_expected:
-    - "artifacts/theme_validators_report_<ts>.json"
-  fail_on_missing: true
+# 00c_E1_S1-theme-validate.yml — THEME VALIDATE (auditor2)
+# Purpose: Validate Theme files (schema/links); flag issues.
+# Reads: Theme_Styleguide.yml, Theme_LoreIndex.yml
+# Outputs: theme_validation_report.md
+# RUN: auditor2 — Run 00c_E1_S1-theme-validate
 
-job_ticket:
-  id: "00c_E1_S1-theme-validate.<ts>"
-  mode: fidelity
-  intent: "Validate theme rules and produce a detailed report."
+meta:
+  id: "00c_E1_S1-theme-validate"
+  version: "2.0.0"
+purpose: >
+  Validate gated theme integrity and run report-only provenance checks.
+  Never censors output; writes a readable provenance note.
 
-inputs:
-  validator: "Theme/Theme_LoreValidator.yml"
-  main: "Theme/Theme_Main.yml"
-  index: "Theme/Theme_LoreIndex.yml"
-  state: "Theme/Theme_Enforcement_State.yml"
+params:
+  overlay_paths_from: "/mnt/data/build/overlay_paths.json"
+  core_map_json: "/mnt/data/build/core_map.json"
+  theme_master: "/mnt/data/build/Theme_Master.yml"
+  out_dir: "/mnt/data/build"
 
 steps:
-  - resolve_phase:
-      state: "{{inputs.state}}"
-      out: "artifacts/00c_phase_<ts>.json"
-  - run_validators:
-      rules: "{{inputs.validator}}"
-      targets: ["{{inputs.main}}","{{inputs.index}}"]
-      phase: "artifacts/00c_phase_<ts>.json"
-      out: "artifacts/theme_validators_report_<ts>.json"
-  - append_logmark:
-      event: "theme_validate_completed"
-      payload: "artifacts/theme_validators_report_<ts>.json"
-      log: "logs/logmarks.ndjson"
+  - load_overlay_paths:
+      from: "${overlay_paths_from}"
+      var: "OVERLAYS"
+      on_missing: "fail-fast"
+
+  - sanity_check_core_map:
+      path: "${core_map_json}"
+      required_keys:
+        - system_policy
+        - project_core
+        - prompt_persona_core
+        - memory_core
+        - narrative_core
+        - operators_plugins
+        - spiral_core
+      on_fail: "fail-fast"
+
+  - yaml_quick_lint:
+      overlays: "${OVERLAYS}"
+      include_globs: ["**/*.yml","**/*.yaml"]
+      out_report: "${out_dir}/validate_yaml_lint.md"
+      treat_warnings_as: "report"
+
+  - call_validator:
+      name: "validator_provenance_guard_min"
+      args:
+        draft: "/mnt/data/build/draft.md"
+        project_master: "${theme_master}"
+      out_expect: "/mnt/data/build/provenance_note.md"
+
+  - write_validate_summary:
+      out: "${out_dir}/validate_summary.md"
+      include:
+        - "yaml_quick_lint: ${out_dir}/validate_yaml_lint.md"
+        - "provenance_note: ${out_dir}/provenance_note.md"
 
 outputs:
-  - id: "theme_validators_report"
-    path: "artifacts/theme_validators_report_<ts>.json"
-    suggested_folder: "artifacts"
-    artifact_type: "report"
-    retention: "artifacts"
-    required: true
-    checksum: true
-    description: "Detailed validation findings for theme artifacts."
+  - "/mnt/data/build/validate_yaml_lint.md"
+  - "/mnt/data/build/provenance_note.md"
+  - "/mnt/data/build/validate_summary.md"
+
+notes:
+  - "Report-only: does not block or censor. Use 00e/00f for enforcement later if needed."

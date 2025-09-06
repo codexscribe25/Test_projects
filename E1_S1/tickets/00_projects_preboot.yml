@@ -1,4 +1,9 @@
-# 00_projects_preboot.yml
+# 00_projects_preboot.yml — PROJECTS PREBOOT (architect1 → courier1)
+# Purpose: Detect projects, check prereqs, prep environment.
+# Reads: workspace manifests / tickets/*
+# Outputs: preboot_report.md, preboot_state.json
+# RUN: architect1 — plan; then courier1 — apply.
+
 meta: { id: "00_projects_preboot", version: "1.0" }
 params:
   project_id: "callen5_v1"

@@ -1,21 +1,10 @@
-# 05_E1_S1-lore-audit-refs.yml instructions
-# ---
-# purpose: "Detect lore/codex items referenced in the draft and compare against Theme_LoreIndex."
-# run_command: "Run the ticket in 05_E1_S1-lore-audit-refs.yml"
-# ai_create_ticket_prompt: |
-#   Create a REFS-style LORE-AUDIT ticket YAML that:
-#     - extracts lore candidates from 10_drafts/episode1_v1.md (or uses existing lore_candidates.json)
-#     - compares candidates to Theme_LoreIndex.yml using Theme_LoreValidator.yml rules
-#     - outputs lore_candidates.json/.md, lore_match_report.json/.md, missing_lore.md, canon_packet_stub.md
-# outputs_to_expect:
-#   - "lore_candidates.json"
-#   - "lore_match_report.json"
-#   - "missing_lore.md"
-#   - "canon_packet_stub.md"
-# gate_rule: "If acceptance.max_missing_items_allowed == 0 and missing_lore.md non-empty → block pipeline until resolved."
-# guidance: "Fill canon_packet_stub.md and re-run BOOT if you add canonical entries."
-# 05_E1_S1-lore-audit-refs.yml — preflight
-# File: tickets/05_E1_S1-lore-audit-refs.yml
+# 05_E1_S1-lore-audit-refs.yml — LORE AUDIT (auditor2)
+# Purpose: Flag contamination, dead refs, contradictions; suggest fixes.
+# Inputs: Theme/Theme_LoreIndex.yml
+# Reads: draft.md
+# Outputs: lore_audit.json, lore_audit.md
+# RUN: auditor2 — Run 05_E1_S1-lore-audit-refs.
+
 preflight:
   description: "Extract lore candidates & produce canon stubs for missing canon."
   require_files:

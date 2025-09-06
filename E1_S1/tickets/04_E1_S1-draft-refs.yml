@@ -1,19 +1,10 @@
-# 04_E1_S1-draft-refs.yml instructions
-# ---
-# purpose: "Produce raw draft from scaffold (no heavy validators yet)."
-# run_command: "Run the ticket in 04_E1_S1-draft-refs.yml"
-# ai_create_ticket_prompt: |
-#   Create a REFS-style DRAFT ticket YAML that:
-#     - asserts scaffold_check.json has required fields
-#     - drafts 1800–2200 words into 10_drafts/episode1_v1.md
-#     - computes basic metrics into metrics_draft_v1.json and logs draft_complete
-# outputs_to_expect:
-#   - "10_drafts/episode1_v1.md"
-#   - "metrics_draft_v1.json"
-# guidance: "Keep Draft isolated: no rewriting or heavy validators here so we can trace issues to generation."
-# 04_E1_S1-draft-refs.yml — preflight
-# File: tickets/04_E1_S1-draft-refs.yml
-# 04_E1_S1-draft-refs.yml — draft generator (dual-score aware)
+# 04_E1_S1-draft-refs.yml — DRAFT (muse1 → editor1)
+# Purpose: Draft from scaffold; then tighten for flow/clarity.
+# Inputs: —
+# Reads: outline.md / scaffold.json
+# Outputs: draft.md
+# RUN: muse1 — draft; then editor1 — tighten. Ticket: 04_E1_S1-draft-refs.
+
 meta:
   id: "04_E1_S1-draft-refs"
   version: "1.1.0"
