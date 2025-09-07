@@ -1,0 +1,13 @@
+meta:
+  id: "validator_provenance_guard_min"
+  version: "1.0.0"
+purpose: "Report-only provenance; reads Theme_Master and emits a short note."
+inputs:
+  draft: "/mnt/data/build/draft.md"
+  project_master: "/mnt/data/build/Theme_Master.yml"
+config:
+  warn_if_empty_master: true
+  top_features: 3
+outputs:
+  - "/mnt/data/build/provenance_note.md"
+on_fail: "report-only"

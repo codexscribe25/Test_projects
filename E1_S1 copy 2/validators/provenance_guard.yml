@@ -1,0 +1,15 @@
+# validators/provenance_guard.yml
+meta: { id: "provenance_guard", version: "1.0" }
+inputs:
+  draft: "build/draft.md"
+  context: "build/context_pack.json"
+  project_master: "Theme/Theme_Master.yml"
+  other_stylecaps: "Caches/*/stylecaps_index.json"
+config:
+  similarity: { formula: "0.7*cosine(emd) + 0.3*z(structure)", warn_at: 0.70 }
+  uniqueness: { df_warn_at: 1 }
+  idea_score:
+    allow_at: 70
+    warn_range: [55, 69]
+outputs: ["build/provenance_report.json","build/provenance_note.md"]
+on_fail: "report-only"

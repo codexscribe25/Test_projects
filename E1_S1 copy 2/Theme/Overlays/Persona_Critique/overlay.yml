@@ -1,0 +1,23 @@
+meta:
+  id: persona_critique
+  name: Persona_Critique
+  created: '2025-09-06T12:23:01.179418Z'
+  version: 0.1.0
+  author: Callen5-MLCI
+description: Overlay skeleton for `Theme/Overlays/Persona_Critique`. Customize personas,
+  aliases, and small-run overrides.
+overrides:
+  theme_flags:
+    priority: low
+    apply_on_boot: false
+  persona:
+    default: neutral
+    variants:
+    - cynic
+    - listener
+    - prose_light
+  validators:
+    extra_banned_terms: []
+links:
+  source_ticket: /mnt/data/99U_04_overlay_skeleton_codegen.yml
+  notes: This file is a generated skeleton. Fill in policies and overrides as needed.

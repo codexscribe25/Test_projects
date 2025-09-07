@@ -1,0 +1,52 @@
+# 08_E1_S1-validate-scorecard-refs.yml — SCORECARD (critic1)
+# Purpose: Final scoring across clarity, tone-fit, hook, coherence; keep/kill notes.
+# Inputs: —
+# Reads: rewrites.md (or updated draft)
+# Outputs: validate_scorecard.json, validate_scorecard.md
+# RUN: critic1 — Run 08_E1_S1-validate-scorecard-refs.
+
+meta:
+  id: "08_E1_S1-validate-scorecard-refs"
+  version: "2.0.0"
+  author: "Callen5"
+purpose: >
+  Aggregate validator outputs into a scorecard and produce a human-readable MD.
+  Does NOT block; reports acceptance decision recommendation only.
+
+params:
+  out_dir: "/mnt/data/build"
+  inputs:
+    validators_json: "/mnt/data/build/validators_pre_rewrite.json"
+    contradiction_index: "/mnt/data/build/contradiction_index.json"
+    provenance_note: "/mnt/data/build/provenance_note.md"
+  thresholds:
+    min_pass_fraction: 0.75
+    max_contradictions: 0          # recommend rewrite if > 0
+    warn_on_provenance: true
+
+steps:
+  - assert_file: { path: "${inputs.validators_json}", on_missing: "report", message: "validators_pre_rewrite.json missing" }
+  - assert_file: { path: "${inputs.contradiction_index}", on_missing: "report" }
+
+  - compute_scorecard:
+      validators_json: "${inputs.validators_json}"
+      contradiction_index: "${inputs.contradiction_index}"
+      out_json: "${out_dir}/scorecard.json"
+
+  - produce_md:
+      from_json: "${out_dir}/scorecard.json"
+      provenance_note: "${inputs.provenance_note}"
+      out_md: "${out_dir}/scorecard.md"
+
+  - recommend_acceptance:
+      scorecard_json: "${out_dir}/scorecard.json"
+      thresholds: "${thresholds}"
+      out_txt: "${out_dir}/acceptance_recommendation.txt"
+
+outputs:
+  - "/mnt/data/build/scorecard.json"
+  - "/mnt/data/build/scorecard.md"
+  - "/mnt/data/build/acceptance_recommendation.txt"
+
+notes:
+  - "Report-only. Gate actual enforcement in 00e/00f after you review the scorecard."

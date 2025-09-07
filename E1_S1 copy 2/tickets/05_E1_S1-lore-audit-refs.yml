@@ -1,0 +1,63 @@
+# 05_E1_S1-lore-audit-refs.yml — LORE AUDIT (auditor2)
+# Purpose: Flag contamination, dead refs, contradictions; suggest fixes.
+# Inputs: Theme/Theme_LoreIndex.yml
+# Reads: draft.md
+# Outputs: lore_audit.json, lore_audit.md
+# RUN: auditor2 — Run 05_E1_S1-lore-audit-refs.
+
+preflight:
+  description: "Extract lore candidates & produce canon stubs for missing canon."
+  require_files:
+    - "10_drafts/episode1_v1_<ts>.md"
+    - "Theme/Theme_LoreIndex.yml"
+  outputs_expected:
+    - "templates/canon_packet_stub_<ts>.md"
+    - "artifacts/missing_lore_<ts>.md"
+  fail_on_missing: true
+
+job_ticket:
+  id: "05_E1_S1-lore-audit.<ts>"
+  mode: fidelity
+  intent: "Identify lore candidates needing canonicalization and generate stubs for human completion."
+
+inputs:
+  draft: "10_drafts/episode1_v1_<ts>.md"
+  lore_index: "Theme/Theme_LoreIndex.yml"
+
+steps:
+  - extract_candidates:
+      draft: "{{inputs.draft}}"
+      out: "artifacts/05_candidates_<ts>.json"
+  - compare_index:
+      candidates: "artifacts/05_candidates_<ts>.json"
+      index: "{{inputs.lore_index}}"
+      out: "artifacts/05_missing_<ts>.json"
+  - generate_stubs:
+      missing: "artifacts/05_missing_<ts>.json"
+      out: "templates/canon_packet_stub_<ts>.md"
+      per_item: true
+  - write_missing:
+      file: "artifacts/05_missing_<ts>.json"
+      out: "artifacts/missing_lore_<ts>.md"
+  - append_logmark:
+      event: "lore_audit_completed"
+      payload: "artifacts/missing_lore_<ts>.md"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "canon_stubs"
+    path: "templates/canon_packet_stub_<ts>.md"
+    suggested_folder: "templates"
+    artifact_type: "template"
+    retention: "workspace"
+    required: true
+    checksum: false
+    description: "Generated canon packet stub(s) for human completion."
+  - id: "missing_lore_md"
+    path: "artifacts/missing_lore_<ts>.md"
+    suggested_folder: "artifacts"
+    artifact_type: "report"
+    retention: "artifacts"
+    required: true
+    checksum: false
+    description: "Human-readable list of missing lore candidates."

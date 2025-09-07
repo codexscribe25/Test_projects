@@ -1,0 +1,15 @@
+{
+  "word_count": 1814,
+  "sentence_count": 108,
+  "avg_sentence_length": 16.8,
+  "approx_reading_time_min": 10,
+  "provenance": {
+    "scaffold_json": "/mnt/data/workspace_project/10_drafts/scaffold_20250904T231329Z.json",
+    "scaffold_check": "/mnt/data/workspace_project/10_drafts/scaffold_check_20250904T231329Z.json",
+    "scaffold_annotated": "/mnt/data/workspace_project/10_drafts/scaffold_annotated_20250904T231329Z.json",
+    "OriginalityScore": 73.0,
+    "GenreMarketScore": 70.75,
+    "selection_source": "/mnt/data/run_outputs_select_rerun_1757022176/selection_list.json",
+    "chosen_from": "GenreMarket"
+  }
+}

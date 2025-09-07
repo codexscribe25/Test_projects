@@ -1,0 +1,32 @@
+# 00_projects_preboot.yml — PROJECTS PREBOOT (architect1 → courier1)
+# Purpose: Detect projects, check prereqs, prep environment.
+# Reads: workspace manifests / tickets/*
+# Outputs: preboot_report.md, preboot_state.json
+# RUN: architect1 — plan; then courier1 — apply.
+
+meta: { id: "00_projects_preboot", version: "1.0" }
+params:
+  project_id: "callen5_v1"
+  overlay_src: "Theme/Overlays/new_project_theme/"   # or "/mnt/data/project_extracted/2025-09-05/new_project_theme/"
+steps:
+  - ensure_file: { path: "@workspace/core/Projects_Ledger.yml", create_if_missing: true }
+  - register_project_in_ledger:
+      project_id: "${project_id}"
+      overlays: [ "${overlay_src}" ]
+  - compute_overlay_digest:
+      src: "${overlay_src}"
+      out: "build/overlay_digest.txt"
+  - build_caches_if_missing:
+      overlay_digest_ref: "build/overlay_digest.txt"
+      outputs:
+        - "Caches/${project_id}/stylecaps_index.json"
+        - "Caches/${project_id}/lexicons_index.json"
+        - "Caches/${project_id}/agnostic_term_table.json"
+  - write_context_pack:
+      out: "build/context_pack.json"
+      includes:
+        cores: ["NarrativeCORE5.yml","PromptCORE5.yml","VisionCORE5.yml"]
+        overlays: ["${overlay_src}"]
+outputs:
+  - "@workspace/core/Projects_Ledger.yml"
+  - "build/context_pack.json"

@@ -1,0 +1,7 @@
+{
+  "overlay_paths_from": "/mnt/data/build/overlay_paths.json",
+  "context_pack": "/mnt/data/build/context_pack.json",
+  "core_map_json": "/mnt/data/build/core_map.json",
+  "provenance_note": "/mnt/data/build/provenance_note.md",
+  "out_dir": "/mnt/data/build"
+}

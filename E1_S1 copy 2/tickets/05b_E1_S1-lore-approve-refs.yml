@@ -1,0 +1,61 @@
+# 05b_E1_S1-lore-approve-refs.yml — LORE APPROVE REFS (auditor2 → courier1)
+# Purpose: Approve vetted lore refs; mark status; emit approvals manifest + changelog.
+# Reads: lore_audit.* , validation_report.md
+# Outputs: lore_approvals.json, approvals_note.md
+# RUN: auditor2 → courier1 — Run 05b_E1_S1-lore-approve-refs.
+
+preflight:
+  description: "Approve completed canon_packet_stub(s) and append to MemoryLog_Lore.yml (append-only)."
+  require_files:
+    - "templates/canon_packet_stub_<ts>.md"
+    - "memory/MemoryLog_Lore.yml"
+  outputs_expected:
+    - "memory/MemoryLog_Lore.yml"
+    - "artifacts/05b_ack_<ts>.json"
+  fail_on_missing: true
+
+job_ticket:
+  id: "05b_E1_S1-lore-approve.<ts>"
+  mode: fidelity
+  intent: "Validate human approval block, append canonical entries to memory, and audit."
+
+inputs:
+  stub: "templates/canon_packet_stub_<ts>.md"
+  memory: "memory/MemoryLog_Lore.yml"
+
+steps:
+  - parse_stub:
+      file: "{{inputs.stub}}"
+      out: "artifacts/05b_stub_parsed_<ts>.json"
+  - require_human_ack:
+      stub: "artifacts/05b_stub_parsed_<ts>.json"
+      ack_field: "approver_name"
+      ack_required: true
+      out: "artifacts/05b_ack_<ts>.json"
+  - append_to_memory:
+      stub: "artifacts/05b_ack_<ts>.json"
+      memory: "{{inputs.memory}}"
+      out: "memory/MemoryLog_Lore.yml"
+      append_only: true
+  - append_logmark:
+      event: "lore_approved"
+      payload: "artifacts/05b_ack_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "memory_updated"
+    path: "memory/MemoryLog_Lore.yml"
+    suggested_folder: "memory"
+    artifact_type: "memory"
+    retention: "persistent"
+    required: true
+    checksum: true
+    description: "Memory log appended with approved canon entries."
+  - id: "ack_record"
+    path: "artifacts/05b_ack_<ts>.json"
+    suggested_folder: "artifacts"
+    artifact_type: "ack"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Human approval record and metadata."

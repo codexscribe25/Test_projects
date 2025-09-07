@@ -1,0 +1,18 @@
+# Theme_Main.yml — preflight
+preflight:
+  description: "Short digests / quick lookups derived from MemoryLog; recommended for quick context."
+  require_files:
+    - "MemoryLog_Lore.yml"
+  fail_on_missing: false
+  note: "If missing, run 00b to regenerate."
+
+meta:
+  version: 1
+  description: "Theme anchor for this project; holds episode-level tags & hooks."
+episode_profile:
+  tags: []
+  target_length_words: 1800-2200
+  continuity_hooks:
+    - id: hook1
+      text: "<promise to be addressed in Episode 2>"
+      status: planned

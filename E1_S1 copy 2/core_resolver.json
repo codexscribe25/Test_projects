@@ -1,0 +1,7 @@
+{
+  "PromptCORE": "core_storage/prompts",
+  "PromptCORE_DEFAULT_FILE": "core_storage/prompts/PromptCORE_index.yml",
+  "StoryCORE": "core_storage/stories",
+  "MemoryCORE": "memory",
+  "resolved_at": "2025-09-04T14:00:00Z"
+}

@@ -1,0 +1,42 @@
+# 00a_E1_S1-session-snapshot.yml — SESSION SNAPSHOT (courier1)
+# Purpose: Record files, checksums, settings.
+# Reads: workspace index
+# Outputs: session_snapshot.yml
+# RUN: courier1 — Run 00a_E1_S1-session-snapshot.
+
+preflight:
+  description: "Create session snapshot for provenance and auditing."
+  require_files: []
+  outputs_expected:
+    - "artifacts/session_snapshot_<ts>.json"
+  fail_on_missing: true
+
+job_ticket:
+  id: "00a_E1_S1-session-snapshot.<ts>"
+  mode: performance
+  intent: "Produce a session snapshot and append a logmark."
+
+steps:
+  - scan_workspace:
+      out: "artifacts/00a_scan_<ts>.json"
+      checksums: true
+  - detect_conflicts:
+      scan: "artifacts/00a_scan_<ts>.json"
+      out: "artifacts/00a_conflicts_<ts>.json"
+  - write_snapshot:
+      scan: "artifacts/00a_scan_<ts>.json"
+      out: "artifacts/session_snapshot_<ts>.json"
+  - append_logmark:
+      event: "session_snapshot_created"
+      payload: "artifacts/session_snapshot_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "session_snapshot"
+    path: "artifacts/session_snapshot_<ts>.json"
+    suggested_folder: "artifacts"
+    artifact_type: "snapshot"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Session snapshot for auditing."

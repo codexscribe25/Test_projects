@@ -1,0 +1,97 @@
+# 00_E1_S1-BOOT.yml — BOOT (courier2)
+# Purpose: Extract/mount, index, verify CORE, set clean-room flags.
+# Reads: @workspace/core/* (and uploaded bundles)
+# Outputs: boot_report.md, boot_state.json
+# RUN: courier2 — Run 00_E1_S1-BOOT.
+
+meta:
+  id: "00_preflight"
+  version: "1.0.0"
+purpose: >
+  Sanity checks after the gate: verify overlay mount, core presence, YAML health,
+  memory policy, and write a single preflight report (report-only).
+
+params:
+  overlay_paths_from: "/mnt/data/build/overlay_paths.json"
+  core_map_json: "/mnt/data/build/core_map.json"        # will exist after 00_map_virtual_cores (but we allow it to be missing here)
+  max_core_size_mb: 2
+  required_core_names:
+    - "01_System_Policy.yml"
+    - "02_ProjectCORE.yml"
+    - "03_PromptPersonaCORE.yml"
+    - "04_MemoryCORE.yml"
+    - "05_NarrativeCORE.yml"
+    - "07_OperatorsPlugins.yml"
+    - "09_SpiralCORE.yml"
+
+steps:
+  - load_overlay_paths:
+      from: "${overlay_paths_from}"
+      var: "OVERLAYS"
+      on_missing: "fail-fast"
+
+  - assert_single_project_scope:
+      overlays: "${OVERLAYS}"
+      max_distinct_roots: 1
+      on_fail: "fail-fast"
+
+  - enumerate_overlay_files:
+      overlays: "${OVERLAYS}"
+      include_globs: ["**/*.yml","**/*.yaml","**/*.md","**/*.txt"]
+      exclude_globs: ["**/.git/**","**/Caches/**"]
+      out: "/mnt/data/build/preflight_overlay_files.json"
+
+  - check_required_cores_present:
+      required_names: "${required_core_names}"
+      search_roots:
+        - "/mnt/data/project_extracted/"
+        - "/mnt/data/"
+        - "."
+      out_missing: "/mnt/data/build/preflight_missing_cores.json"
+      fail_if_missing: true
+
+  - yaml_quick_lint:
+      files_json: "/mnt/data/build/preflight_overlay_files.json"
+      out_report: "/mnt/data/build/preflight_yaml_lint.md"
+      treat_warnings_as: "report"
+
+  - size_guard:
+      files:
+        - "01_System_Policy.yml"
+        - "02_ProjectCORE.yml"
+        - "03_PromptPersonaCORE.yml"
+        - "04_MemoryCORE.yml"
+        - "05_NarrativeCORE.yml"
+        - "06_VisionCORE.yml"
+        - "07_OperatorsPlugins.yml"
+        - "08_RoutingMountsOverlay.yml"
+        - "09_SpiralCORE.yml"
+      max_mb: "${max_core_size_mb}"
+      out_report: "/mnt/data/build/preflight_size_report.md"
+      on_exceed: "report"
+
+  - assert_memory_policy:
+      expected:
+        memory_scope: "project-only"
+        import_user_knowledge_memories: false
+        allow_session_history_lookup: false
+      sources:
+        - "01_System_Policy.yml"
+        - "02_ProjectCORE.yml"
+      out_report: "/mnt/data/build/preflight_memory_policy.md"
+      on_mismatch: "report"
+
+  - write_preflight_summary:
+      out: "/mnt/data/build/preflight_summary.md"
+      include:
+        - "overlay roots found"
+        - "missing cores (if any)"
+        - "yaml lint digest"
+        - "size guard digest"
+        - "memory policy check"
+outputs:
+  - "/mnt/data/build/preflight_overlay_files.json"
+  - "/mnt/data/build/preflight_yaml_lint.md"
+  - "/mnt/data/build/preflight_size_report.md"
+  - "/mnt/data/build/preflight_memory_policy.md"
+  - "/mnt/data/build/preflight_summary.md"

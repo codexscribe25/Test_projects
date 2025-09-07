@@ -1,0 +1,35 @@
+{
+  "generated_at": "2025-09-05T07:37:23.801883Z",
+  "validators": {
+    "metrics": {
+      "word_count": 1788,
+      "sentence_count": 147,
+      "avg_sentence_length": 12.16
+    },
+    "scores": {
+      "tone": 100,
+      "style": 92.8,
+      "continuity": 100.0,
+      "contradiction": 100,
+      "canon": 100,
+      "citation": 100
+    },
+    "overall": 98.56,
+    "pass_rate": 100.0,
+    "accepted": true,
+    "found": {
+      "reliquary": true,
+      "child": true,
+      "thermal": true,
+      "gantry": true,
+      "clamps": true,
+      "tags": true,
+      "safehouse": true,
+      "alarm": true,
+      "watch-data": true,
+      "bay": true
+    },
+    "found_banned": [],
+    "contradictions": []
+  }
+}

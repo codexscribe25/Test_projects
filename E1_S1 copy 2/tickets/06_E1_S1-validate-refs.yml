@@ -1,0 +1,94 @@
+# 06_E1_S1-validate-refs.yml — VALIDATE (editor1)
+# Purpose: Check against acceptance criteria; apply light fixes; note remaining gaps.
+# Inputs: acceptance_criteria.md (if present)
+# Reads: draft.md, lore_audit.*
+# Outputs: validation_report.md
+# RUN: editor1 — Run 06_E1_S1-validate-refs.
+
+meta:
+  id: "06_E1_S1-validate-refs"
+  version: "2.0.0"
+  author: "Callen5"
+purpose: >
+  Run pre-rewrite validators on the current draft (overlay-gated). Report issues,
+  compute a contradiction index, and produce a consolidated JSON + summary MD.
+  Never reads outside /mnt/data/build/overlay_paths.json.
+
+params:
+  draft_path: "/mnt/data/build/draft.md"
+  overlay_paths_from: "/mnt/data/build/overlay_paths.json"
+  context_pack: "/mnt/data/build/context_pack.json"
+  out_dir: "/mnt/data/build"
+
+steps:
+  - assert_file:
+      path: "${draft_path}"
+      on_missing: "fail-fast"
+      message: "No draft found at ${draft_path}."
+
+  - load_overlay_paths:
+      from: "${overlay_paths_from}"
+      var: "OVERLAYS"
+      on_missing: "fail-fast"
+
+  - call_validator:
+      name: "validator_tone_guard"
+      args:
+        draft: "${draft_path}"
+        overlays: "${OVERLAYS}"
+        context_pack: "${context_pack}"
+      out_expect: "${out_dir}/tone_guard_report.md"
+
+  - call_validator:
+      name: "validator_style_guard"
+      args:
+        draft: "${draft_path}"
+        overlays: "${OVERLAYS}"
+        context_pack: "${context_pack}"
+      out_expect: "${out_dir}/style_guard_report.md"
+
+  - call_validator:
+      name: "validator_contradiction_scan"
+      args:
+        draft: "${draft_path}"
+        overlays: "${OVERLAYS}"
+        context_pack: "${context_pack}"
+      out_expect: "${out_dir}/contradiction_index.json"
+
+  - call_validator:
+      name: "validator_canon_gate"
+      args:
+        draft: "${draft_path}"
+        overlays: "${OVERLAYS}"
+        context_pack: "${context_pack}"
+      out_expect: "${out_dir}/canon_gate_report.md"
+
+  - call_validator:
+      name: "validator_citation_map"
+      args:
+        draft: "${draft_path}"
+        overlays: "${OVERLAYS}"
+        context_pack: "${context_pack}"
+      out_expect: "${out_dir}/citation_map.json"
+
+  - synthesize_issues:
+      inputs:
+        - "${out_dir}/tone_guard_report.md"
+        - "${out_dir}/style_guard_report.md"
+        - "${out_dir}/contradiction_index.json"
+        - "${out_dir}/canon_gate_report.md"
+        - "${out_dir}/citation_map.json"
+      out_json: "${out_dir}/validators_pre_rewrite.json"
+      out_md:   "${out_dir}/issues_summary.md"
+
+outputs:
+  - "/mnt/data/build/validators_pre_rewrite.json"
+  - "/mnt/data/build/issues_summary.md"
+  - "/mnt/data/build/contradiction_index.json"
+  - "/mnt/data/build/tone_guard_report.md"
+  - "/mnt/data/build/style_guard_report.md"
+  - "/mnt/data/build/canon_gate_report.md"
+  - "/mnt/data/build/citation_map.json"
+
+notes:
+  - "This is report-only by design. Use 00e/00f to enforce thresholds later."

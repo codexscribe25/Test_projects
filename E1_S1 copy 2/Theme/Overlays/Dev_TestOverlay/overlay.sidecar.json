@@ -1,0 +1,16 @@
+{
+  "overlay": "Theme/Overlays/Dev_TestOverlay",
+  "files": [
+    {
+      "name": "overlay.yml",
+      "path": "/mnt/data/mlci_upgrade_vnext/overlays_skeletons/Theme/Overlays/Dev_TestOverlay/overlay.yml",
+      "checksum": "sha256:82ae0f38000fd93ef54aadb78fcdfb321f046bb54bdf846351e5b1adf1cd0655"
+    },
+    {
+      "name": "README.md",
+      "path": "/mnt/data/mlci_upgrade_vnext/overlays_skeletons/Theme/Overlays/Dev_TestOverlay/README.md",
+      "checksum": "sha256:480b9ce5f0b8dfc93c7a5672844bc7dd88f064259b962193677906c288d45f1f"
+    }
+  ],
+  "generated": "2025-09-06T12:23:01.178758Z"
+}

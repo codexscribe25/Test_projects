@@ -1,0 +1,89 @@
+# File: Theme/Theme_HumanPolish.yml
+meta:
+  mode: "logic_only"
+  guardrails:
+    preserve_facts: true
+    preserve_proper_nouns: true
+    preserve_numbers: true
+    continuity_keys: [reliquary, child, thermal, gantry, clamps, tags, safehouse, alarm, watch-data, bay]
+
+targets:
+  metrics:
+    avg_sentence_length: [14, 17]     # target window
+    dialogue_ratio: [0.18, 0.28]      # % of sentences containing dialogue
+    paragraph_sentences: [3, 6]       # average per paragraph
+    lexical_diversity_min: 0.34
+    banned_tokens: []                 # must remain empty
+
+rules:
+  - id: "R1_sentence_rhythm"
+    action: "split_long_join_short"
+    details:
+      split_over_words: 26
+      join_under_words: 7
+      vary_starts: true
+      min_short_pct: 20
+      min_long_pct: 8
+
+  - id: "R2_dialogue_variation"
+    action: "convert_exposition_to_dialogue"
+    mode: "conservative"              # no new facts; reformulate existing lines as spoken cues
+    anchors: ["he said","she said","Sera said","Marlo said","Kito said"]
+    target_ratio: 0.22
+
+  - id: "R3_specificity"
+    action: "swap_generic_to_concrete"
+    constraints:
+      from_vocab: ["tool","device","thing","object","container"]
+      to_vocab:   ["clamp","magnet","hook","crate","tarpaulin"]
+      no_new_proper_nouns: true
+
+  - id: "R4_de_cliche"
+    action: "replace_or_remove"
+    patterns:
+      - "time would tell"
+      - "heart pounded"
+      - "out of the corner of his eye"
+    strategy: "remove_or_phrase_fresh"
+
+  - id: "R5_punctuation_humanize"
+    action: "em_dash_commas_contractions"
+    details:
+      allow_em_dash: true
+      prefer_contractions: true
+      semicolon_limit: 1
+
+  - id: "R6_motif_callback"
+    action: "reintroduce_image_with_variation"
+    motif: "sea-chant"
+    min_callbacks: 2
+    placement: ["end_of_beat_2","final_paragraph"]
+
+  - id: "R7_sensory_balance"
+    action: "ensure_senses"
+    per_paragraph_min: 1
+    senses: ["sound","touch","smell"]
+
+  - id: "R8_redundancy_prune"
+    action: "dedupe_refrains"
+    details:
+      near_duplicates_window_sentences: 2
+
+scoring:
+  weights:
+    voice_tone: 0.20
+    style_clarity: 0.20
+    flow_cohesion: 0.15
+    pacing: 0.15
+    worldbuilding_sensory: 0.10
+    stakes_clarity: 0.10
+    genre_fit_marketability: 0.05
+    continuity: 0.05
+
+gates:
+  accept_if:
+    - "human_likeness >= 85"
+    - "style_clarity >= 75"
+    - "flow_cohesion >= 75"
+    - "continuity >= 90"
+    - "canon_clean == 100"

@@ -1,0 +1,14 @@
+---
+# logs/ProcessLog.csv — preflight
+preflight:
+  description: "CSV process log used to record exports and major pipeline events."
+  require_files:
+    - "logs/ProcessLog.csv"
+  fail_on_missing: false
+  csv_headers_expected:
+    - "ts,run_id,event,artifact,notes"
+---
+timestamp,step,detail
+2025-09-03T20:30:23.234872Z,load_ticket,E1_S1-validate-export-refs.yml
+2025-09-03T20:30:23.234879Z,run_validators,Executed tone_guard,style_guard,canon_gate,contradiction_scan,citation_map
+2025-09-03T20:30:23.234881Z,export,Written to /mnt/data/40_exports/episode1_final.md

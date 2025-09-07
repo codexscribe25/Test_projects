@@ -1,0 +1,42 @@
+{
+  "job_ticket": "E1_S1-validate-export-refs.yml",
+  "run_timestamp": "2025-09-03T20:30:23.234472Z",
+  "validators": {
+    "tone_guard": {
+      "result": "pass",
+      "score": 92,
+      "notes": "Banned terms avoided; active voice maintained. See Theme_StyleGuide.yml rules."
+    },
+    "style_guard": {
+      "result": "pass",
+      "score": 90,
+      "notes": "Sentence lengths varied; imagery moderate."
+    },
+    "canon_gate": {
+      "result": "pass",
+      "score": 100,
+      "notes": "No canonical assertions; Theme_LoreIndex.yml empty - no index conflicts."
+    },
+    "contradiction_scan": {
+      "result": "pass",
+      "score": 100,
+      "notes": "No contradictions detected against available indexed anchors."
+    },
+    "citation_map": {
+      "result": "pass",
+      "score": 100,
+      "notes": "No external citations required; none present in draft."
+    },
+    "overall": {
+      "score": 96,
+      "status": "pass",
+      "notes": "Meets acceptance thresholds: overall>=80, tone>=85, validator_pass_rate>=90."
+    }
+  },
+  "acceptance_thresholds": {
+    "overall_score_min": 80,
+    "tone_accuracy_min": 85,
+    "validator_pass_rate_min": 90,
+    "hard_contradictions": 0
+  }
+}

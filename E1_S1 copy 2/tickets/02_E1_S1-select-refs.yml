@@ -1,0 +1,196 @@
+# 02_E1_S1-select-refs.yml — SELECT (critic1)
+# Purpose: Pick one concept; record 2–3 line rationale.
+# Inputs: —
+# Reads: ideation.md, ideation_scores.json
+# Outputs: selection.json, selection.md
+# RUN: critic1 — Run 02_E1_S1-select-refs. Rule: strongest hook, clear cost, minimal overlap.
+
+meta:
+  id: "02_E1_S1-select-refs"
+  version: "1.2.0"
+  author: "Callen5"
+  created: "2025-09-04T20:00:00Z"
+  description: >
+    Select a primary ideation concept to carry forward. This ticket understands
+    both OriginalityScore and GenreMarketScore (from ideation), supports several
+    selection strategies (originality-first, genremarket-first, hybrid), and
+    emits selection artifacts with provenance and rationale.
+
+preflight:
+  description: "Select best ideation candidate and record rationale. Requires ideation outputs."
+  require_files:
+    - "artifacts/01_ideation_candidates_<ts>.md"
+    - "artifacts/01_ideation_scores_<ts>.json"
+  outputs_expected:
+    - "artifacts/02_selection_<ts>.md"
+    - "artifacts/02_selection_<ts>.json"
+    - "artifacts/02_selection_report_<ts>.json"
+  fail_on_missing: true
+
+job_ticket:
+  id: "02_E1_S1-select.<ts>"
+  mode: fidelity
+  intent: "Choose one or more concepts and produce structured selection justification for downstream tickets."
+  params:
+    select_count:
+      type: integer
+      default: 1
+      description: "Number of concepts to select (default 1)."
+    ranking_mode:
+      type: string
+      default: "hybrid"
+      description: "Which leaderboard to prefer: originality | genremarket | hybrid | combined"
+    hybrid_split:
+      type: object
+      default: { orig: 0.5, genremarket: 0.5 }
+      description: "When ranking_mode == hybrid, fraction of picks from each leaderboard (orig/genremarket)."
+    combined_weighting:
+      type: object
+      default: { originality: 0.5, genremarket: 0.5 }
+      description: "When ranking_mode == combined, weights used to compute a single combined score."
+    tie_breaker:
+      type: string
+      default: "hook"
+      description: "Tie-breaker metric: hook | clarity | tone | novelty | genrefit | producibility | originality | genremarket"
+    de_duplicate:
+      type: boolean
+      default: true
+      description: "Remove near-duplicate seeds before selection (text-similarity threshold applied)."
+    force_include_ids:
+      type: array
+      default: []
+      description: "Optional list of candidate IDs to force into the selection (appended then deduped)."
+    explain_length:
+      type: integer
+      default: 3
+      description: "Number of short rationale lines (2-4) to include per selection."
+
+inputs:
+  ideation_md: "artifacts/01_ideation_candidates_<ts>.md"
+  ideation_scores: "artifacts/01_ideation_scores_<ts>.json"
+
+steps:
+  - load_candidates:
+      files: ["{{inputs.ideation_md}}","{{inputs.ideation_scores}}"]
+      out: "artifacts/02_candidates_<ts>.json"
+
+  - validate_scores_present:
+      in: "artifacts/02_candidates_<ts>.json"
+      assert:
+        - "every_candidate_has_field(originality_score)"
+        - "every_candidate_has_field(genremarket_score)"
+      fail_message: "Ideation scores must include OriginalityScore and GenreMarketScore. Re-run ideation with scoring_mode=dual."
+
+  - dedupe_candidates:
+      in: "artifacts/02_candidates_<ts>.json"
+      out: "artifacts/02_candidates_deduped_<ts>.json"
+      params:
+        enabled: "{{job_ticket.params.de_duplicate}}"
+        similarity_threshold: 0.87
+      note: "Near-duplicate removal preserves highest-scored candidate among clusters."
+
+  - apply_force_include:
+      in: "artifacts/02_candidates_deduped_<ts>.json"
+      out: "artifacts/02_candidates_included_<ts>.json"
+      params:
+        force_ids: "{{job_ticket.params.force_include_ids}}"
+      note: "Force-included IDs are appended to selection pool and deduped; they count toward select_count."
+
+  - compute_leaderboards:
+      in: "artifacts/02_candidates_included_<ts>.json"
+      out: "artifacts/02_leaderboards_<ts>.json"
+      logic:
+        - produce sorted lists:
+          - by OriginalityScore (desc)
+          - by GenreMarketScore (desc)
+          - by hook, clarity, tone, novelty, genrefit, producibility (desc)
+        - include component breakdown and source provenance for each candidate
+
+  - select_candidates:
+      leaderboards: "artifacts/02_leaderboards_<ts>.json"
+      out: 
+        - "artifacts/02_selection_list_<ts>.json"
+      params:
+        mode: "{{job_ticket.params.ranking_mode}}"
+        select_count: "{{job_ticket.params.select_count}}"
+        hybrid_split: "{{job_ticket.params.hybrid_split}}"
+        combined_weighting: "{{job_ticket.params.combined_weighting}}"
+        tie_breaker: "{{job_ticket.params.tie_breaker}}"
+      behaviour:
+        - if mode == "originality": choose top N from OriginalityScore leaderboard (apply tie_breaker)
+        - if mode == "genremarket": choose top N from GenreMarketScore leaderboard
+        - if mode == "hybrid": choose floor(N*orig_split) from Originality, floor(N*gen_split) from Genremarket, fill remaining from combined ranking
+        - if mode == "combined": compute CombinedScore = w_o*OriginalityScore + w_g*GenreMarketScore using combined_weighting, pick top N
+      note: "Selection algorithm preserves provenance and records which leaderboard each pick came from."
+
+  - generate_rationale_and_artifacts:
+      in: "artifacts/02_selection_list_<ts>.json"
+      out:
+        - "artifacts/02_selection_<ts>.md"
+        - "artifacts/02_selection_<ts>.json"
+        - "artifacts/02_selection_report_<ts>.json"
+      logic:
+        - for each selected candidate produce:
+          - short rationale ({{job_ticket.params.explain_length}} lines): 1-2 sentence why chosen, which score led to selection, one practical note for downstream (e.g., "good for fast scene", "requires worldbuilding")
+          - component breakdown (hook, clarity, tone, novelty, genrefit, producibility)
+          - provenance (source file, original candidate id, timestamp)
+        - produce machine-friendly selection JSON (id, text, components, scores, rationale_lines, chosen_from_leaderboard)
+        - produce selection_report containing:
+          - session metadata, weights_used (from ideation file), ranking_mode, candidate_count, run_timestamp
+          - full list of top-20 candidates by both scores for auditing
+
+  - append_logmark:
+      event: "selection_made"
+      payload:
+        selection_md: "artifacts/02_selection_<ts>.md"
+        selection_json: "artifacts/02_selection_<ts>.json"
+        report: "artifacts/02_selection_report_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "selection_doc"
+    path: "artifacts/02_selection_<ts>.md"
+    artifact_type: "selection"
+    required: true
+    checksum: true
+    description: "Human-readable selection with rationale and score breakdown."
+
+  - id: "selection_json"
+    path: "artifacts/02_selection_<ts>.json"
+    artifact_type: "selection_machine"
+    required: true
+    checksum: true
+    description: "Machine-friendly selection record for downstream tickets."
+
+  - id: "selection_report"
+    path: "artifacts/02_selection_report_<ts>.json"
+    artifact_type: "report"
+    required: true
+    checksum: true
+    description: "Run metadata, leaderboards excerpt and provenance for audit."
+
+validators:
+  - id: "S1_scores_presence"
+    type: "post"
+    assert: "every_candidate_has_fields(['OriginalityScore','GenreMarketScore'], artifacts/02_candidates_<ts>.json)"
+    message: "Ideation must supply both OriginalityScore and GenreMarketScore (or run with scoring_mode that produced them)."
+
+  - id: "S2_selected_count"
+    type: "post"
+    assert: "count_selected_in_json(artifacts/02_selection_<ts>.json) == job_ticket.params.select_count"
+    message: "Selection count must match requested select_count."
+
+  - id: "S3_rationale_length"
+    type: "post"
+    assert: "every_selected_has_min_rationale_lines(artifacts/02_selection_<ts>.json, min_lines=1)"
+    message: "Each selected candidate must include at least one short rationale line."
+
+acceptance_criteria:
+  - "Produces exactly N selected concepts where N == job_ticket.params.select_count."
+  - "Selection artifacts include component breakdown, both final scores (OriginalityScore & GenreMarketScore), provenance, and human-readable rationale."
+  - "selection_report contains leaderboards excerpt for auditing and lists weights_used (from ideation)."
+
+notes:
+  - "This ticket expects ideation to have run in 'dual' scoring_mode (ideation artifact should include both scores). If not available, the ticket will still run in which case it falls back to OriginalityScore only (documented in selection_report)."
+  - "Downstream tickets may prefer selection_json entries by id; include selection_json in pipeline inputs to preserve machine-readability."
+  - "Runners should validate that any custom combined_weighting sums to 1.0; otherwise the preset default is used."

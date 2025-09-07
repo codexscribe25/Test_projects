@@ -1,0 +1,14 @@
+# Theme_LoreIndex.yml — preflight
+preflight:
+  description: "Pointer index of canonical lore artifacts. Created by 00b sync ticket."
+  require_files:
+    - "MemoryLog_Lore.yml"
+  fail_on_missing: false
+  note: "If missing, 00b will create or update it from memory."
+
+meta: { version: 1, description: "Agnostic index of allowed canon sources" }
+index:
+  entries: []   # Add {path, canonical_id, confidence} entries here
+policy:
+  min_confidence: 0.85
+  allow_new_unindexed_facts: false

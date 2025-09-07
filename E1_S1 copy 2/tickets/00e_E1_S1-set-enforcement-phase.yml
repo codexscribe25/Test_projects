@@ -1,0 +1,63 @@
+# 00e_E1_S1-set-enforcement-phase.yml — ENFORCEMENT PHASE (architect1 → courier1)
+# Purpose: Set enforcement flags/validators; lock phase state.
+# Reads: current run state
+# Outputs: enforcement_state.json
+# RUN: architect1 — configure; then courier1 — apply.
+
+preflight:
+  description: "Evaluate and set Theme enforcement phase based on rules."
+  require_files:
+    - "Theme/Theme_LoreValidator.yml"
+    - "Theme/Theme_Enforcement_State.yml"
+  outputs_expected:
+    - "Theme/Theme_Enforcement_State.yml"
+    - "artifacts/00e_eval_<ts>.json"
+  fail_on_missing: true
+
+job_ticket:
+  id: "00e_E1_S1-set-enforcement-phase.<ts>"
+  mode: fidelity
+  intent: "Evaluate transition rules and update enforcement state (safe-apply audit)."
+
+inputs:
+  validator: "Theme/Theme_LoreValidator.yml"
+  state: "Theme/Theme_Enforcement_State.yml"
+  theme_report: "artifacts/theme_validators_report_<ts>.json"
+  memory: "memory/MemoryLog_Lore.yml"
+
+steps:
+  - load_state:
+      file: "{{inputs.state}}"
+      out: "artifacts/00e_state_<ts>.json"
+  - evaluate_transitions:
+      rules: "{{inputs.validator}}"
+      theme_report: "{{inputs.theme_report}}"
+      memory: "{{inputs.memory}}"
+      out: "artifacts/00e_eval_<ts>.json"
+  - if_auto_apply:
+      eval: "artifacts/00e_eval_<ts>.json"
+      state: "artifacts/00e_state_<ts>.json"
+      out: "Theme/Theme_Enforcement_State.yml"
+      safe_apply: true
+  - append_logmark:
+      event: "enforcement_phase_evaluated"
+      payload: "artifacts/00e_eval_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "enforcement_state"
+    path: "Theme/Theme_Enforcement_State.yml"
+    suggested_folder: "Theme"
+    artifact_type: "state"
+    retention: "workspace"
+    required: true
+    checksum: false
+    description: "Enforcement state file (phase and history)."
+  - id: "00e_eval"
+    path: "artifacts/00e_eval_<ts>.json"
+    suggested_folder: "artifacts"
+    artifact_type: "evaluation"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Evaluation results and recommended transitions."

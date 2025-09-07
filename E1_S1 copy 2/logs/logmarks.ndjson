@@ -1,0 +1,17 @@
+# logs/logmarks.ndjson — preflight
+preflight:
+  description: "Append-only event trail. Must be writable by tickets that append logmarks."
+  require_files:
+    - "logs/logmarks.ndjson"
+  fail_on_missing: false
+  write_policy:
+    append_only: true
+{"ts":"2025-09-04T13:30:56Z","run_id":"session_20250904_001","event":"session_snapshot_created","payload":{"snapshot":"session_snapshot_20250904T133056Z.json","file_count":34},"level":"info"}
+{"ts":"2025-09-04T13:33:12Z","run_id":"session_20250904_001","event":"deepscan_completed","payload":{"scores":"lore_deepscan_scores.json","low_confidence_count":3},"level":"info"}
+{"ts":"2025-09-04T13:35:00Z","run_id":"session_20250904_001","event":"preflight_remediation_manifest_created","payload":{"file":"remediation_manifest.yml"},"level":"info"}
+{"ts": "20250904T174904Z", "event": "boot_completed", "payload": {"manifest_loaded": true, "manifest_path": "run_manifest.yml"}}
+{"ts": "20250904T174904Z", "event": "session_snapshot_created", "payload": {"snapshot": "artifacts/session_snapshot_20250904T174904Z.json"}}
+{"ts": "20250904T174904Z", "event": "theme_synced_from_memory", "payload": {"index": "Theme/Theme_LoreIndex.yml", "main": "Theme/Theme_Main.yml"}}
+{"ts": "20250904T174904Z", "event": "theme_validate_completed", "payload": {"report": "artifacts/theme_validators_report_20250904T174904Z.json"}}
+{"ts": "20250904T174904Z", "event": "lore_deepscan_completed", "payload": {"deepscan": "artifacts/deepscan_report_20250904T174904Z.json", "low_conf": "artifacts/low_confidence_lore_20250904T174904Z.md"}}
+{"ticket": "00a_E1_S1-session-snapshot.yml", "status": "completed", "generated_at": "20250904T180117Z", "snapshot_path": "artifacts/session_snapshot_20250904T180117Z.json", "duplicates_report": "artifacts/session_duplicates_20250904T180117Z.json", "conflicts_report": "artifacts/session_conflicts_20250904T180117Z.json"}

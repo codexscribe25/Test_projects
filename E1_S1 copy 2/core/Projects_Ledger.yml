@@ -1,0 +1,27 @@
+meta:
+  id: "Projects_Ledger"
+  version: "1.0.0"
+  author: "Callen5"
+generated: "2025-09-05T10:58:00Z"
+
+projects:
+  - project_id: "callen5_v1"              # deterministic: slug(project_name)+"-"+shortsha
+    name: "Callen 5 v1"
+    created: "2025-09-05T10:40:00Z"
+    overlays:
+      - id: "Callen5_TestProjects05092025"
+        path: "Theme/Overlays/Callen5_TestProjects05092025/"
+        sha256: "<sha-of-overlay-root>"
+    caches:
+      stylecaps_index: "Caches/callen5_v1/stylecaps_index.json"
+      lexicons_index:  "Caches/callen5_v1/lexicons_index.json"
+      agnostic_terms:  "Caches/callen5_v1/agnostic_term_table.json"
+    policy:
+      import_user_knowledge_memories: false
+      allow_session_history_lookup: false
+      memory_scope: "project-only"
+    provenance_summary:
+      last_30_sessions:
+        avg_similarity_peak: 0.31
+        cross_project_warn_rate: 0.07
+        hard_warn_unique_rate: 0.01

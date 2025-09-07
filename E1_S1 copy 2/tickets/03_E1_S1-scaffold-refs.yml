@@ -1,0 +1,182 @@
+# 03_E1_S1-scaffold-refs.yml — SCAFFOLD (architect1 x2)
+# Purpose: Turn selection into a clean outline/skeleton (beats, POV, stakes).
+# Inputs: —
+# Reads: selection.json (or selection.md)
+# Outputs: outline.md, scaffold.json
+# RUN: architect1 x2 — Run 03_E1_S1-scaffold-refs.
+
+meta:
+  id: "03_E1_S1-scaffold-refs"
+  version: "1.1.0"
+  author: "Callen5"
+  created: "2025-09-04T20:20:00Z"
+  description: >
+    Create a compact scaffold (beats, POV, stakes, cost, continuity hooks)
+    from the selected concept. Reads machine-friendly selection JSON (artifacts/02_selection_<ts>.json)
+    which contains component breakdown and both scores (OriginalityScore & GenreMarketScore).
+    Produces human-readable scaffold plus structured scaffold JSON and a scaffold_check.
+
+preflight:
+  description: "Produce scaffold (beats, POV, stakes, hooks) from selected concept."
+  require_files:
+    - "artifacts/02_selection_<ts>.json"
+  outputs_expected:
+    - "10_drafts/scaffold_<ts>.md"
+    - "10_drafts/scaffold_<ts>.json"
+    - "10_drafts/scaffold_check_<ts>.json"
+  fail_on_missing: true
+
+job_ticket:
+  id: "03_E1_S1-scaffold.<ts>"
+  mode: fidelity
+  intent: "Create a concise scaffold (<=250 words) for the chosen selection, with machine-check output."
+
+params:
+  scaffold_max_words:
+    type: integer
+    default: 250
+    description: "Maximum words for the human scaffold (soft limit enforced by validator)."
+  prefer_score:
+    type: string
+    default: "as_selected"
+    description: "Informational: which score drove the selection ('originality'|'genremarket'|'as_selected')."
+  include_selection_md:
+    type: boolean
+    default: true
+    description: "If true and available, include a small excerpt from artifacts/02_selection_<ts>.md in the human scaffold for context."
+
+inputs:
+  selection_json: "artifacts/02_selection_<ts>.json"
+  selection_md: "artifacts/02_selection_<ts>.md"   # optional convenience input
+  scaffold_template: "00_inputs/scaffold.md"
+
+steps:
+  - load_selection:
+      file: "{{inputs.selection_json}}"
+      out: "artifacts/03_selection_<ts>.json"
+
+  - validate_selection_fields:
+      in: "artifacts/03_selection_<ts>.json"
+      assert:
+        - "has_field('id')"
+        - "has_field('text')"
+        - "has_field('components')"
+        - "has_field('scores')"
+      fail_message: "Selection JSON must include id, text, components and scores. Re-run selection if missing."
+
+  - extract_primary_selection:
+      in: "artifacts/03_selection_<ts>.json"
+      out: "artifacts/03_primary_selection_<ts>.json"
+      logic:
+        - choose the first entry in selection list (or single selection)
+        - keep fields: id, text, components, scores, chosen_from_leaderboard, provenance
+      note: "This is the canonical selection object used for scaffold generation."
+
+  - generate_scaffold_md:
+      selection: "artifacts/03_primary_selection_<ts>.json"
+      template: "{{inputs.scaffold_template}}"
+      params:
+        include_selection_md: "{{job_ticket.params.include_selection_md}}"
+      out: "10_drafts/scaffold_<ts>.md"
+      format: |
+        Title: {{selection.id}} — compact scaffold
+        Logline: {{selection.text}}
+        Source: {{selection.provenance}}
+        Scores: Originality={{selection.scores.OriginalityScore}}; GenreMarket={{selection.scores.GenreMarketScore}}; ChosenFrom={{selection.chosen_from_leaderboard}}
+        ---
+        Beats:
+        1) Inciting jolt (what breaks expectation)
+        2) Complication (rising cost / complication)
+        3) Choice & Cost (the hard choice and its price)
+        POV: (recommended POV)
+        Stakes: (clear, immediate stakes)
+        Cost: (what the protagonist loses if they fail)
+        Hooks (3 continuity hooks that can seed next scenes)
+        [End of scaffold — keep <= {{job_ticket.params.scaffold_max_words}} words]
+
+  - generate_scaffold_json:
+      selection: "artifacts/03_primary_selection_<ts>.json"
+      out: "10_drafts/scaffold_<ts>.json"
+      schema:
+        type: object
+        properties:
+          id: {type: string}
+          text: {type: string}
+          beats:
+            type: array
+            items: {type: string}
+          pov: {type: string}
+          stakes: {type: string}
+          cost: {type: string}
+          hooks:
+            type: array
+            items: {type: string}
+          components: {type: object}
+          scores: {type: object}
+          provenance: {type: object}
+        required: [id, text, beats, pov, stakes, cost, hooks, components, scores]
+
+  - scaffold_check:
+      in_json: "10_drafts/scaffold_<ts>.json"
+      out: "10_drafts/scaffold_check_<ts>.json"
+      checks:
+        - required_fields_present: ["beats","pov","stakes","cost","hooks"]
+        - beats_count: "len(beats) == 3"
+        - word_count_limit: "word_count(10_drafts/scaffold_<ts>.md) <= job_ticket.params.scaffold_max_words"
+      report_fields:
+        - passed
+        - failures
+        - warnings
+      note: "scaffold_check must pass before Draft ticket runs."
+
+  - annotate_scaffold_with_selection:
+      scaffold_json: "10_drafts/scaffold_<ts>.json"
+      selection: "artifacts/03_primary_selection_<ts>.json"
+      out: "10_drafts/scaffold_annotated_<ts>.json"
+      logic:
+        - embed selection id, chosen_from_leaderboard, and scores into annotated scaffold for downstream traceability
+
+  - append_logmark:
+      event: "scaffold_generated"
+      payload:
+        scaffold_md: "10_drafts/scaffold_<ts>.md"
+        scaffold_json: "10_drafts/scaffold_<ts>.json"
+        scaffold_check: "10_drafts/scaffold_check_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "scaffold_md"
+    path: "10_drafts/scaffold_<ts>.md"
+    artifact_type: "scaffold"
+    required: true
+    checksum: false
+    description: "Human-readable scaffold (<= scaffold_max_words)."
+
+  - id: "scaffold_json"
+    path: "10_drafts/scaffold_<ts>.json"
+    artifact_type: "scaffold_machine"
+    required: true
+    checksum: true
+    description: "Structured scaffold used by Draft tickets."
+
+  - id: "scaffold_check"
+    path: "10_drafts/scaffold_check_<ts>.json"
+    artifact_type: "validation"
+    required: true
+    checksum: true
+    description: "Validation result proving scaffold completeness and word-limit compliance."
+
+validators:
+  - id: "SC1_selection_valid"
+    type: "pre"
+    assert: "file_exists('{{inputs.selection_json}}') and json_has(['id','text','components','scores'], '{{inputs.selection_json}}')"
+    message: "Selection JSON missing required fields."
+
+  - id: "SC2_scaffold_check_pass"
+    type: "post"
+    assert: "json_field_true('10_drafts/scaffold_check_<ts>.json','passed')"
+    message: "Scaffold check failed — review scaffold_check_<ts>.json for details."
+
+notes:
+  - "This ticket expects selection JSON to include 'scores' with OriginalityScore and GenreMarketScore if ideation ran in dual mode. If absent, the ticket will continue but scaffold JSON will note missing score fields for auditing."
+  - "Keep the scaffold concise and actionable; the draft ticket will use scaffold_json for scene building."

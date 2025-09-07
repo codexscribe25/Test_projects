@@ -1,0 +1,41 @@
+# 00b_E1_S1-sync-theme-from-memory-refs.yml — THEME SYNC (architect1)
+# Purpose: Sync Theme_* from memory refs; align styleguide + lore index.
+# Reads: Theme_* and memory refs
+# Outputs: theme_sync.md
+# RUN: architect1 — Run 00b_E1_S1-sync-theme-from-memory-refs.
+
+meta:
+  id: "00b_E1_S1-sync-theme-from-memory-refs"
+  version: "2.0.0"
+purpose: >
+  Overlay-scoped sync of theme refs. Does NOT import user/global memories.
+  Reads only from the gated overlay paths. Report-only if refs are missing.
+
+params:
+  overlay_paths_from: "/mnt/data/build/overlay_paths.json"
+  import_user_knowledge_memories: false
+  refs_scope: "overlay_only"
+  out_dir: "/mnt/data/build"
+
+steps:
+  - load_overlay_paths:
+      from: "${overlay_paths_from}"
+      var: "OVERLAYS"
+      on_missing: "fail-fast"
+
+  - enumerate_refs:
+      overlays: "${OVERLAYS}"
+      include_globs: ["**/*.yml","**/*.yaml","**/*.md"]
+      exclude_globs: ["**/.git/**","**/Caches/**"]
+      out: "${out_dir}/sync_theme_refs.json"
+
+  - summarize_refs:
+      from: "${out_dir}/sync_theme_refs.json"
+      out: "${out_dir}/sync_theme_summary.md"
+
+outputs:
+  - "/mnt/data/build/sync_theme_refs.json"
+  - "/mnt/data/build/sync_theme_summary.md"
+
+notes:
+  - "If your original 00b ticket can't enforce overlay-only, use this as a drop-in replacement."

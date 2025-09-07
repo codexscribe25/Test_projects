@@ -1,0 +1,59 @@
+# 00d_E1_S1-lore-deepscan.yml — LORE DEEPSCAN (auditor2)
+# Purpose: Scan corpus for contamination, dead refs, contradictions.
+# Reads: lore/* (or mounted corpus)
+# Outputs: deepscan.json, deepscan.md
+# RUN: auditor2 — Run 00d_E1_S1-lore-deepscan.
+
+preflight:
+  description: "Deep-scan lore & theme for provenance and confidence gaps."
+  require_files:
+    - "memory/MemoryLog_Lore.yml"
+  outputs_expected:
+    - "artifacts/deepscan_report_<ts>.json"
+    - "artifacts/low_confidence_lore_<ts>.md"
+  fail_on_missing: true
+
+job_ticket:
+  id: "00d_E1_S1-lore-deepscan.<ts>"
+  mode: fidelity
+  intent: "Score lore entries for confidence and provenance gaps."
+
+inputs:
+  memory: "memory/MemoryLog_Lore.yml"
+  index: "Theme/Theme_LoreIndex.yml"
+  config:
+    confidence_threshold: 0.75
+
+steps:
+  - extract_candidates:
+      memory: "{{inputs.memory}}"
+      out: "artifacts/00d_candidates_<ts>.json"
+  - score_candidates:
+      candidates: "artifacts/00d_candidates_<ts>.json"
+      threshold: "{{inputs.config.confidence_threshold}}"
+      out: "artifacts/deepscan_report_<ts>.json"
+  - generate_low_confidence_md:
+      report: "artifacts/deepscan_report_<ts>.json"
+      out: "artifacts/low_confidence_lore_<ts>.md"
+  - append_logmark:
+      event: "lore_deepscan_completed"
+      payload: "artifacts/deepscan_report_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "deepscan_report"
+    path: "artifacts/deepscan_report_<ts>.json"
+    suggested_folder: "artifacts"
+    artifact_type: "report"
+    retention: "artifacts"
+    required: true
+    checksum: true
+    description: "Confidence/provenance scoring for lore."
+  - id: "low_confidence_report"
+    path: "artifacts/low_confidence_lore_<ts>.md"
+    suggested_folder: "artifacts"
+    artifact_type: "list"
+    retention: "artifacts"
+    required: true
+    checksum: false
+    description: "Human-readable list of low-confidence lore candidates."

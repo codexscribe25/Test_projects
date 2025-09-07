@@ -1,0 +1,159 @@
+# 04_E1_S1-draft-refs.yml — DRAFT (muse1 → editor1)
+# Purpose: Draft from scaffold; then tighten for flow/clarity.
+# Inputs: —
+# Reads: outline.md / scaffold.json
+# Outputs: draft.md
+# RUN: muse1 — draft; then editor1 — tighten. Ticket: 04_E1_S1-draft-refs.
+
+meta:
+  id: "04_E1_S1-draft-refs"
+  version: "1.1.0"
+  author: "Callen5"
+  created: "2025-09-04T20:40:00Z"
+  description: >
+    Produce a first raw draft (1800–2200 words) from the scaffold. This ticket
+    enforces scaffold_check, reads scaffold_json (which should include selection
+    provenance and scores when available), and emits basic metrics. Keep generation
+    isolated from heavy rewriting or validations.
+
+preflight:
+  description: "Produce first raw draft from scaffold; require scaffold_check to have passed."
+  require_files:
+    - "10_drafts/scaffold_<ts>.json"
+    - "10_drafts/scaffold_check_<ts>.json"
+  outputs_expected:
+    - "10_drafts/episode1_v1_<ts>.md"
+    - "metrics/metrics_draft_v1_<ts>.json"
+  fail_on_missing: true
+
+job_ticket:
+  id: "04_E1_S1-draft.<ts>"
+  mode: fidelity
+  intent: "Produce the initial draft artifact from scaffold, record basic metrics and provenance."
+
+params:
+  target_min_words:
+    type: integer
+    default: 1800
+    description: "Minimum target word count for draft generation."
+  target_max_words:
+    type: integer
+    default: 2200
+    description: "Maximum target word count for draft generation."
+  prefer_by:
+    type: string
+    default: "as_selected"
+    description: "Informational: which score to prefer for stylistic choices if desired (originality|genremarket|as_selected)."
+  include_selection_excerpt:
+    type: boolean
+    default: true
+    description: "If true, include a short selection/scaffold header in the generated draft for provenance."
+
+inputs:
+  scaffold_json: "10_drafts/scaffold_<ts>.json"
+  scaffold_check: "10_drafts/scaffold_check_<ts>.json"
+  selection_json: "artifacts/03_primary_selection_<ts>.json"   # optional, used for added provenance
+  styleguide: "Theme/Theme_Styleguide.yml"
+
+steps:
+  - load_scaffold:
+      file: "{{inputs.scaffold_json}}"
+      out: "artifacts/04_scaffold_in_<ts>.json"
+
+  - assert_scaffold_check:
+      file: "{{inputs.scaffold_check}}"
+      assert:
+        - "json_field_true('{{inputs.scaffold_check}}','passed')"
+      fail_message: "scaffold_check did not pass; cannot proceed to draft generation."
+
+  - optional_load_selection:
+      file: "{{inputs.selection_json}}"
+      out: "artifacts/04_selection_context_<ts>.json"
+      behaviour:
+        - continue_on_missing: true
+      note: "Selection context provides provenance and scores (OriginalityScore, GenreMarketScore) if present."
+
+  - assemble_generation_prompt:
+      scaffold: "artifacts/04_scaffold_in_<ts>.json"
+      selection_context: "artifacts/04_selection_context_<ts>.json"
+      styleguide: "{{inputs.styleguide}}"
+      params:
+        prefer_by: "{{job_ticket.params.prefer_by}}"
+        include_selection_excerpt: "{{job_ticket.params.include_selection_excerpt}}"
+      out: "artifacts/04_draft_prompt_<ts>.txt"
+      note: "This step composes a single LLM prompt including scaffold beats, POV, stakes, cost, and brief provenance header."
+
+  - generate_draft:
+      prompt_file: "artifacts/04_draft_prompt_<ts>.txt"
+      params:
+        min_words: "{{job_ticket.params.target_min_words}}"
+        max_words: "{{job_ticket.params.target_max_words}}"
+      out: "10_drafts/episode1_v1_<ts>.md"
+      behaviour:
+        - model_mode: "generation"
+        - isolation: true
+      note: "Draft generation must not perform heavy rewriting; this is raw output."
+
+  - compute_basic_metrics:
+      file: "10_drafts/episode1_v1_<ts>.md"
+      out: "metrics/metrics_draft_v1_<ts>.json"
+      compute:
+        - word_count: "word_count(10_drafts/episode1_v1_<ts>.md)"
+        - sentence_count: "sentence_count(10_drafts/episode1_v1_<ts>.md)"
+        - avg_sentence_length: "avg_sentence_length(10_drafts/episode1_v1_<ts>.md)"
+        - approx_reading_time_min: "ceil(word_count / 200)"
+        - provenance:
+            scaffold_id: "json_get('artifacts/04_scaffold_in_<ts>.json','id', null)"
+            selection_id: "json_get('artifacts/04_selection_context_<ts>.json','id', null)"
+            chosen_from_leaderboard: "json_get('artifacts/04_selection_context_<ts>.json','chosen_from_leaderboard', null)"
+            OriginalityScore: "json_get('artifacts/04_selection_context_<ts>.json','scores.OriginalityScore', null)"
+            GenreMarketScore: "json_get('artifacts/04_selection_context_<ts>.json','scores.GenreMarketScore', null)"
+
+  - checksum:
+      file: "10_drafts/episode1_v1_<ts>.md"
+      out: "artifacts/10_drafts_episode1_v1_<ts>.md.sha256"
+
+  - append_logmark:
+      event: "draft_generated"
+      payload:
+        draft: "10_drafts/episode1_v1_<ts>.md"
+        metrics: "metrics/metrics_draft_v1_<ts>.json"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "draft_v1"
+    path: "10_drafts/episode1_v1_<ts>.md"
+    artifact_type: "draft"
+    required: true
+    checksum: true
+    description: "First raw draft from scaffold."
+
+  - id: "metrics_v1"
+    path: "metrics/metrics_draft_v1_<ts>.json"
+    artifact_type: "metrics"
+    required: true
+    checksum: true
+    description: "Basic metrics and provenance for draft v1."
+
+  - id: "draft_checksum"
+    path: "artifacts/10_drafts_episode1_v1_<ts>.md.sha256"
+    artifact_type: "checksum"
+    required: true
+    checksum: false
+    description: "SHA256 checksum for draft v1."
+
+validators:
+  - id: "D1_scaffold_check_passed"
+    type: "pre"
+    assert: "json_field_true('10_drafts/scaffold_check_<ts>.json','passed')"
+    message: "Scaffold check must pass before running draft."
+
+  - id: "D2_word_count_range"
+    type: "post"
+    assert: "json_get('metrics/metrics_draft_v1_<ts>.json','word_count',0) >= job_ticket.params.target_min_words and json_get('metrics/metrics_draft_v1_<ts>.json','word_count',0) <= job_ticket.params.target_max_words"
+    message: "Draft word count outside target range (1800-2200)."
+
+notes:
+  - "This ticket is intentionally light on heavy validators; downstream tickets handle polishing, edits, and stricter validation."
+  - "If selection/scaffold included OriginalityScore and GenreMarketScore, metrics provenance will record them for auditability."
+  - "If you want the draft to bias style or plot elements based on which score was chosen (Originality vs GenreMarket), set `params.prefer_by` accordingly before running."

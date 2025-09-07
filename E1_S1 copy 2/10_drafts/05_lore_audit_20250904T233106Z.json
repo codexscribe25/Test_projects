@@ -1,0 +1,46 @@
+{
+  "generated_at": "2025-09-04T23:31:06.882967Z",
+  "draft": "/mnt/data/workspace_project/10_drafts/episode1_v1_20250904T232522Z.md",
+  "checks": {
+    "banned_terms": {
+      "found": [
+        "manifest",
+        "memory"
+      ],
+      "status": "fail"
+    },
+    "proper_noun_counts": {
+      "counts": {
+        "Ilya": 25,
+        "Marlo": 12,
+        "Sera": 2,
+        "Kito": 2,
+        "Karo": 0
+      }
+    },
+    "inconsistent_caps": [],
+    "beats_presence": [
+      {
+        "beat": "The Job Drops: forged manifest, midnight private auction at warlord Karo's fortified warehouse.",
+        "found": true,
+        "pos": 325,
+        "matched_word": "forged"
+      },
+      {
+        "beat": "Fortified Routine, Human Unknowns: rooftop entry, thermal sweeps, a humming child in the loading bay.",
+        "found": true,
+        "pos": 1320,
+        "matched_word": "Human"
+      },
+      {
+        "beat": "Choice & Cost: grab the reliquary and escape, or stall to free innocents and risk capture.",
+        "found": true,
+        "pos": 2224,
+        "matched_word": "Choice"
+      }
+    ],
+    "beats_order_ok": true,
+    "contradictions": [],
+    "heavy_world_tokens": []
+  }
+}

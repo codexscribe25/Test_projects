@@ -1,0 +1,20 @@
+# 01_project_manifest_build.yml — PROJECT MANIFEST BUILD (architect1 → courier1)
+# Purpose: Build a canonical project manifest (IDs, paths, hashes, types).
+# Reads: workspace index (tickets/, Theme/, core/, assets/*)
+# Outputs: project_manifest.yml (or .json), manifest_report.md
+# RUN: architect1 → courier1 — Run 01_project_manifest_build.
+
+meta: { id: "01_project_manifest_build", version: "1.0" }
+inputs: ["build/context_pack.json", "${overlay_src}/**/*"]
+steps:
+  - update_project_context_index:
+      out: "Project/Project_Context_Index.yml"
+  - assemble_theme_master:
+      out: "Theme/Theme_Master.yml"
+      from:
+        - lexicons: "${overlay_src}/lexicon.yml"         # if missing, derive from sources and cache
+        - stylecap: "Caches/${project_id}/stylecaps_index.json"
+        - ideas:    "${overlay_src}/ideas/**/*"
+outputs:
+  - "Project/Project_Context_Index.yml"
+  - "Theme/Theme_Master.yml"

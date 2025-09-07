@@ -1,0 +1,61 @@
+# 07_E1_S1-rewrite-refs.yml — REWRITE (doctor2)
+# Purpose: Diagnose weak spots; produce targeted rewrites with diffs.
+# Inputs: —
+# Reads: draft.md, validation_report.md
+# Outputs: rewrites.md (or rewrites.patch)
+# RUN: doctor2 — Run 07_E1_S1-rewrite-refs.
+
+preflight:
+  description: "Apply targeted rewrites based on validator flags; enforce edit-density cap."
+  require_files:
+    - "20_reviews/validators_pre_rewrite_<ts>.json"
+    - "10_drafts/episode1_v1_<ts>.md"
+  outputs_expected:
+    - "30_rewrites/episode1_v2_<ts>.md"
+    - "artifacts/30_rewrites_episode1_v2_<ts>.md.sha256"
+  fail_on_missing: true
+
+job_ticket:
+  id: "07_E1_S1-rewrite.<ts>"
+  mode: fidelity
+  intent: "Produce a controlled rewrite using validator guidance."
+
+inputs:
+  draft: "10_drafts/episode1_v1_<ts>.md"
+  issues: "20_reviews/validators_pre_rewrite_<ts>.json"
+  max_edit_density_pct: 45
+
+steps:
+  - load_draft:
+      file: "{{inputs.draft}}"
+      out: "artifacts/07_draft_<ts>.json"
+  - apply_rewrites:
+      draft: "artifacts/07_draft_<ts>.json"
+      issues: "{{inputs.issues}}"
+      max_edit_density: "{{inputs.max_edit_density_pct}}"
+      out: "30_rewrites/episode1_v2_<ts>.md"
+  - checksum:
+      file: "30_rewrites/episode1_v2_<ts>.md"
+      out: "artifacts/30_rewrites_episode1_v2_<ts>.md.sha256"
+  - append_logmark:
+      event: "rewrite_completed"
+      payload: "30_rewrites/episode1_v2_<ts>.md"
+      log: "logs/logmarks.ndjson"
+
+outputs:
+  - id: "rewrite_v2"
+    path: "30_rewrites/episode1_v2_<ts>.md"
+    suggested_folder: "30_rewrites"
+    artifact_type: "rewrite"
+    retention: "workspace"
+    required: true
+    checksum: true
+    description: "Controlled rewrite of the draft."
+  - id: "rewrite_v2_checksum"
+    path: "artifacts/30_rewrites_episode1_v2_<ts>.md.sha256"
+    suggested_folder: "artifacts"
+    artifact_type: "checksum"
+    retention: "artifacts"
+    required: true
+    checksum: false
+    description: "SHA256 checksum for rewrite v2."

@@ -1,0 +1,130 @@
+# Theme_LoreValidator.yml — preflight
+preflight:
+  description: "Validator rules file. Tickets must read this file to determine active rules per current phase."
+  require_files:
+    - "Theme_Enforcement_State.yml"
+  fail_on_missing: true
+  checks:
+    - "valid_schema: true"
+    - "phases_defined: ['draft','controlled','locked']"
+
+meta:
+  version: 1
+  project: "E1_S1"
+  description: "Validator rules partitioned by enforcement phase. Tickets MUST read the 'Theme_Enforcement_State.yml' to select the active phase rules."
+
+phases:
+  draft:
+    description: "Initial project startup: soft warnings only. Nothing blocks the pipeline by default."
+    enforcement: soft  # soft | controlled | locked (informational)
+    rules:
+      - id: banned_terms
+        description: "Flag tokens that look like external influence. Warning-only in draft phase."
+        severity: warn
+        tokens:
+          - "recursion"
+          - "choir"
+          - "echo"
+          - "symbolic memory"
+        behavior:
+          action_on_match: "flag"
+      - id: sensitive_terms
+        description: "Sensitive/regulatory tokens (still warn in draft; may be upgraded)."
+        severity: warn
+        patterns:
+          - "\\bSSN\\b"
+          - "\\bpassport\\b"
+        behavior:
+          action_on_match: "flag"
+      - id: low_confidence_lore
+        description: "Flag lore entries with missing or weak provenance."
+        severity: warn
+        check:
+          source: "MemoryLog_Lore.yml"
+          rule: "confidence < 0.75 OR provenance missing"
+        behavior:
+          action_on_match: "flag"
+
+  controlled:
+    description: "Mid-phase: some tokens escalate to errors; provenance required for core canon."
+    enforcement: controlled
+    rules:
+      - id: banned_terms
+        description: "Project-level banned tokens escalate to errors here (selective)."
+        severity: error
+        tokens:
+          - "aetheris"   # explicit permanently banned token (example)
+        behavior:
+          action_on_match: "fail"
+      - id: sensitive_terms
+        description: "Sensitive tokens are errors in controlled mode."
+        severity: error
+        patterns:
+          - "\\bSSN\\b"
+          - "\\bcredit\\s*card\\b"
+        behavior:
+          action_on_match: "fail"
+      - id: low_confidence_lore
+        description: "Low-confidence lore will be flagged as warning; core canon missing provenance becomes error."
+        severity: warn
+        check:
+          source: "MemoryLog_Lore.yml, Theme_LoreIndex.yml"
+          rule: "if candidate_in_core_list AND confidence < 0.8 -> severity:error"
+        behavior:
+          action_on_match: "flag_or_fail"
+
+  locked:
+    description: "Full enforcement: stylistic & banned-token rules are enforced as errors. Only approved changes via 05b + 00e allowed."
+    enforcement: locked
+    rules:
+      - id: banned_terms_all
+        description: "Comprehensive hard ban list. Any match fails export and halts pipeline."
+        severity: error
+        tokens:
+          - "aetheris"
+          - "OldBrandName"
+          - "ProjectX_internal_token"
+        behavior:
+          action_on_match: "fail"
+      - id: sensitive_terms
+        severity: error
+        patterns:
+          - "PII|SSN|passport|credit card"
+        behavior:
+          action_on_match: "fail"
+      - id: core_provenance_requirement
+        description: "All canonical entries in MemoryLog_Lore.yml must have status=approved and confidence>=0.85"
+        severity: error
+        check:
+          source: "MemoryLog_Lore.yml"
+          rule: "for each canonical_id in Theme_Main.core_list: status == 'approved' AND confidence >= 0.85"
+        behavior:
+          action_on_match: "fail"
+
+transition_rules:
+  # named transitions; used by the change-phase ticket to evaluate auto-promotions
+  - name: draft_to_controlled
+    from: draft
+    to: controlled
+    conditions:
+      - description: "Theme validators must report zero error severity findings"
+        expression: "theme_validators_report.error_count == 0"
+      - description: "At least N canonical lore entries approved"
+        expression: "count(MemoryLog_Lore.entries where status=='approved') >= 5"
+    require_human_ack: false   # can auto-apply if auto_mode true
+    note: "Promote to controlled when basic canon and validators are clean."
+
+  - name: controlled_to_locked
+    from: controlled
+    to: locked
+    conditions:
+      - description: "No error findings in theme validators and no warnings in core_provenance"
+        expression: "theme_validators_report.error_count == 0 and theme_validators_report.warnings_core_provenance == 0"
+      - description: "Project lead human ack required"
+        expression: "human_ack.present == true"
+    require_human_ack: true
+    note: "Locking the project is a deliberate action: requires human signoff."
+
+notes:
+  - "Tickets that run validators MUST read Theme_Enforcement_State.yml to find the 'current_phase' and apply the corresponding phase.rules set for severity and behavior."
+  - "Transition expressions are evaluated by the change-phase ticket; they are NOT executable code but declarative strings the ticket evaluates against runtime artifacts (theme_validators_report.json, MemoryLog_Lore.yml counts, etc.)."

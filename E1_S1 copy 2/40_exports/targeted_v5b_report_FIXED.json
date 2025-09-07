@@ -1,0 +1,20 @@
+{
+  "file": "/mnt/data/project_extracted/30_rewrites/episode1_v5b_20250905T073723Z_human-polished-v5_targeted2.md",
+  "human_likeness_fixed": 87.5,
+  "components_fixed": {
+    "Fluency": 91.6,
+    "Lexical": 60.6,
+    "Passive": 100,
+    "Imagery": 100,
+    "Dialogue": 98.8
+  },
+  "basics": {
+    "word_count": 1754,
+    "sentence_count": 107,
+    "avg_sentence_len": 16.39,
+    "dialogue_ratio": 0.121,
+    "sensory_density_per_1000": 35.92,
+    "passive_ratio": 0.0
+  },
+  "note": "Corrected passive detector (requires participle) applied."
+}

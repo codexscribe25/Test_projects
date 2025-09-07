@@ -1,0 +1,46 @@
+Action-fuelled 10 seeds
+Generated: 2025-09-04T20:43:48.503838Z
+
+1. Sabotage inside a warship: an engineer plants timed charges while evading patrols and sealing bulkheads.
+2. Collapsing bridge escape: a caravan must cross as the supports fail and enemies set flame to the approach.
+3. Rooftop courier chase: across a midnight bazaar with collapsing awnings and a stolen governor’s seal.
+4. High-speed canyon wing-sled race: sabotage sends competitors careening off cliffs.
+5. Underwater demolition run: sabotage an enemy blockade before dawn reinforcements arrive.
+6. Midnight warehouse extraction: steal the auctioned target from a fortified warehouse under warlord guards.
+7. Urban hunt in neon alleys: a tracker and fugitive play cat-and-mouse through collapsing infrastructure.
+8. Convoy ambush rescue: a lone scout leads civilians through a canyon after an ambush.
+9. Gladiator skirmish in a floating market: rules change every round and the crowd bets on survival.
+10. Train heist in a storm: thieves crack a vault car on a moving train while dodging rival gangs and lightning.
+
+
+Scores (seed -> hook / clarity / tone_fit / novelty -> average)
+- Sabotage inside a warship: an engineer plants timed charges while evading patrols and sealing bulkheads.
+  Scores: hook=89, clarity=70, tone_fit=94, novelty=94 -> avg=86.75
+
+- Collapsing bridge escape: a caravan must cross as the supports fail and enemies set flame to the approach.
+  Scores: hook=90, clarity=79, tone_fit=90, novelty=86 -> avg=86.25
+
+- Rooftop courier chase: across a midnight bazaar with collapsing awnings and a stolen governor’s seal.
+  Scores: hook=82, clarity=94, tone_fit=81, novelty=79 -> avg=84.0
+
+- High-speed canyon wing-sled race: sabotage sends competitors careening off cliffs.
+  Scores: hook=80, clarity=88, tone_fit=92, novelty=76 -> avg=84.0
+
+- Underwater demolition run: sabotage an enemy blockade before dawn reinforcements arrive.
+  Scores: hook=85, clarity=76, tone_fit=93, novelty=74 -> avg=82.0
+
+- Midnight warehouse extraction: steal the auctioned target from a fortified warehouse under warlord guards.
+  Scores: hook=82, clarity=84, tone_fit=78, novelty=62 -> avg=76.5
+
+- Urban hunt in neon alleys: a tracker and fugitive play cat-and-mouse through collapsing infrastructure.
+  Scores: hook=78, clarity=95, tone_fit=80, novelty=67 -> avg=80.0
+
+- Convoy ambush rescue: a lone scout leads civilians through a canyon after an ambush.
+  Scores: hook=77, clarity=86, tone_fit=79, novelty=73 -> avg=78.75
+
+- Gladiator skirmish in a floating market: rules change every round and the crowd bets on survival.
+  Scores: hook=67, clarity=70, tone_fit=97, novelty=65 -> avg=74.75
+
+- Train heist in a storm: thieves crack a vault car on a moving train while dodging rival gangs and lightning.
+  Scores: hook=71, clarity=79, tone_fit=77, novelty=82 -> avg=77.25
+

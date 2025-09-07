@@ -1,0 +1,12 @@
+# core_map.yml
+# Maps virtual CORE names to real relative paths inside the ZIP/workspace.
+# Tickets should consult this map at BOOT or use run_manifest to resolve.
+mapping:
+  PromptCORE: "core_storage/prompts"        # where prompts are stored (folder)
+  StoryCORE:  "core_storage/stories"        # story drafts, episodic artifacts
+  MemoryCORE: "memory"                      # MemoryLog_Lore.yml and other memory artifacts
+  PromptCORE_DEFAULT_FILE: "core_storage/prompts/PromptCORE_index.yml"
+  StoryCORE_DEFAULT_FILE: "core_storage/stories/StoryCORE_index.yml"
+notes:
+  - "Update this file if you move files or change folder layout."
+  - "Use '00_map_virtual_cores.yml' to produce runtime resolver file core_resolver.json"
